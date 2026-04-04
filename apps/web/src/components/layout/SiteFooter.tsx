@@ -1,6 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-
-import { LogoMark } from "@/components/brand/LogoMark";
 
 type Props = {
   siteTitle: string;
@@ -54,18 +53,16 @@ export function SiteFooter({
 
         <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-sm font-semibold text-zinc-950">
-                <LogoMark className="h-5 w-5 text-zinc-950" />
-              </div>
-              <div className="leading-tight">
-                <div className="font-semibold tracking-tight">{siteTitle}</div>
-                <div className="text-sm text-zinc-400">Photography</div>
-              </div>
-            </div>
+            <Image
+              src="/brand/rabinson-photographs-light.svg"
+              alt={siteTitle}
+              width={304}
+              height={67}
+              className="h-9 w-auto"
+            />
             <p className="mt-4 max-w-md text-sm leading-6 text-zinc-300">
               Premium photography for weddings, portraits, and commercial
-              projects—crafted with intention, light, and story.
+              projects, crafted with intention, light, and story.
             </p>
             {locationLine ? (
               <p className="mt-3 text-sm text-zinc-400">{locationLine}</p>

@@ -5,10 +5,13 @@ import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 import { ContactForm } from "@/components/contact/ContactForm";
 import { FeaturedGrid } from "@/components/home/FeaturedGrid";
+import { HeroCarousel } from "@/components/home/HeroCarousel";
+import { ServicesAccordion } from "@/components/home/ServicesAccordion";
 import { HomeHeader } from "@/components/layout/HomeHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Reveal } from "@/components/ui/Reveal";
 import {
+  demoAbout,
   demoCategories,
   demoFooter,
   demoHero,
@@ -57,6 +60,44 @@ type ProjectListItem = {
   publishedAt?: string;
 };
 
+function getServiceDetails(title?: string) {
+  const normalized = title?.toLowerCase() ?? "";
+
+  if (normalized.includes("plan")) {
+    return [
+      "Creative consultation and visual direction before the shoot",
+      "Location, timeline, and styling guidance tailored to the session",
+      "A clear approach that keeps the day calm and well organized",
+    ];
+  }
+
+  if (normalized.includes("capture") || normalized.includes("shoot")) {
+    return [
+      "Natural direction that keeps images refined without feeling forced",
+      "Attention to light, composition, and consistent storytelling",
+      "A relaxed working rhythm for portraits, events, and brand sessions",
+    ];
+  }
+
+  if (
+    normalized.includes("retouch") ||
+    normalized.includes("delivery") ||
+    normalized.includes("edit")
+  ) {
+    return [
+      "Careful color grading and retouching with a timeless finish",
+      "High-resolution delivery prepared for web, print, and sharing",
+      "A clean gallery experience that makes final selection effortless",
+    ];
+  }
+
+  return [
+    "A tailored process shaped around the story, style, and purpose of the work",
+    "Clear communication from planning through final delivery",
+    "Refined execution designed to keep the experience smooth and professional",
+  ];
+}
+
 export default async function Home() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
 
@@ -78,20 +119,19 @@ export default async function Home() {
     }
   }
 
-  const heroTitle = settings?.heroTitle ?? demoHero.title;
-  const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
-  const heroMediaType = settings?.heroMediaType ?? demoHero.mediaType;
-  const heroVideoUrl = settings?.heroVideoUrl ?? null;
-  const heroImageUrl = settings?.heroImage
-    ? urlFor(settings.heroImage)?.width(2800).height(1600).url()
-    : demoHero.image;
-
   const serviceTitle = settings?.servicesTitle ?? demoServices.title;
   const serviceIntro = settings?.servicesIntro ?? demoServices.intro;
   const serviceItems =
     settings?.services?.length && settings.services.some((s) => s?.title)
       ? settings.services
       : demoServices.items;
+  const servicePanels = serviceItems.map((service) => ({
+    title: service.title ?? "Service",
+    description:
+      service.description ??
+      "A considered photography process shaped around your story and goals.",
+    details: getServiceDetails(service.title),
+  }));
 
   const projectsForBento = (projects?.length ? projects : null)
     ? (projects as ProjectListItem[])
@@ -135,9 +175,41 @@ export default async function Home() {
   }));
 
   const siteTitle = settings?.title ?? "Rabinson Photographs";
+  const heroTitle = settings?.heroTitle ?? demoHero.title;
+  const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
   const footerEmail = settings?.email ?? demoFooter.email;
   const footerInstagram = settings?.instagram ?? demoFooter.instagram;
   const footerFacebook = settings?.facebook ?? demoFooter.facebook;
+  const heroSlides = projectsForBento
+    .map((project) => {
+      const image =
+        project.coverImage && sanityEnabled
+          ? typeof project.coverImage === "string"
+            ? project.coverImage
+            : urlFor(project.coverImage)?.width(2400).height(1600).url() ?? null
+          : typeof project.coverImage === "string"
+            ? project.coverImage
+            : null;
+
+      return image
+        ? {
+            src: image,
+            alt: project.title,
+          }
+        : null;
+    })
+    .filter((slide): slide is { src: string; alt: string } => Boolean(slide))
+    .slice(0, 5);
+
+  const fallbackHeroSlides = [
+    { src: demoHero.image, alt: siteTitle },
+    ...demoProjects.slice(0, 4).map((project) => ({
+      src: project.coverImage,
+      alt: project.title,
+    })),
+  ];
+
+  const slides = heroSlides.length ? heroSlides : fallbackHeroSlides;
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -146,44 +218,23 @@ export default async function Home() {
       <main className="mx-auto max-w-6xl px-6 py-0 sm:py-0">
         <section className="relative left-1/2 min-h-screen w-screen -translate-x-1/2 overflow-hidden bg-zinc-900">
           <div className="absolute inset-0">
-            {heroMediaType === "video" && heroVideoUrl ? (
-              <video
-                className="h-full w-full object-cover opacity-75"
-                src={heroVideoUrl}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-              />
-            ) : heroMediaType === "image" && heroImageUrl ? (
-              <Image
-                src={heroImageUrl}
-                alt={siteTitle}
-                fill
-                priority
-                className="object-cover opacity-80"
-                sizes="(max-width: 1024px) 100vw, 1200px"
-              />
-            ) : (
-              <div className="h-full w-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
-            )}
+            <HeroCarousel slides={slides} siteTitle={siteTitle} />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-zinc-950/35" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
           <div className="relative mx-auto flex min-h-screen max-w-6xl items-end px-6 pb-16 pt-32 sm:px-10 sm:pb-20 sm:pt-36">
-            <Reveal className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-200/80">
-                Professional photographer
+            <Reveal className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-200/80">
+                Rabinson Photographs
               </p>
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
                 {heroTitle}
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-zinc-200 sm:text-lg sm:leading-8">
+              <p className="mt-5 max-w-xl text-base leading-7 text-zinc-200 sm:text-lg sm:leading-8">
                 {heroSubtitle}
               </p>
-              <div className="mt-10 flex flex-wrap items-center gap-3">
+              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <a
                   href="#contact"
                   className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-zinc-100"
@@ -194,7 +245,7 @@ export default async function Home() {
                   href="#work"
                   className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
                 >
-                  View work
+                  Explore work
                 </a>
               </div>
             </Reveal>
@@ -229,9 +280,9 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="categories" className="mt-16 scroll-mt-24 sm:mt-24">
+        <section id="categories" className="mt-16 scroll-mt-24 font-sans sm:mt-24">
           <Reveal>
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Categories
               </h2>
@@ -242,7 +293,8 @@ export default async function Home() {
             </div>
           </Reveal>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 sm:grid-cols-3">
+          <div className="mt-10 overflow-hidden rounded-[1.75rem] bg-white sm:mt-12">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {homeCategories.map((c, idx) => {
               const imageUrl = c.coverImage
                 ? sanityEnabled
@@ -256,13 +308,25 @@ export default async function Home() {
                 : null;
 
               return (
-                <Reveal key={c._id} delayMs={idx * 80}>
+                <Reveal
+                  key={c._id}
+                  delayMs={idx * 80}
+                  className=""
+                >
                   <Link
                     href={`/categories/${c.slug}`}
-                    className="group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0"
+                    className={[
+                      "group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-white font-sans transition hover:bg-zinc-50/70",
+                    ].join(" ")}
                   >
-                    <div className="px-4 pt-4">
-                      <div className="relative h-[24rem] overflow-hidden rounded-xl bg-zinc-100 sm:h-[26rem]">
+                    <div className="px-5 pt-5 sm:px-6 sm:pt-6">
+                      <div
+                        className={[
+                          "relative overflow-hidden bg-zinc-100",
+                          "rounded-[1rem]",
+                          "h-[24rem] sm:h-[28rem] md:h-[26rem] lg:h-[30rem]",
+                        ].join(" ")}
+                      >
                         {imageUrl ? (
                           <Image
                             src={imageUrl}
@@ -278,22 +342,27 @@ export default async function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-zinc-200 px-5 py-5">
-                      <div className="text-zinc-900">
-                        <div className="text-lg font-semibold tracking-tight sm:text-xl">
-                          {c.title}
+                    <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
+                      <div className="flex-1 text-zinc-900">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="font-sans text-lg font-semibold tracking-tight sm:text-xl">
+                            {c.title}
+                          </div>
+                          <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                            {String(idx + 1).padStart(2, "0")}
+                          </span>
                         </div>
                         {c.description ? (
-                          <p className="mt-2 text-sm leading-6 text-zinc-600">
+                          <p className="mt-3 max-w-sm font-sans text-sm leading-6 text-zinc-600">
                             {c.description}
                           </p>
                         ) : null}
                       </div>
-                      <div className="mt-5 flex items-center justify-between">
-                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
-                          Category
+                      <div className="mt-6 flex items-center justify-between pt-2">
+                        <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                          Curated collection
                         </span>
-                        <span className="text-sm font-medium text-zinc-900 transition group-hover:translate-x-0.5 motion-reduce:transition-none">
+                        <span className="font-sans text-sm font-medium text-zinc-900 transition group-hover:translate-x-0.5 motion-reduce:transition-none">
                           View gallery →
                         </span>
                       </div>
@@ -302,35 +371,50 @@ export default async function Home() {
                 </Reveal>
               );
             })}
+            </div>
           </div>
+        </section>
+
+        <section id="about" className="mt-16 scroll-mt-24 sm:mt-24">
+          <Reveal>
+            <div className="mx-auto max-w-4xl border-y border-zinc-200 py-12 text-center sm:py-14">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
+                {demoAbout.eyebrow}
+              </p>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+                {demoAbout.title}
+              </h2>
+              <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-zinc-600 sm:text-base">
+                {demoAbout.body}
+              </p>
+              <div className="mt-8">
+                <Link
+                  href="/about"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-900 px-6 text-sm font-medium tracking-[0.02em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+                >
+                  Read more
+                </Link>
+              </div>
+            </div>
+          </Reveal>
         </section>
 
         <section id="services" className="mt-16 scroll-mt-24 sm:mt-24">
           <Reveal>
-            <div className="rounded-[2rem] border border-zinc-200 bg-white p-8 shadow-sm sm:p-10 lg:p-12">
-              <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-14">
-                <div className="max-w-xl">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            <div className="rounded-[2rem] bg-[#f7f3ee] px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+              <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
+                <div className="max-w-xl lg:col-span-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
+                    Services
+                  </p>
+                  <h2 className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
                     {serviceTitle}
                   </h2>
                   <p className="mt-4 text-zinc-600">{serviceIntro}</p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-5">
-                  {serviceItems.map((s, i) => (
-                    <Reveal key={`${s.title ?? "service"}:${i}`} delayMs={i * 60}>
-                      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-                        <div className="font-semibold tracking-tight">
-                          {s.title ?? "Service"}
-                        </div>
-                        {s.description ? (
-                          <p className="mt-2 text-sm text-zinc-600">
-                            {s.description}
-                          </p>
-                        ) : null}
-                      </div>
-                    </Reveal>
-                  ))}
+                <div className="lg:col-span-7">
+                  <ServicesAccordion items={servicePanels} />
                 </div>
               </div>
             </div>

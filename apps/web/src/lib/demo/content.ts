@@ -15,9 +15,8 @@ export type DemoProject = {
 };
 
 export const demoHero = {
-  title: "Professional Photography Portfolio",
-  subtitle:
-    "A clean, modern portfolio with editorial framing—built with Next.js and managed in Sanity.",
+  title: "Quiet frames. Lasting stories.",
+  subtitle: "Wedding, portrait, and commercial photography.",
   mediaType: "image" as const,
   image: "/demo/hero.jpg",
 };
@@ -64,6 +63,15 @@ export const demoServices = {
         "Color grading, retouching, and a beautiful gallery with print-ready exports.",
     },
   ],
+};
+
+export const demoAbout = {
+  eyebrow: "About",
+  title: "A quiet, editorial approach to modern photography.",
+  body:
+    "Rabinson Photographs focuses on honest light, strong composition, and images that feel refined without losing emotion. Each project is approached with calm direction, careful pacing, and a clean visual language built to last.",
+  note:
+    "Available for weddings, portraits, and selected commercial commissions.",
 };
 
 export const demoFooter = {
