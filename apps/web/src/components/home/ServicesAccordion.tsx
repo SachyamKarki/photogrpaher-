@@ -66,21 +66,19 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
             >
               <div className="overflow-hidden">
                 <div className="sm:ml-[calc(88px+1.5rem)] sm:max-w-2xl">
-                  <div className="rounded-[1.5rem] border border-zinc-200 bg-white/80 px-5 py-5 backdrop-blur-sm sm:px-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
-                      Learn more
-                    </p>
-                    <div className="mt-4 grid gap-3">
-                      {item.details.map((detail) => (
-                        <div
-                          key={detail}
-                          className="flex items-start gap-3 text-sm leading-7 text-zinc-600"
-                        >
-                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-900" />
-                          <span>{detail}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
+                    Learn more
+                  </p>
+                  <div className="mt-4 grid gap-3">
+                    {item.details.map((detail) => (
+                      <div
+                        key={detail}
+                        className="flex items-start gap-3 text-sm leading-7 text-zinc-600"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-900" />
+                        <span>{detail}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

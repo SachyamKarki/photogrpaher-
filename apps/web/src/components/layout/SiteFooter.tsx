@@ -21,133 +21,155 @@ export function SiteFooter({
   locationLine,
 }: Props) {
   return (
-    <footer className="mt-16 border-t border-white/10 bg-zinc-950 text-zinc-100">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="text-xl font-semibold tracking-tight">
-              Ready to create something timeless?
-            </div>
-            <div className="mt-2 text-sm text-zinc-300">
-              Share your date, location, and vision—I&apos;ll reply with
-              availability.
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/#contact"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20"
-            >
-              Book a shoot
-            </Link>
-            {email ? (
-              <a
-                href={`mailto:${email}`}
-                className="inline-flex h-11 items-center justify-center rounded-full border border-white/15 bg-white/0 px-6 text-sm font-medium text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20"
-              >
-                Email
-              </a>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
+    <footer className="relative z-0 mt-16 w-full overflow-hidden border-t border-white/10 bg-black pb-12 pt-24 text-zinc-100">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-12 lg:px-20">
+        <div className="mb-24 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24">
+          <div className="flex flex-col space-y-8 lg:col-span-5">
             <Image
               src="/brand/rabinson-photographs-light.svg"
               alt={siteTitle}
               width={304}
               height={67}
-              className="h-9 w-auto"
+              className="h-10 w-auto"
             />
-            <p className="mt-4 max-w-md text-sm leading-6 text-zinc-300">
-              Premium photography for weddings, portraits, and commercial
-              projects, crafted with intention, light, and story.
+
+            <p className="max-w-md text-base font-light leading-relaxed text-zinc-400">
+              A refined photography experience for weddings, portraits, and
+              commercial stories—crafted with calm direction, timeless light,
+              and honest detail.
             </p>
-            {locationLine ? (
-              <p className="mt-3 text-sm text-zinc-400">{locationLine}</p>
-            ) : null}
-          </div>
 
-          <div>
-            <div className="text-sm font-semibold text-white">Explore</div>
-            <ul className="mt-4 flex flex-col gap-3 text-sm text-zinc-300">
-              <li>
-                <Link className="hover:text-white" href="/#work">
-                  Work
-                </Link>
-              </li>
-              <li>
-                <Link className="hover:text-white" href="/#categories">
-                  Categories
-                </Link>
-              </li>
-              <li>
-                <Link className="hover:text-white" href="/#services">
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link className="hover:text-white" href="/#contact">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link className="hover:text-white" href="/studio">
-                  Studio
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <div className="text-sm font-semibold text-white">Contact</div>
-            <ul className="mt-4 flex flex-col gap-3 text-sm text-zinc-300">
+            <div className="flex flex-wrap gap-4 pt-2">
+              <Link
+                href="/#contact"
+                className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-6 py-3 text-sm font-medium text-white transition-all hover:border-white hover:bg-white hover:text-black"
+              >
+                Book a shoot
+              </Link>
               {email ? (
-                <li>
-                  <a className="hover:text-white" href={`mailto:${email}`}>
-                    {email}
-                  </a>
-                </li>
+                <a
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-6 py-3 text-sm font-medium text-white transition-all hover:border-white hover:bg-white hover:text-black"
+                >
+                  Email us
+                </a>
               ) : null}
+            </div>
 
+            <div className="flex flex-wrap gap-6 pt-6 text-sm uppercase tracking-[0.18em] text-zinc-500">
               {instagram && isExternalUrl(instagram) ? (
-                <li>
-                  <a
-                    className="hover:text-white"
-                    href={instagram}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Instagram
-                  </a>
-                </li>
+                <a
+                  href={instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-white"
+                >
+                  Instagram
+                </a>
               ) : null}
-
               {facebook && isExternalUrl(facebook) ? (
-                <li>
-                  <a
-                    className="hover:text-white"
-                    href={facebook}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Facebook
-                  </a>
-                </li>
+                <a
+                  href={facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-white"
+                >
+                  Facebook
+                </a>
               ) : null}
-            </ul>
+              {locationLine ? <span>{locationLine}</span> : null}
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-start md:items-end lg:col-span-7">
+            <div className="grid grid-cols-2 gap-x-16 gap-y-6 text-left md:text-right">
+              <Link
+                href="/#work"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Featured Work
+              </Link>
+              <Link
+                href="/#categories"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Categories
+              </Link>
+              <Link
+                href="/about"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                About
+              </Link>
+              <Link
+                href="/#services"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Services
+              </Link>
+              <Link
+                href="/#contact"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Contact
+              </Link>
+              <Link
+                href="/studio"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Studio
+              </Link>
+              {email ? (
+                <a
+                  href={`mailto:${email}`}
+                  className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+                >
+                  Email
+                </a>
+              ) : null}
+              <a
+                href="#top"
+                className="block text-sm uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:text-white"
+              >
+                Back to Top
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {siteTitle}. All rights reserved.</p>
-          <div className="flex flex-col gap-2 text-zinc-500 sm:flex-row sm:items-center sm:gap-6">
-            <a className="hover:text-zinc-300" href="#top">
-              Back to top
-            </a>
-            <p>Built with Next.js, Tailwind CSS, and Sanity.</p>
+        <div className="pointer-events-none mb-8 mt-12 w-full select-none overflow-hidden leading-none opacity-30 mix-blend-overlay">
+          <h1
+            className="whitespace-nowrap text-center text-[8.5vw] font-bold text-transparent"
+            style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.8)" }}
+          >
+            RABINSON PHOTOGRAPHS
+          </h1>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 border-t border-white/5 py-8">
+          <div className="flex gap-8">
+            <Link
+              href="/about"
+              className="text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-white"
+            >
+              About
+            </Link>
+            <Link
+              href="/#services"
+              className="text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-white"
+            >
+              Services
+            </Link>
+            <Link
+              href="/#contact"
+              className="text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-white"
+            >
+              Contact
+            </Link>
           </div>
+          <p className="text-center text-xs tracking-wide text-zinc-600">
+            © {new Date().getFullYear()} {siteTitle}. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
