@@ -10,6 +10,7 @@ import { ServicesAccordion } from "@/components/home/ServicesAccordion";
 import { HomeHeader } from "@/components/layout/HomeHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
   demoAbout,
   demoCategories,
@@ -60,22 +61,44 @@ type ProjectListItem = {
   publishedAt?: string;
 };
 
+function getServiceSummary(title?: string) {
+  const normalized = title?.toLowerCase() ?? "";
+
+  if (normalized.includes("plan")) {
+    return "A clear plan for locations, timing, styling, and a calm shoot day.";
+  }
+
+  if (normalized.includes("capture") || normalized.includes("shoot")) {
+    return "Confident direction, clean composition, and natural moments that feel effortless.";
+  }
+
+  if (
+    normalized.includes("retouch") ||
+    normalized.includes("delivery") ||
+    normalized.includes("edit")
+  ) {
+    return "Timeless editing, true-to-life color, and delivery ready for web and print.";
+  }
+
+  return "A refined end-to-end process shaped around your story and goals.";
+}
+
 function getServiceDetails(title?: string) {
   const normalized = title?.toLowerCase() ?? "";
 
   if (normalized.includes("plan")) {
     return [
-      "Creative consultation and visual direction before the shoot",
-      "Location, timeline, and styling guidance tailored to the session",
-      "A clear approach that keeps the day calm and well organized",
+      "We begin with a short consultation to align on mood, priorities, and the kind of images you want to live with long-term. From that, we build a simple plan that keeps the session calm and efficient.",
+      "You’ll get guidance on location, timing (best light), and styling that fits your theme. If it’s an event, we’ll map the flow and key moments so nothing important gets missed.",
+      "Expect a clear approach, not a complicated process—just enough structure to make the day feel easy while the results stay intentional and editorial.",
     ];
   }
 
   if (normalized.includes("capture") || normalized.includes("shoot")) {
     return [
-      "Natural direction that keeps images refined without feeling forced",
-      "Attention to light, composition, and consistent storytelling",
-      "A relaxed working rhythm for portraits, events, and brand sessions",
+      "On the day, the direction is simple and confident—so you never feel awkward, and the images never feel forced. We guide posture, movement, and pacing without interrupting the moment.",
+      "We prioritize clean light and strong composition, then build the story with details and transitions. That’s what makes a gallery feel cohesive, not random.",
+      "If you’re a brand, we focus on consistency: tones, framing, and a repeatable visual language that works across web, socials, and campaigns.",
     ];
   }
 
@@ -85,16 +108,15 @@ function getServiceDetails(title?: string) {
     normalized.includes("edit")
   ) {
     return [
-      "Careful color grading and retouching with a timeless finish",
-      "High-resolution delivery prepared for web, print, and sharing",
-      "A clean gallery experience that makes final selection effortless",
+      "Editing is crafted for longevity—true skin tones, clean contrast, and color that stays elegant over time. Retouching is subtle and realistic (no plastic look).",
+      "You receive a clean online gallery with high-resolution exports for print and optimized sizes for web. Everything is delivered organized and ready to share.",
+      "Turnaround depends on the project, but the standard is: fast communication, a consistent look, and files that are ready for real use—not just viewing.",
     ];
   }
 
   return [
-    "A tailored process shaped around the story, style, and purpose of the work",
-    "Clear communication from planning through final delivery",
-    "Refined execution designed to keep the experience smooth and professional",
+    "Every project is shaped around the story and the purpose of the work—personal, editorial, or commercial—so the final images feel intentional, not generic.",
+    "We keep communication clear, the shoot calm, and delivery clean. The result is a gallery that feels cohesive from first frame to last.",
   ];
 }
 
@@ -128,8 +150,7 @@ export default async function Home() {
   const servicePanels = serviceItems.map((service) => ({
     title: service.title ?? "Service",
     description:
-      service.description ??
-      "A considered photography process shaped around your story and goals.",
+      service.description ?? getServiceSummary(service.title),
     details: getServiceDetails(service.title),
   }));
 
@@ -228,7 +249,7 @@ export default async function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-200/80">
                 Rabinson Photographs
               </p>
-              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
+              <h1 className="font-heading mt-4 text-4xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
                 {heroTitle}
               </h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-zinc-200 sm:text-lg sm:leading-8">
@@ -252,25 +273,12 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="work" className="mt-16 scroll-mt-24 sm:mt-24">
+        <section id="work" className="scroll-mt-24 py-14 sm:py-20">
           <Reveal>
-            <div className="flex items-end justify-between gap-6">
-              <div className="max-w-2xl">
-                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                  Featured work
-                </h2>
-                <p className="mt-4 text-zinc-600">
-                  A bento-style grid to highlight signature images and recent
-                  projects.
-                </p>
-              </div>
-              <Link
-                className="hidden text-sm font-medium text-zinc-600 hover:text-zinc-900 sm:inline"
-                href="/studio"
-              >
-                Manage in Studio →
-              </Link>
-            </div>
+            <SectionHeading
+              title="Featured work"
+              subtitle="A curated grid to highlight signature images and recent projects."
+            />
           </Reveal>
 
           <div className="mt-10 sm:mt-12">
@@ -280,21 +288,15 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="categories" className="mt-16 scroll-mt-24 font-sans sm:mt-24">
+        <section id="categories" className="scroll-mt-24 py-14 font-sans sm:py-20">
           <Reveal>
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                Categories
-              </h2>
-              <p className="mt-4 text-zinc-600">
-                Explore focused collections. Each category opens into a dedicated
-                page with its own curated work.
-              </p>
-            </div>
+            <SectionHeading
+              title="Explore by category"
+              subtitle="Explore focused collections. Each category opens into a dedicated page with its own curated work."
+            />
           </Reveal>
 
-          <div className="mt-10 overflow-hidden rounded-[1.75rem] bg-white sm:mt-12">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-8 sm:mt-12 md:grid-cols-3 md:gap-6 lg:gap-8">
             {homeCategories.map((c, idx) => {
               const imageUrl = c.coverImage
                 ? sanityEnabled
@@ -308,61 +310,45 @@ export default async function Home() {
                 : null;
 
               return (
-                <Reveal
-                  key={c._id}
-                  delayMs={idx * 80}
-                  className=""
-                >
+                <Reveal key={c._id} delayMs={idx * 80}>
                   <Link
                     href={`/categories/${c.slug}`}
-                    className={[
-                      "group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-white font-sans transition hover:bg-zinc-50/70",
-                    ].join(" ")}
+                    className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-zinc-200 bg-white transition hover:border-zinc-300 hover:shadow-sm"
                   >
-                    <div className="px-5 pt-5 sm:px-6 sm:pt-6">
-                      <div
-                        className={[
-                          "relative overflow-hidden bg-zinc-100",
-                          "rounded-[1rem]",
-                          "h-[24rem] sm:h-[28rem] md:h-[26rem] lg:h-[30rem]",
-                        ].join(" ")}
-                      >
-                        {imageUrl ? (
-                          <Image
-                            src={imageUrl}
-                            alt={c.title}
-                            fill
-                            className="object-cover transition duration-700 group-hover:scale-[1.02] motion-reduce:transition-none"
-                            sizes="(max-width: 1024px) 100vw, 33vw"
-                          />
-                        ) : (
-                          <div className="h-full w-full bg-gradient-to-br from-zinc-200 via-zinc-100 to-zinc-200" />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-                      </div>
+                    <div className="relative h-[16rem] w-full bg-zinc-100 sm:h-[18rem] md:h-[20rem] lg:h-[22rem] xl:h-[24rem]">
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={c.title}
+                          fill
+                          className="object-cover transition duration-700 group-hover:scale-[1.02] motion-reduce:transition-none"
+                          sizes="(max-width: 1024px) 100vw, 33vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-zinc-200 via-zinc-100 to-zinc-200" />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                     </div>
 
-                    <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
-                      <div className="flex-1 text-zinc-900">
+                    <div className="flex flex-1 flex-col px-6 py-6">
+                      <div className="flex-1">
                         <div className="flex items-start justify-between gap-4">
-                          <div className="font-sans text-lg font-semibold tracking-tight sm:text-xl">
+                          <div className="font-heading text-xl font-semibold tracking-tight text-zinc-900">
                             {c.title}
                           </div>
-                          <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
                             {String(idx + 1).padStart(2, "0")}
                           </span>
                         </div>
                         {c.description ? (
-                          <p className="mt-3 max-w-sm font-sans text-sm leading-6 text-zinc-600">
+                          <p className="mt-3 text-sm leading-6 text-zinc-600">
                             {c.description}
                           </p>
                         ) : null}
                       </div>
-                      <div className="mt-6 flex items-center justify-between pt-2">
-                        <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
-                          Curated collection
-                        </span>
-                        <span className="font-sans text-sm font-medium text-zinc-900 transition group-hover:translate-x-0.5 motion-reduce:transition-none">
+
+                      <div className="mt-6 flex items-center justify-between">
+                        <span className="text-sm font-medium text-zinc-900 transition group-hover:translate-x-0.5 motion-reduce:transition-none">
                           View gallery →
                         </span>
                       </div>
@@ -371,74 +357,55 @@ export default async function Home() {
                 </Reveal>
               );
             })}
-            </div>
           </div>
         </section>
 
-        <section id="about" className="mt-16 scroll-mt-24 sm:mt-24">
+        <section id="about" className="scroll-mt-24 py-14 sm:py-20">
           <Reveal>
-            <div className="mx-auto max-w-4xl border-y border-zinc-200 py-12 text-center sm:py-14">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
-                {demoAbout.eyebrow}
-              </p>
-              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
-                {demoAbout.title}
-              </h2>
-              <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-zinc-600 sm:text-base">
-                {demoAbout.body}
-              </p>
-              <div className="mt-8">
-                <Link
-                  href="/about"
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-900 px-6 text-sm font-medium tracking-[0.02em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
-                >
-                  Read more
-                </Link>
-              </div>
+            <div className="mx-auto max-w-4xl py-10 text-center sm:py-12">
+              <SectionHeading
+                title={demoAbout.title}
+                subtitle={demoAbout.body}
+                containerClassName="max-w-4xl"
+                action={
+                  <Link
+                    href="/about"
+                    className="inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-900 px-6 text-sm font-medium tracking-[0.02em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+                  >
+                    Read more
+                  </Link>
+                }
+              />
             </div>
           </Reveal>
         </section>
 
-        <section id="services" className="mt-16 scroll-mt-24 sm:mt-24">
+        <section id="services" className="scroll-mt-24 py-14 sm:py-20">
           <Reveal>
             <div className="rounded-[2rem] bg-[#f7f3ee] px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
-              <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
-                <div className="max-w-xl lg:col-span-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
-                    Services
-                  </p>
-                  <h2 className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
-                    {serviceTitle}
-                  </h2>
-                  <p className="mt-4 text-zinc-600">{serviceIntro}</p>
-                </div>
+              <SectionHeading
+                title={serviceTitle}
+                subtitle={serviceIntro}
+              />
 
-                <div className="lg:col-span-7">
-                  <ServicesAccordion items={servicePanels} />
-                </div>
+              <div className="mx-auto mt-10 max-w-4xl sm:mt-12">
+                <ServicesAccordion items={servicePanels} />
               </div>
             </div>
           </Reveal>
         </section>
 
-        <section id="contact" className="mt-16 scroll-mt-24 sm:mt-24">
+        <section id="contact" className="scroll-mt-24 py-14 sm:py-20">
           <Reveal>
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
-              <div className="max-w-xl pt-1">
-                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                  Let’s work together
-                </h2>
-                <p className="mt-4 text-zinc-600">
-                  Share your date, location, and what you’re envisioning. I’ll
-                  reply with availability and a tailored package.
-                </p>
-                {!sanityEnabled ? (
-                  <div className="mt-6 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700">
-                    Tip: connect Sanity to manage hero, categories, and projects.
-                  </div>
-                ) : null}
+            <div>
+              <SectionHeading
+                title="Contact us"
+                subtitle="Share your date, location, and what you need. You’ll receive availability and a tailored quote within 24–48 hours."
+              />
+
+              <div className="mx-auto mt-10 w-full max-w-6xl sm:mt-12">
+                <ContactForm categories={contactCategories} />
               </div>
-              <ContactForm categories={contactCategories} />
             </div>
           </Reveal>
         </section>

@@ -89,7 +89,9 @@ export default async function CategoryPage({
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white">
               <LogoMark className="h-5 w-5" />
             </div>
-            <div className="font-semibold tracking-tight">Rabinson Photographs</div>
+            <div className="font-heading font-semibold tracking-tight">
+              Rabinson Photographs
+            </div>
           </Link>
           <nav className="text-sm text-zinc-600">
             <Link className="hover:text-zinc-900" href="/studio">
@@ -117,12 +119,9 @@ export default async function CategoryPage({
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/10 to-zinc-950/40" />
           </div>
 
-          <div className="relative px-6 py-16 sm:px-10 sm:py-20">
+            <div className="relative px-6 py-16 sm:px-10 sm:py-20">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-200/80">
-                Category
-              </p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h1 className="font-heading mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {category.title}
               </h1>
               {category.description ? (

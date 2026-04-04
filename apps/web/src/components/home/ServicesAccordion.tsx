@@ -33,7 +33,7 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               </div>
 
               <div>
-                <div className="font-semibold tracking-tight text-zinc-900">
+                <div className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
                   {item.title}
                 </div>
                 <p className="mt-2 max-w-xl text-sm leading-7 text-zinc-600">
@@ -42,15 +42,22 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               </div>
 
               <span className="flex justify-start sm:justify-end">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-900 transition duration-300 group-hover:border-zinc-900">
+                <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-zinc-900 shadow-sm shadow-black/5 transition duration-300 group-hover:bg-zinc-50">
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 20 20"
-                    className={`h-4 w-4 transition duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}
+                    className={`h-5 w-5 transition duration-300 ${isOpen ? "rotate-45" : "rotate-0"}`}
                     fill="none"
                   >
                     <path
-                      d="M5 7.5 10 12.5 15 7.5"
+                      d="M10 4.5v11"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M4.5 10h11"
                       stroke="currentColor"
                       strokeWidth="1.6"
                       strokeLinecap="round"
@@ -67,17 +74,16 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               <div className="overflow-hidden">
                 <div className="sm:ml-[calc(88px+1.5rem)] sm:max-w-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
-                    Learn more
+                    Details
                   </p>
-                  <div className="mt-4 grid gap-3">
+                  <div className="mt-4 grid gap-4">
                     {item.details.map((detail) => (
-                      <div
+                      <p
                         key={detail}
-                        className="flex items-start gap-3 text-sm leading-7 text-zinc-600"
+                        className="text-sm leading-7 text-zinc-600"
                       >
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-900" />
-                        <span>{detail}</span>
-                      </div>
+                        {detail}
+                      </p>
                     ))}
                   </div>
                 </div>

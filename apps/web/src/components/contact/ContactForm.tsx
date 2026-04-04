@@ -75,20 +75,22 @@ export function ContactForm({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8"
+      className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8 md:p-10"
     >
       <div className="flex flex-col gap-2">
-        <h3 className="text-xl font-semibold tracking-tight">Contact</h3>
+        <h3 className="font-heading text-xl font-semibold tracking-tight">
+          Send an inquiry
+        </h3>
         <p className="text-sm text-zinc-600">
-          Tell me about your shoot—timeline, location, and the vibe you want.
+          Share the essentials and we’ll reply with availability and next steps.
         </p>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-zinc-800">Name</span>
           <input
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200"
+            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
@@ -100,7 +102,7 @@ export function ContactForm({ categories }: Props) {
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-zinc-800">Email</span>
           <input
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200"
+            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
@@ -110,12 +112,13 @@ export function ContactForm({ categories }: Props) {
           />
         </label>
 
-        <label className="flex flex-col gap-2 text-sm sm:col-span-2">
-          <span className="font-medium text-zinc-800">Category (optional)</span>
+        <label className="flex flex-col gap-2 text-sm">
+          <span className="font-medium text-zinc-800">Category</span>
           <select
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200"
+            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            required
           >
             <option value="">Select a category…</option>
             {categories.map((c) => (
@@ -126,15 +129,18 @@ export function ContactForm({ categories }: Props) {
           </select>
         </label>
 
-        <label className="flex flex-col gap-2 text-sm sm:col-span-2">
+        <label className="flex flex-col gap-2 text-sm lg:col-span-2">
           <span className="font-medium text-zinc-800">Message</span>
           <textarea
-            className="min-h-[140px] resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200"
+            className="min-h-[120px] resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3 outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 sm:min-h-[160px]"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="I’d love a couple’s shoot in late May…"
+            placeholder="Date, location, and what you’re looking for…"
             required
           />
+          <span className="text-xs text-zinc-500">
+            Tip: include date, location, and deliverables (e.g. “60 edited photos”).
+          </span>
         </label>
       </div>
 
@@ -150,16 +156,16 @@ export function ContactForm({ categories }: Props) {
         </div>
       ) : null}
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-8 flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center">
         <p className="text-xs text-zinc-500">
           By submitting, you agree to be contacted about your request.
         </p>
         <button
-          className="inline-flex h-11 items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           disabled={!isValid || state === "submitting"}
           type="submit"
         >
-          {state === "submitting" ? "Sending…" : "Send message"}
+          {state === "submitting" ? "Sending…" : "Send inquiry"}
         </button>
       </div>
     </form>

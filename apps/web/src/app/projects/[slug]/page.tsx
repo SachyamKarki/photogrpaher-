@@ -71,7 +71,7 @@ export default async function ProjectPage({
           ← Back to projects
         </Link>
 
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight">
+        <h1 className="font-heading mt-6 text-3xl font-semibold tracking-tight">
           {project.title}
         </h1>
         {project.excerpt ? (

@@ -12,10 +12,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-5xl">
             <Reveal>
               <div className="max-w-3xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
-                  {demoAbout.eyebrow}
-                </p>
-                <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+                <h1 className="font-heading mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
                   {demoAbout.title}
                 </h1>
                 <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-600 sm:text-lg">

@@ -77,7 +77,7 @@ export function SiteFooter({
           </div>
 
           <div className="flex flex-col justify-start md:items-end lg:col-span-7">
-            <div className="grid grid-cols-2 gap-x-12 gap-y-5 text-left md:text-right">
+            <div className="grid grid-cols-1 gap-x-12 gap-y-5 text-left sm:grid-cols-2 md:text-right">
               <Link
                 href="/#work"
                 className="block text-xs uppercase tracking-[0.16em] text-zinc-400 transition-colors hover:text-white sm:text-sm"
@@ -130,6 +130,9 @@ export function SiteFooter({
         <div className="mt-6 flex flex-col items-center justify-center gap-4 border-t border-white/5 py-6">
           <p className="text-center text-[11px] tracking-[0.08em] text-zinc-600 sm:text-xs">
             © {new Date().getFullYear()} {siteTitle}. All rights reserved.
+          </p>
+          <p className="font-heading text-center text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 sm:text-sm">
+            {siteTitle}
           </p>
         </div>
       </div>
