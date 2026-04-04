@@ -1,0 +1,14 @@
+{
+  "name": "photographer",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @photographer/web",
+    "dev:studio": "npm run dev -w @photographer/studio",
+    "build": "npm run build -w @photographer/web",
+    "build:studio": "npm run build -w @photographer/studio",
+    "lint": "npm run lint -w @photographer/web"
+  }
+}

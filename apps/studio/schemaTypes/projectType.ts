@@ -1,0 +1,68 @@
+import { defineField, defineType } from "sanity";
+
+export const projectType = defineType({
+  name: "project",
+  title: "Project",
+  type: "document",
+  fields: [
+    defineField({
+      name: "category",
+      type: "reference",
+      to: [{ type: "category" }],
+    }),
+    defineField({
+      name: "title",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "excerpt",
+      title: "Short Description",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
+      name: "coverImage",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          type: "string",
+        }),
+      ],
+    }),
+    defineField({
+      name: "gallery",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt Text",
+              type: "string",
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "publishedAt",
+      type: "datetime",
+      initialValue: () => new Date().toISOString(),
+    }),
+  ],
+  preview: {
+    select: { title: "title", media: "coverImage" },
+  },
+});
