@@ -45,10 +45,10 @@ export const demoCategories: DemoCategory[] = [
 export const demoServices = {
   title: "What we do",
   intro:
-    "A premium photography experience—from planning to delivery—tailored to your story.",
+    "A premium photography experience, from planning to delivery, tailored to your story.",
   items: [
     {
-      title: "Pre-shoot planning",
+      title: "Pre shoot planning",
       description:
         "Locations, styling, schedules, and shot lists to make the day effortless.",
     },
@@ -60,7 +60,7 @@ export const demoServices = {
     {
       title: "Retouch & delivery",
       description:
-        "Color grading, retouching, and a beautiful gallery with print-ready exports.",
+        "Color grading, retouching, and a beautiful gallery with print ready exports.",
     },
   ],
 };
@@ -69,7 +69,7 @@ export const demoAbout = {
   eyebrow: "About",
   title: "A quiet, editorial approach to modern photography.",
   body:
-    "Rabinson Photographs focuses on honest light, strong composition, and images that feel refined without losing emotion. Each project is approached with calm direction, careful pacing, and a clean visual language built to last.",
+    "Rabinson Photography focuses on honest light, strong composition, and images that feel refined without losing emotion. Each project is approached with calm direction, careful pacing, and a clean visual language built to last.",
   note:
     "Available for weddings, portraits, and selected commercial commissions.",
 };
@@ -78,8 +78,30 @@ export const demoFooter = {
   email: "hello@example.com",
   instagram: "https://instagram.com",
   facebook: "https://facebook.com",
+  whatsapp: "https://wa.me/9779800000000",
   locationLine: "Based in Kathmandu • Available worldwide",
 };
+
+export const demoReviews = [
+  {
+    _id: "rev-1",
+    author: "Sarah & James",
+    role: "Wedding Clients",
+    quote: "Working with Rabinson was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
+  },
+  {
+    _id: "rev-2",
+    author: "Alex Mercer",
+    role: "Creative Director, Kinfolk",
+    quote: "Rabinson brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
+  },
+  {
+    _id: "rev-3",
+    author: "Elena Rostova",
+    role: "Portrait Session",
+    quote: "I usually hate having my picture taken, but the session was incredibly calm and natural. When I saw the final gallery, I was speechless. These are images I will cherish for the rest of my life.",
+  }
+];
 
 export const demoProjects: DemoProject[] = [
   {
@@ -109,7 +131,7 @@ export const demoProjects: DemoProject[] = [
   {
     title: "Product Studio Set",
     slug: "product-studio-set",
-    excerpt: "High-contrast lighting and premium product detail.",
+    excerpt: "High contrast lighting and premium product detail.",
     coverImage: "/demo/bento-4.jpg",
     gallery: ["/demo/bento-4.jpg", "/demo/bento-5.jpg", "/demo/bento-6.jpg"],
     categorySlug: "commercial",
@@ -123,7 +145,7 @@ export const demoProjects: DemoProject[] = [
     categorySlug: "commercial",
   },
   {
-    title: "Black & White Portraits",
+    title: "Black and White Portraits",
     slug: "black-and-white-portraits",
     excerpt: "Classic monochrome with modern edge and soft contrast.",
     coverImage: "/demo/bento-6.jpg",

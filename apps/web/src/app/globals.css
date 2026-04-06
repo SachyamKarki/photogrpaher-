@@ -32,6 +32,10 @@
   src: url("/fonts/poppins/poppins-700.woff2") format("woff2");
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -57,6 +61,7 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: var(--font-sans);
+  --font-calligraphy: var(--font-calligraphy);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -99,3 +104,44 @@ body {
     transition: none;
   }
 }
+
+/* ── Skeleton shimmer animation ── */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes skeleton-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* White-themed shimmer: light gray base with white sweep */
+.skeleton-shimmer {
+  background-color: #f0f0f0;
+  background-image: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #fafafa 40%,
+    #fafafa 60%,
+    #f0f0f0 100%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* Delay wrapper — skeleton stays invisible for 400ms.
+   If the real content loads within 400ms, user never sees it. */
+.skeleton-delay-wrapper {
+  opacity: 0;
+  animation: skeleton-fade-in 0.3s ease-out 0.4s forwards;
+}
+

@@ -30,6 +30,25 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
     };
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    const isHomePage = window.location.pathname === "/";
+    if (isHomePage) {
+      e.preventDefault();
+      const element = document.getElementById(id.replace("#", ""));
+      if (element) {
+        const headerOffset = 100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+        setIsMenuOpen(false);
+      }
+    }
+  };
+
   return (
     <header
       className={[
@@ -39,7 +58,7 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
     >
       <div
         className={[
-          "mx-auto flex items-center px-6 sm:px-10",
+          "mx-auto flex items-center px-4 sm:px-6 md:px-8",
           isCompact
             ? "max-w-6xl justify-between py-0 opacity-0"
             : "max-w-6xl justify-between py-6",
@@ -48,7 +67,7 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
         <Link
           href="/"
           className={[
-            "relative block h-10 w-[19rem] transition-all duration-500 sm:w-[20rem]",
+            "relative block h-10 w-[14rem] transition-all duration-500 xs:w-[16rem] sm:w-[20rem]",
             isCompact ? "translate-y-1 opacity-0" : "translate-y-0 opacity-100",
           ].join(" ")}
         >
@@ -61,7 +80,7 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
             ].join(" ")}
           >
             <Image
-              src="/brand/rabinson-photographs-light.svg"
+              src="/brand/rabinson-photography-light.svg"
               alt={siteTitle}
               width={304}
               height={67}
@@ -92,16 +111,23 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
               : "translate-y-0 text-white/90 opacity-100",
           ].join(" ")}
         >
-          <a className="hover:text-white" href="#work">
-            Work
-          </a>
-          <a className="hover:text-white" href="#categories">
+
+          <Link className="hover:text-white" href="/gallery">
+            Gallery
+          </Link>
+          <a
+            className="hover:text-white"
+            href="/#categories"
+            onClick={(e) => scrollToSection(e, "#categories")}
+          >
             Categories
           </a>
-          <a className="hover:text-white" href="#services">
-            Services
-          </a>
-          <a className="hover:text-white" href="#contact">
+
+          <a
+            className="hover:text-white"
+            href="#contact"
+            onClick={(e) => scrollToSection(e, "#contact")}
+          >
             Contact
           </a>
         </nav>
@@ -109,36 +135,37 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
 
       <div
         className={[
-          "mx-auto max-w-6xl px-6 sm:hidden",
+          "mx-auto max-w-6xl px-4 sm:hidden",
           isCompact || !isMenuOpen ? "pointer-events-none opacity-0" : "opacity-100",
         ].join(" ")}
       >
         <div className="rounded-3xl border border-white/10 bg-zinc-950/70 p-4 backdrop-blur">
           <div className="flex flex-col gap-3 text-sm text-white/90">
-            <a
-              href="#work"
+
+            <Link
+              href="/gallery"
               onClick={() => setIsMenuOpen(false)}
               className="rounded-2xl px-3 py-2 hover:bg-white/10"
             >
-              Work
-            </a>
+              Gallery
+            </Link>
             <a
-              href="#categories"
-              onClick={() => setIsMenuOpen(false)}
+              href="/#categories"
+              onClick={(e) => {
+                scrollToSection(e, "#categories");
+                setIsMenuOpen(false);
+              }}
               className="rounded-2xl px-3 py-2 hover:bg-white/10"
             >
               Categories
             </a>
-            <a
-              href="#services"
-              onClick={() => setIsMenuOpen(false)}
-              className="rounded-2xl px-3 py-2 hover:bg-white/10"
-            >
-              Services
-            </a>
+
             <a
               href="#contact"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => {
+                scrollToSection(e, "#contact");
+                setIsMenuOpen(false);
+              }}
               className="rounded-2xl px-3 py-2 hover:bg-white/10"
             >
               Contact

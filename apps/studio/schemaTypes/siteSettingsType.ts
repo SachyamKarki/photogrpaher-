@@ -141,6 +141,10 @@ export const siteSettingsType = defineType({
       name: "facebook",
       type: "url",
     }),
+    defineField({
+      name: "whatsapp",
+      type: "url",
+    }),
   ],
   preview: {
     prepare: () => ({ title: "Site Settings" }),

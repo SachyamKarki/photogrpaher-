@@ -15,7 +15,8 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     services,
     email,
     instagram,
-    facebook
+    facebook,
+    whatsapp
   }
 `);
 
@@ -60,6 +61,7 @@ export const PROJECTS_QUERY = defineQuery(`
     "slug": slug.current,
     excerpt,
     coverImage,
+    "category": category->{title, "slug": slug.current},
     publishedAt
   }
 `);
@@ -73,5 +75,33 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
     coverImage,
     gallery,
     publishedAt
+  }
+`);
+export const GALLERY_PROJECTS_QUERY = defineQuery(`
+  *[_type == "project" && defined(slug.current)]
+  | order(publishedAt desc)[0...100]{
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    coverImage {
+      ...,
+      asset-> { metadata { dimensions } }
+    },
+    gallery[] {
+      ...,
+      asset-> { metadata { dimensions } }
+    },
+    "category": category->{title, "slug": slug.current},
+    publishedAt
+  }
+`);
+
+export const REVIEWS_QUERY = defineQuery(`
+  *[_type == "review" && featured == true] | order(_createdAt desc) {
+    _id,
+    author,
+    role,
+    quote
   }
 `);

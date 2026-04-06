@@ -32,11 +32,11 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-heading mt-4 text-2xl font-bold uppercase leading-tight tracking-tight text-balance text-zinc-900 sm:text-4xl">
+      <h2 className="font-heading mt-4 text-2xl font-semibold uppercase leading-tight tracking-tight text-balance text-zinc-900 sm:text-3xl md:text-4xl">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-zinc-600 sm:text-base sm:leading-8">
+        <p className="mx-auto mt-3 max-w-2xl text-[13px] leading-relaxed text-zinc-500 sm:text-sm md:text-base sm:leading-loose">
           {subtitle}
         </p>
       ) : null}

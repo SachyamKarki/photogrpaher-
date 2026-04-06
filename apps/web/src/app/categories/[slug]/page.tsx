@@ -90,7 +90,7 @@ export default async function CategoryPage({
               <LogoMark className="h-5 w-5" />
             </div>
             <div className="font-heading font-semibold tracking-tight">
-              Rabinson Photographs
+              Rabinson Photography
             </div>
           </Link>
           <nav className="text-sm text-zinc-600">
@@ -119,7 +119,7 @@ export default async function CategoryPage({
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/10 to-zinc-950/40" />
           </div>
 
-            <div className="relative px-6 py-16 sm:px-10 sm:py-20">
+          <div className="relative px-6 py-16 sm:px-10 sm:py-20">
             <div className="max-w-2xl">
               <h1 className="font-heading mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {category.title}
@@ -155,7 +155,7 @@ export default async function CategoryPage({
                       src={imageUrl}
                       alt={project.title}
                       fill
-                      className="object-cover transition group-hover:scale-[1.01]"
+                      className="object-cover transition"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                     />
                   ) : (
@@ -179,14 +179,6 @@ export default async function CategoryPage({
           })}
         </div>
       </main>
-
-      <SiteFooter
-        siteTitle="Rabinson Photographs"
-        email={demoFooter.email}
-        instagram={demoFooter.instagram}
-        facebook={demoFooter.facebook}
-        locationLine={demoFooter.locationLine}
-      />
     </div>
   );
 }

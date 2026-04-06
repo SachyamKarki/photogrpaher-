@@ -120,14 +120,6 @@ export default async function ProjectPage({
           </div>
         ) : null}
       </main>
-
-      <SiteFooter
-        siteTitle="Rabinson Photographs"
-        email={demoFooter.email}
-        instagram={demoFooter.instagram}
-        facebook={demoFooter.facebook}
-        locationLine={demoFooter.locationLine}
-      />
     </div>
   );
 }

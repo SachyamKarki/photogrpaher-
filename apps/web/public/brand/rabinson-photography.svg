@@ -1,0 +1,12 @@
+<svg width="760" height="168" viewBox="0 0 760 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="148" height="148" rx="38" fill="#111111" fill-opacity="0.04" stroke="#111111" stroke-opacity="0.12" stroke-width="2"/>
+  <path d="M84 44L105.6 61.2L97.57 87.52H70.43L62.4 61.2L84 44Z" fill="#111111"/>
+  <path d="M84 122C105.39 122 122.73 104.66 122.73 83.27" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <path d="M45.27 83.27C45.27 104.66 62.61 122 84 122" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <path d="M84 44.55C62.61 44.55 45.27 61.89 45.27 83.27" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <path d="M122.73 83.27C122.73 61.89 105.39 44.55 84 44.55" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="84" cy="83.27" r="12.5" fill="#111111"/>
+  <text x="192" y="82" fill="#111111" font-size="36" font-family="Poppins, Lato, Arial, sans-serif" letter-spacing="0.22em">RABINSON</text>
+  <text x="192" y="121" fill="#111111" fill-opacity="0.72" font-size="26" font-family="Poppins, Lato, Arial, sans-serif" letter-spacing="0.28em">PHOTOGRAPHY</text>
+</svg>
+
