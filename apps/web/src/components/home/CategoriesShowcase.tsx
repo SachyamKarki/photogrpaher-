@@ -23,10 +23,10 @@ export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
-    <section id="categories" className="scroll-mt-24 py-16 sm:py-32">
+    <section id="categories" className="scroll-mt-24 py-16 sm:py-24">
       {/* Section heading */}
       <Reveal>
-        <div className="mb-12 sm:mb-20">
+        <div className="mb-10 sm:mb-16">
           <SectionHeading
             title="Explore by category"
             subtitle="A curated selection of work across distinct photographic styles."
@@ -75,7 +75,7 @@ export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
               {/* Animated Text Content */}
               <motion.div layout="position" className="absolute inset-x-0 bottom-0 p-8 xl:p-10 flex flex-col justify-end h-full pointer-events-none">
                 <div className="mt-auto">
-                  <h3 className="font-heading text-3xl xl:text-5xl font-bold uppercase tracking-tight text-white transition-all duration-700 w-full truncate mb-0 group-hover/card:mb-4">
+                  <h3 className="font-heading text-2xl xl:text-4xl font-bold uppercase tracking-tight text-white transition-all duration-700 w-full truncate mb-0 group-hover/card:mb-4">
                     {c.title}
                   </h3>
                 
@@ -128,7 +128,7 @@ export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/5 opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
 
               <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                <h3 className="font-heading text-3xl sm:text-4xl font-semibold uppercase tracking-tight text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-1">
+                <h3 className="font-heading text-2xl sm:text-3xl font-semibold uppercase tracking-tight text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-1">
                   {c.title}
                 </h3>
                 {c.description && (

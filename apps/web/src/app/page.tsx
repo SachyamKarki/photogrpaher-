@@ -245,12 +245,12 @@ export default async function Home() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[85vh] max-w-6xl items-end px-4 pb-16 pt-32 sm:px-6 sm:pb-20 sm:pt-36 md:min-h-screen md:px-8">
+          <div className="relative mx-auto flex min-h-[85vh] max-w-6xl items-end px-4 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-28 md:min-h-screen md:px-8">
             <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="font-heading text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                 {heroTitle}
               </h1>
-              <p className="mt-5 max-w-xl text-base leading-7 text-zinc-200 sm:text-lg sm:leading-8">
+              <p className="mt-4 text-base text-white/70 sm:text-lg md:text-xl">
                 {heroSubtitle}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">

@@ -1,12 +1,47 @@
-<svg width="760" height="168" viewBox="0 0 760 168" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="10" y="10" width="148" height="148" rx="38" fill="#111111" fill-opacity="0.04" stroke="#111111" stroke-opacity="0.12" stroke-width="2"/>
-  <path d="M84 44L105.6 61.2L97.57 87.52H70.43L62.4 61.2L84 44Z" fill="#111111"/>
-  <path d="M84 122C105.39 122 122.73 104.66 122.73 83.27" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
-  <path d="M45.27 83.27C45.27 104.66 62.61 122 84 122" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
-  <path d="M84 44.55C62.61 44.55 45.27 61.89 45.27 83.27" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
-  <path d="M122.73 83.27C122.73 61.89 105.39 44.55 84 44.55" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="84" cy="83.27" r="12.5" fill="#111111"/>
-  <text x="192" y="82" fill="#111111" font-size="36" font-family="Poppins, Lato, Arial, sans-serif" letter-spacing="0.22em">RABINSON</text>
-  <text x="192" y="121" fill="#111111" fill-opacity="0.72" font-size="26" font-family="Poppins, Lato, Arial, sans-serif" letter-spacing="0.28em">PHOTOGRAPHY</text>
+<svg width="600" height="120" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Detailed Professional Camera Lens Icon -->
+  <g transform="translate(10, 10)">
+    <!-- Lens Barrel (Outer Housing) -->
+    <circle cx="50" cy="50" r="48" stroke="black" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="50" cy="50" r="44" stroke="black" stroke-width="0.75" opacity="0.3"/>
+    
+    <!-- Focus/Aperture Ring Details -->
+    <path d="M50 2 A 48 48 0 0 1 98 50" stroke="black" stroke-width="3" opacity="0.1"/>
+    <g opacity="0.4">
+      <rect x="49" y="2" width="2" height="6" fill="black" rx="1"/>
+      <rect x="92" y="49" width="6" height="2" fill="black" rx="1"/>
+      <rect x="49" y="92" width="2" height="6" fill="black" rx="1"/>
+      <rect x="2" y="49" width="6" height="2" fill="black" rx="1"/>
+    </g>
+    
+    <!-- Inner Lens Elements & Coatings -->
+    <circle cx="50" cy="50" r="38" stroke="black" stroke-width="1" opacity="0.2"/>
+    <circle cx="50" cy="50" r="32" fill="black" fill-opacity="0.03"/>
+    
+    <!-- Aperture Blades (Realistic Interlocking Style) -->
+    <g transform="translate(50, 50)" opacity="0.8">
+      <path d="M0 -30 L26 -15 L26 15 L0 30 L-26 15 L-26 -15 Z" fill="black" fill-opacity="0.05" stroke="black" stroke-width="1"/>
+      <path d="M0 -30 L10 -5 L26 -15" stroke="black" stroke-width="1" opacity="0.5"/>
+      <path d="M26 -15 L15 10 L26 15" stroke="black" stroke-width="1" opacity="0.5"/>
+      <path d="M26 15 L-5 20 L0 30" stroke="black" stroke-width="1" opacity="0.5"/>
+      <path d="M0 30 L-20 5 L-26 15" stroke="black" stroke-width="1" opacity="0.5"/>
+      <path d="M-26 15 L-15 -15 L-26 -15" stroke="black" stroke-width="1" opacity="0.5"/>
+      <path d="M-26 -15 L5 -15 L0 -30" stroke="black" stroke-width="1" opacity="0.5"/>
+    </g>
+    
+    <!-- Center Optics -->
+    <circle cx="50" cy="50" r="14" stroke="black" stroke-width="1.5" fill="black" fill-opacity="0.1"/>
+    <circle cx="50" cy="50" r="8" fill="black" fill-opacity="0.9"/>
+    
+    <!-- Professional Lens Glints -->
+    <path d="M75 25 C85 35 85 65 75 75" stroke="black" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+    <circle cx="68" cy="32" r="3" fill="black" opacity="0.6"/>
+    <circle cx="32" cy="68" r="1.5" fill="black" opacity="0.4"/>
+  </g>
+  
+  <!-- "RABINSON" - High-end Serif -->
+  <text x="130" y="62" fill="black" font-family="'Playfair Display', 'Times New Roman', serif" font-weight="700" font-size="52" letter-spacing="0.08em">RABINSON</text>
+  
+  <!-- "PHOTOGRAPHY" - Modern Wide Sans-serif -->
+  <text x="132" y="98" fill="black" fill-opacity="0.8" font-family="Montserrat, Inter, sans-serif" font-weight="500" font-size="18" letter-spacing="0.7em">PHOTOGRAPHY</text>
 </svg>
-

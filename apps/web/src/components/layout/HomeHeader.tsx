@@ -61,13 +61,13 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
           "mx-auto flex items-center px-4 sm:px-6 md:px-8",
           isCompact
             ? "max-w-6xl justify-between py-0 opacity-0"
-            : "max-w-6xl justify-between py-6",
+            : "max-w-6xl justify-between py-4",
         ].join(" ")}
       >
         <Link
           href="/"
           className={[
-            "relative block h-10 w-[14rem] transition-all duration-500 xs:w-[16rem] sm:w-[20rem]",
+            "relative block h-11 w-[16rem] transition-all duration-500 xs:w-[18rem] sm:w-[22rem]",
             isCompact ? "translate-y-1 opacity-0" : "translate-y-0 opacity-100",
           ].join(" ")}
         >
@@ -82,9 +82,9 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
             <Image
               src="/brand/rabinson-photography-light.svg"
               alt={siteTitle}
-              width={304}
-              height={67}
-              className="h-10 w-auto drop-shadow-sm"
+              width={280}
+              height={56}
+              className="h-11 w-auto drop-shadow-sm brightness-110 contrast-125"
               priority
             />
           </div>
@@ -105,13 +105,12 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
 
         <nav
           className={[
-            "hidden items-center gap-6 text-sm transition-all duration-500 will-change-transform sm:flex",
+            "hidden items-center gap-5 text-sm transition-all duration-500 will-change-transform sm:flex",
             isCompact
               ? "pointer-events-none translate-y-1 opacity-0"
               : "translate-y-0 text-white/90 opacity-100",
           ].join(" ")}
         >
-
           <Link className="hover:text-white" href="/gallery">
             Gallery
           </Link>
@@ -122,7 +121,9 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
           >
             Categories
           </a>
-
+          <Link className="hover:text-white" href="/about">
+            About me
+          </Link>
           <a
             className="hover:text-white"
             href="#contact"
@@ -159,7 +160,13 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
             >
               Categories
             </a>
-
+            <Link
+              href="/about"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-2xl px-3 py-2 hover:bg-white/10"
+            >
+              About me
+            </Link>
             <a
               href="#contact"
               onClick={(e) => {

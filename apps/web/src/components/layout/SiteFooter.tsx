@@ -99,7 +99,7 @@ export function SiteFooter({
         <div className="mb-16 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
-            <p className="max-w-md text-[13px] normal-case leading-[1.8] text-white/50 tracking-wide">
+            <p className="max-w-md text-[13px] normal-case leading-[1.8] text-white tracking-wide">
               A refined photography experience for weddings, portraits, and
               commercial stories. Crafted with calm direction, timeless light,
               and honest detail.
@@ -130,9 +130,9 @@ export function SiteFooter({
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Facebook"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all hover:border-white hover:bg-white hover:text-black"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white transition-all hover:brightness-110 hover:scale-105"
                   >
-                    <FacebookIcon className="h-4 w-4" />
+                    <FacebookIcon className="h-5 w-5" />
                   </a>
                 ) : null}
                 {instagram && isExternalUrl(instagram) ? (
@@ -141,9 +141,9 @@ export function SiteFooter({
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Instagram"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all hover:border-white hover:bg-white hover:text-black"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white transition-all hover:brightness-110 hover:scale-105"
                   >
-                    <InstagramIcon className="h-4 w-4" />
+                    <InstagramIcon className="h-5 w-5" />
                   </a>
                 ) : null}
                 {whatsapp && isExternalUrl(whatsapp) ? (
@@ -152,9 +152,9 @@ export function SiteFooter({
                     target="_blank"
                     rel="noreferrer"
                     aria-label="WhatsApp"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all hover:border-white hover:bg-white hover:text-black"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366] text-white transition-all hover:brightness-110 hover:scale-105"
                   >
-                    <WhatsAppIcon className="h-4 w-4" />
+                    <WhatsAppIcon className="h-5 w-5" />
                   </a>
                 ) : null}
               </div>
@@ -216,30 +216,6 @@ export function SiteFooter({
               </ul>
             </nav>
 
-            <a
-              href="#top"
-              aria-label="Back to top"
-              className="group inline-flex items-center justify-center transition-opacity hover:opacity-100"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/5 transition-all group-hover:border-white group-hover:bg-white group-hover:text-black">
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transition-transform group-hover:-translate-y-0.5"
-                >
-                  <path
-                    d="M1 6L6 1L11 6M6 1V11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </a>
           </div>
         </div>
 
