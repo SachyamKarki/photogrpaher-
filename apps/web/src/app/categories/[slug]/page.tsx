@@ -5,8 +5,7 @@ import { notFound } from "next/navigation";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 import { LogoMark } from "@/components/brand/LogoMark";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { demoCategories, demoFooter, demoProjects } from "@/lib/demo/content";
+import { demoCategories, demoProjects } from "@/lib/demo/content";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import {
@@ -94,8 +93,8 @@ export default async function CategoryPage({
             </div>
           </Link>
           <nav className="text-sm text-zinc-600">
-            <Link className="hover:text-zinc-900" href="/studio">
-              Studio
+            <Link className="hover:text-zinc-900" href="/gallery">
+              Gallery
             </Link>
           </nav>
         </div>

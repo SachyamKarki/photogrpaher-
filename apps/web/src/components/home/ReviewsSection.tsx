@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -33,7 +32,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             <Reveal key={review._id} delayMs={idx * 100}>
               <div className="flex flex-col justify-between h-full p-8 rounded-[2rem] bg-white border border-zinc-100 shadow-sm transition hover:shadow-md">
                 <blockquote>
-                  <span className="text-4xl text-zinc-300 font-serif leading-none absolute -mt-4 -ml-2">"</span>
+                  <span className="text-4xl text-zinc-300 font-serif leading-none absolute -mt-4 -ml-2">&quot;</span>
                   <p className="relative text-zinc-600 text-[15px] leading-relaxed italic z-10">
                     {review.quote}
                   </p>

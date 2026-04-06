@@ -1,3 +1,5 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
@@ -7,11 +9,62 @@ import {
 } from "@/lib/sanity/queries";
 import { demoCategories, demoProjects } from "@/lib/demo/content";
 
+export interface SanityImage {
+  asset?: {
+    _ref?: string;
+    _type?: string;
+    metadata?: {
+      dimensions?: {
+        width: number;
+        height: number;
+      };
+    };
+  };
+  camera?: string;
+  lens?: string;
+  settings?: string;
+  description?: string;
+}
+
+export type SanityImageSourcePlus = SanityImageSource & SanityImage;
+
+export interface SanityProject {
+  _id?: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  coverImage?: SanityImageSourcePlus;
+  gallery?: SanityImageSourcePlus[];
+  category?: { title: string; slug: string };
+  categorySlug?: string;
+}
+
+export interface SanityCategory {
+  _id: string;
+  title: string;
+  slug: string;
+  description?: string;
+}
+
+export interface GalleryImage {
+  _id: string;
+  title: string;
+  imageUrl: string;
+  aspectRatio: number;
+  category?: { title: string; slug: string };
+  metadata: {
+    camera: string;
+    lens: string;
+    settings: string;
+    description: string;
+  };
+}
+
 export async function getAllGalleryImages() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
 
-  let rawProjects: any[] = [];
-  let rawCategories: any[] = [];
+  let rawProjects: SanityProject[] = [];
+  let rawCategories: SanityCategory[] = [];
 
   if (sanityEnabled) {
     try {
@@ -29,7 +82,7 @@ export async function getAllGalleryImages() {
   }
 
   const processedCategories = (rawCategories && rawCategories.length > 0)
-    ? rawCategories.map((c: any) => ({
+    ? rawCategories.map((c: SanityCategory) => ({
         _id: c?._id || Math.random().toString(),
         title: c?.title || "Untitled",
         slug: c?.slug || "uncategorized",
@@ -40,9 +93,9 @@ export async function getAllGalleryImages() {
         slug: c.slug,
       }));
 
-  let allImages: any[] = [];
+  const allImages: GalleryImage[] = [];
 
-  const addImage = (id: string, title: string, source: any, project: any) => {
+  const addImage = (id: string, title: string, source: SanityImageSourcePlus, project: SanityProject) => {
     let imageUrl = null;
     let aspectRatio = 1.0; 
 
@@ -60,10 +113,10 @@ export async function getAllGalleryImages() {
 
     // Professional Standards Metadata
     const metadata = {
-      camera: source?.camera || "Sony α7R V",
-      lens: source?.lens || "FE 35mm f/1.4 GM",
-      settings: source?.settings || "f/1.4 • 1/250s • ISO 100",
-      description: source?.description || project?.excerpt || "A focus on honest light and careful composition to create a timeless, editorial aesthetic."
+      camera: (source as SanityImage).camera || "Sony α7R V",
+      lens: (source as SanityImage).lens || "FE 35mm f/1.4 GM",
+      settings: (source as SanityImage).settings || "f/1.4 • 1/250s • ISO 100",
+      description: (source as SanityImage).description || project?.excerpt || "A focus on honest light and careful composition to create a timeless, editorial aesthetic."
     };
 
     if (typeof source === "string") {
@@ -83,19 +136,22 @@ export async function getAllGalleryImages() {
         imageUrl,
         aspectRatio,
         metadata,
-        category: project?.category || { title: project?.categorySlug, slug: project?.categorySlug },
+        category: project?.category || { 
+          title: project?.categorySlug || "Photography", 
+          slug: project?.categorySlug || "photography" 
+        },
       });
     }
   };
 
   if (rawProjects && rawProjects.length > 0) {
-    rawProjects.forEach((project: any) => {
+    rawProjects.forEach((project: SanityProject) => {
       if (!project) return;
       if (project.coverImage) {
         addImage(`${project._id}-cover`, project.title, project.coverImage, project);
       }
       if (Array.isArray(project.gallery)) {
-        project.gallery.forEach((img: any, idx: number) => {
+        project.gallery.forEach((img: SanityImageSourcePlus, idx: number) => {
           if (!img) return;
           addImage(`${project._id}-gal-${idx}`, `${project.title || "Project"} - Photo ${idx + 1}`, img, project);
         });
@@ -105,10 +161,10 @@ export async function getAllGalleryImages() {
 
   if (allImages.length === 0) {
     demoProjects.forEach((p) => {
-      addImage(`demo-${p.slug}-cover`, p.title, p.coverImage, p);
+      addImage(`demo-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject);
       if (Array.isArray(p.gallery)) {
         p.gallery.forEach((img, idx) => {
-          addImage(`demo-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img, p);
+          addImage(`demo-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject);
         });
       }
     });

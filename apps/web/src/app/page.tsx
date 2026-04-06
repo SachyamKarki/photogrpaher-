@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
@@ -7,16 +6,14 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { HeroCarousel } from "@/components/home/HeroCarousel";
 import { ServicesAccordion } from "@/components/home/ServicesAccordion";
 import { HomeHeader } from "@/components/layout/HomeHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GallerySection } from "@/components/home/GallerySection";
 import { BrandsSection } from "@/components/home/BrandsSection";
-import { ReviewsSection } from "@/components/home/ReviewsSection";
+import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
 import {
   demoAbout,
   demoCategories,
-  demoFooter,
   demoHero,
   demoProjects,
   demoServices,
@@ -132,7 +129,7 @@ export default async function Home() {
   let settings: SiteSettings | null = null;
   let projects: ProjectListItem[] | null = null;
   let categories: Category[] | null = null;
-  let reviews: any[] | null = null;
+  let reviews: Review[] | null = null;
 
   if (sanityEnabled) {
     try {
@@ -140,7 +137,7 @@ export default async function Home() {
         sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY),
         sanityServerClient!.fetch<ProjectListItem[]>(PROJECTS_QUERY),
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
-        sanityServerClient!.fetch<any[]>(REVIEWS_QUERY),
+        sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
       ]);
     } catch {
       settings = null;
@@ -204,10 +201,6 @@ export default async function Home() {
   const siteTitle = settings?.title ?? "Rabinson Photography";
   const heroTitle = settings?.heroTitle ?? demoHero.title;
   const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
-  const footerEmail = settings?.email ?? demoFooter.email;
-  const footerInstagram = settings?.instagram ?? demoFooter.instagram;
-  const footerFacebook = settings?.facebook ?? demoFooter.facebook;
-  const footerWhatsapp = settings?.whatsapp ?? demoFooter.whatsapp;
   
   const heroSlides = allProjects
     .map((project) => {
@@ -238,19 +231,19 @@ export default async function Home() {
       <HomeHeader siteTitle={siteTitle} />
 
       <main className="w-full">
-        <section className="relative min-h-[85vh] overflow-hidden bg-zinc-900 md:min-h-screen">
+        <section className="relative min-h-[100svh] overflow-hidden bg-zinc-900 md:min-h-screen">
           <div className="absolute inset-0">
             <HeroCarousel slides={slides} siteTitle={siteTitle} />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-zinc-950/35" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[85vh] max-w-6xl items-end px-4 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-28 md:min-h-screen md:px-8">
+          <div className="relative mx-auto flex min-h-[100svh] max-w-6xl items-end px-4 pb-20 pt-24 sm:px-6 sm:pb-16 sm:pt-28 md:min-h-screen md:px-8">
             <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="font-heading text-xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
                 {heroTitle}
               </h1>
-              <p className="mt-4 text-base text-white/70 sm:text-lg md:text-xl">
+              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base md:text-lg max-w-xl">
                 {heroSubtitle}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">

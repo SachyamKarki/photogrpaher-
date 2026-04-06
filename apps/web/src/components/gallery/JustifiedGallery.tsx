@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,12 +43,14 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
-  useEffect(() => {
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-      setCurrentPage(1);
-    }
-  }, [categoryParam]);
+  // Sync internal state when URL changes (e.g., back button)
+  // This pattern is recommended by React for syncing props to state
+  if (categoryParam !== selectedCategory && !isSearching) {
+    setSelectedCategory(categoryParam);
+    setCurrentPage(1);
+  }
+
+  const activeCategory = isSearching ? (selectedCategory !== categoryParam ? selectedCategory : categoryParam) : categoryParam;
 
   const handleCategoryChange = (slug: string | null) => {
     if (slug === selectedCategory) return;
@@ -69,8 +71,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     }, 600);
   };
 
-  const filteredImages = selectedCategory
-    ? images.filter((img) => img.category?.slug === selectedCategory)
+  const filteredImages = activeCategory
+    ? images.filter((img) => img.category?.slug === activeCategory)
     : images;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
@@ -78,37 +80,45 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
   return (
     <div className="w-full">
-      {/* Refined Minimalist Category Filters */}
-      <div className="mb-12 flex flex-wrap justify-center gap-8 sm:gap-12 border-b border-zinc-200/50 pb-4">
-        <button
-          onClick={() => handleCategoryChange(null)}
-          className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[17px] ${
-            selectedCategory === null
-              ? "text-zinc-900"
-              : "text-zinc-400 hover:text-zinc-900"
-          }`}
-        >
-          All
-          {selectedCategory === null && (
-            <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
-          )}
-        </button>
-        {categories.map((category) => (
-          <button
-            key={category._id}
-            onClick={() => handleCategoryChange(category.slug)}
-            className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[17px] ${
-              selectedCategory === category.slug
-                ? "text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-900"
-            }`}
-          >
-            {category.title}
-            {selectedCategory === category.slug && (
-              <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
-            )}
-          </button>
-        ))}
+      {/* Refined Minimalist Category Filters - Scrollable on Mobile */}
+      <div className="relative mb-12">
+        <div className="flex overflow-x-auto no-scrollbar border-b border-zinc-200/50 pb-px scroll-smooth">
+          <div className="flex flex-nowrap gap-8 sm:gap-12 min-w-full justify-start sm:justify-center px-4 sm:px-0">
+            <button
+              onClick={() => handleCategoryChange(null)}
+              className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
+                selectedCategory === null
+                  ? "text-zinc-900"
+                  : "text-zinc-400 hover:text-zinc-900"
+              }`}
+            >
+              All
+              {selectedCategory === null && (
+                <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
+              )}
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category._id}
+                onClick={() => handleCategoryChange(category.slug)}
+                className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
+                  selectedCategory === category.slug
+                    ? "text-zinc-900"
+                    : "text-zinc-400 hover:text-zinc-900"
+                }`}
+              >
+                {category.title}
+                {selectedCategory === category.slug && (
+                  <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Subtle Fade Indicators for scrolling */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-zinc-50 to-transparent sm:hidden opacity-0" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent sm:hidden" />
       </div>
 
       {/* "Puzzle" Justified Grid */}
@@ -134,7 +144,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               </motion.div>
             ))
           ) : (
-            paginatedImages.map((image, index) => (
+            paginatedImages.map((image) => (
               <motion.div
                 key={image._id}
                 layout
@@ -143,8 +153,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 style={{
+                  // Industry Standard Optimized Grid Logic:
+                  // 1. Flex Grow by aspect ratio (justified fill)
                   flexGrow: image.aspectRatio,
-                  flexBasis: `${image.aspectRatio * 200}px`,
+                  // 2. Responsive Flex Basis: 
+                  // - On mobile (< 640px): strictly 2 columns (max 48% to fit two per row)
+                  // - On larger screens: calculated based on aspect ratio height of 280px
+                  flexBasis: `calc(min(48%, max(44%, ${image.aspectRatio * 160}px)))`,
                   aspectRatio: `${image.aspectRatio}`,
                 }}
                 className="relative overflow-hidden rounded-2xl bg-zinc-100 group cursor-pointer"
@@ -170,15 +185,15 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                   </div>
                 )}
                 
-                {/* Refined Cinematic Overlay */}
-                <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex flex-col items-center justify-center pointer-events-none p-4">
+                {/* Refined Cinematic Overlay - More visible on mobile touch */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 sm:backdrop-blur-[2px] flex flex-col items-center justify-end pb-6 pointer-events-none p-4">
                   <div className="text-center translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                     {image.category && (
-                      <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/80 mb-2">
+                      <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/90 mb-1 sm:text-[9px] sm:tracking-[0.25em]">
                         {image.category.title}
                       </p>
                     )}
-                    <h3 className="text-lg md:text-xl font-heading tracking-wide text-white drop-shadow-md">
+                    <h3 className="text-sm font-heading tracking-wide text-white drop-shadow-md sm:text-lg md:text-xl">
                       {image.title}
                     </h3>
                   </div>
@@ -192,9 +207,9 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         {!isSearching && <div className="flex-grow-[100] basis-0" />}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination Controls - Touch Optimized */}
       {totalPages > 1 && (
-        <div className="mt-12 flex justify-center gap-2">
+        <div className="mt-12 flex flex-wrap justify-center gap-3">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
@@ -202,9 +217,9 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                 setCurrentPage(i + 1);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className={`rounded-full h-10 w-10 text-sm font-semibold transition ${
+              className={`rounded-full h-11 w-11 text-sm font-semibold transition-all active:scale-95 ${
                 currentPage === i + 1
-                  ? "bg-black text-white"
+                  ? "bg-black text-white shadow-md scale-105"
                   : "border border-zinc-200 bg-white text-zinc-600 hover:border-black hover:text-black"
               }`}
             >

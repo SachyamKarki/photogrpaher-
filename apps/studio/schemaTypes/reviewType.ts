@@ -5,7 +5,7 @@ export const reviewType = defineType({
   name: "review",
   title: "Testimonial / Review",
   type: "document",
-  icon: MessageSquare as any,
+  icon: MessageSquare,
   fields: [
     defineField({
       name: "author",

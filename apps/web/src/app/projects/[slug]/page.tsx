@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { demoFooter, demoProjects } from "@/lib/demo/content";
+import { demoProjects } from "@/lib/demo/content";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { PROJECT_BY_SLUG_QUERY } from "@/lib/sanity/queries";

@@ -5,7 +5,7 @@ import "@fontsource/lato/700.css";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
-import { ScrollToTopOnNav } from "@/components/layout/ScrollToTopOnNav";
+import { ErrorFilter } from "@/components/layout/ErrorFilter";
 import { demoFooter } from "@/lib/demo/content";
 
 const calligraphy = Pinyon_Script({
@@ -32,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${calligraphy.variable} font-sans bg-white text-zinc-950 antialiased`}
       >
+        <ErrorFilter />
         {children}
         <SiteFooter
           siteTitle={siteTitle}

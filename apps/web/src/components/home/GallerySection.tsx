@@ -69,21 +69,21 @@ export function GallerySection({
           </div>
         </Reveal>
 
-        <div className="mt-10 sm:mt-12">
+        <div className="mt-12 sm:mt-16">
           <motion.div 
             layout
-            className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-12 lg:auto-rows-[180px] xl:auto-rows-[200px]"
+            className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[220px] xl:auto-rows-[240px]"
           >
             <AnimatePresence mode="popLayout">
               {filteredProjects.slice(0, 6).map((project, idx) => {
                 const isFirst = idx === 0 && !activeCategory;
                 const cardClass = isFirst 
-                  ? "min-h-[320px] md:h-[400px] lg:col-span-7 lg:row-span-3 lg:h-auto"
+                  ? "aspect-[4/5] sm:aspect-square md:aspect-auto lg:col-span-7 lg:row-span-3 lg:h-full lg:min-h-[400px]"
                   : idx === 1 && !activeCategory 
-                  ? "min-h-[240px] md:h-[400px] lg:col-span-5 lg:row-span-2 lg:h-auto"
+                  ? "aspect-[4/5] sm:aspect-square md:aspect-auto lg:col-span-5 lg:row-span-2 lg:h-full lg:min-h-[300px]"
                   : idx === 2 && !activeCategory 
-                  ? "min-h-[220px] md:h-auto lg:col-span-5 lg:row-span-1"
-                  : "min-h-[220px] md:h-auto lg:col-span-4 lg:row-span-1";
+                  ? "aspect-[4/5] sm:aspect-square md:aspect-auto lg:col-span-5 lg:row-span-1 lg:h-full"
+                  : "aspect-[4/5] sm:aspect-square md:aspect-auto lg:col-span-4 lg:row-span-1 lg:h-full";
 
                 return (
                   <motion.div

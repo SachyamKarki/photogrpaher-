@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { ZoomIn } from "lucide-react";
 
 type ZoomableImageProps = {
   src: string;
@@ -20,12 +19,10 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
       doubleClick={{ mode: "toggle" }}
       panning={{ velocityDisabled: false }}
     >
-      {({ zoomIn, zoomOut, resetTransform }) => (
-        <div className="relative w-full h-full">
-          <TransformComponent
-            wrapperStyle={{ width: "100%", height: "100%" }}
-            contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
-          >
+      <TransformComponent
+        wrapperStyle={{ width: "100%", height: "100%" }}
+        contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
             <div className="relative w-full h-full cursor-zoom-in">
               <Image
                 src={src}
@@ -37,9 +34,7 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
                 draggable={false}
               />
             </div>
-          </TransformComponent>
-        </div>
-      )}
+      </TransformComponent>
     </TransformWrapper>
   );
 }

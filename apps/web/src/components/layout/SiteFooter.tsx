@@ -86,7 +86,7 @@ export function SiteFooter({
   whatsapp,
 }: Props) {
   return (
-    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/10 bg-black pb-12 pt-16 text-white/90 uppercase font-semibold">
+    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white uppercase font-semibold">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
         <div className="pointer-events-none mb-10 w-full select-none text-center">
           <h2
@@ -99,7 +99,7 @@ export function SiteFooter({
         <div className="mb-16 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
-            <p className="max-w-md text-[13px] normal-case leading-[1.8] text-white tracking-wide">
+            <p className="max-w-md text-sm leading-[1.8] text-white tracking-wide lg:text-base normal-case opacity-90">
               A refined photography experience for weddings, portraits, and
               commercial stories. Crafted with calm direction, timeless light,
               and honest detail.
@@ -109,14 +109,14 @@ export function SiteFooter({
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/#contact"
-                  className="inline-flex h-9 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-[11px] font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15"
+                  className="inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                 >
                   BOOK A SHOOT
                 </Link>
                 {email ? (
                   <a
                     href={`mailto:${email}`}
-                    className="inline-flex h-9 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-[11px] font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15"
+                    className="inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                   >
                     EMAIL US
                   </a>
@@ -166,52 +166,52 @@ export function SiteFooter({
             <nav aria-label="Footer">
               <ul className="grid grid-cols-2 gap-x-12 gap-y-6 text-left md:gap-x-16 md:text-right">
                 <li>
-                  <a
+                  <Link
                     href="/#work"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Featured Work
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
                     href="/gallery"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Gallery
                   </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/#categories"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Categories
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
                     href="/about"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     About
                   </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/#services"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Services
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/#contact"
-                    className="font-heading block text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 transition-colors hover:text-white"
+                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -220,7 +220,7 @@ export function SiteFooter({
         </div>
 
         <div className="mt-20 border-t border-white/5 pt-10 pb-6 text-center">
-          <p className="text-[10px] tracking-[0.15em] text-white/70 uppercase font-bold">
+          <p className="text-[10px] tracking-[0.2em] text-white uppercase font-bold opacity-40">
             © {new Date().getFullYear()} {siteTitle}. All rights reserved.
           </p>
         </div>

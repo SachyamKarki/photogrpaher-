@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getAllGalleryImages } from "@/lib/gallery";
-import { ChevronLeft, ChevronRight, X, Camera, Aperture, Settings, Info } from "lucide-react";
+import { getAllGalleryImages, type GalleryImage } from "@/lib/gallery";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ZoomableImage } from "@/components/gallery/ZoomableImage";
 
-export async function generateMetadata(props: any): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { allImages } = await getAllGalleryImages();
   const params = await props.params;
-  const image = allImages.find((img) => img._id === params.id);
+  const image = allImages.find((img: GalleryImage) => img._id === params.id);
   
   if (!image) {
     return { title: "Photo Not Found | Rabinson Photography" };
@@ -20,7 +20,10 @@ export async function generateMetadata(props: any): Promise<Metadata> {
   };
 }
 
-export default async function PhotoPage(props: any) {
+export default async function PhotoPage(props: { 
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ category?: string }>;
+}) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   

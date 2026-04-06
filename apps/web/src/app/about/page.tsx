@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { demoAbout, demoFooter, demoProjects } from "@/lib/demo/content";
+import { demoAbout, demoProjects } from "@/lib/demo/content";
 
 export default function AboutPage() {
   // Taking a few choice images for the recommendation section
@@ -32,7 +31,7 @@ export default function AboutPage() {
                     <p>
                       Every session is built around calm direction, thoughtful
                       planning, and a visual style that feels timeless rather than
-                      overdone. I believe that the best photographs aren't forced;
+                      overdone. I believe that the best photographs aren&apos;t forced;
                       they are found in the quiet moments between the poses, in 
                       the honest light of a late afternoon, and in the genuine 
                       connection between people.
@@ -43,7 +42,7 @@ export default function AboutPage() {
                       My technical background is rooted in traditional film 
                       aesthetics—prioritizing natural skin tones, soft grain, 
                       and a dynamic range that feels as close to the human 
-                      eye as possible. Whether it's an editorial portrait or a 
+                      eye as possible. Whether it&apos;s an editorial portrait or a 
                       large-scale commercial commission, the goal remains the 
                       same: create photographs that feel personal, elevated, 
                       and easy to return to for years.

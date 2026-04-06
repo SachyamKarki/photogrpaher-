@@ -1,11 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { JustifiedGallery } from "@/components/gallery/JustifiedGallery";
 import { getAllGalleryImages } from "@/lib/gallery";
-import { demoFooter } from "@/lib/demo/content";
 
 export const metadata: Metadata = {
   title: "Gallery | Rabinson Photography",
@@ -14,11 +12,10 @@ export const metadata: Metadata = {
 
 export default async function GalleryPage() {
   const { allImages, processedCategories } = await getAllGalleryImages();
-  let siteTitle = "Rabinson Photography";
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <main className="mx-auto max-w-[1440px] px-6 pb-20 pt-8 sm:px-10 lg:px-16">
+      <main className="mx-auto max-w-[1440px] px-2 pb-20 pt-8 sm:px-10 lg:px-16">
         <Reveal>
           <div className="mb-8">
             <SectionHeading
