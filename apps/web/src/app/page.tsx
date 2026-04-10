@@ -39,7 +39,7 @@ type SiteSettings = {
   heroVideoUrl?: string;
   servicesTitle?: string;
   servicesIntro?: string;
-  services?: { title?: string; description?: string }[];
+  services?: { title?: string; description?: string; details?: string[] }[];
   email?: string;
   instagram?: string;
   facebook?: string;
@@ -157,7 +157,7 @@ export default async function Home() {
     title: service.title ?? "Service",
     description:
       service.description ?? getServiceSummary(service.title),
-    details: getServiceDetails(service.title),
+    details: service.details ?? getServiceDetails(service.title),
   }));
 
   const allProjects = (projects?.length ? projects : null)
@@ -224,7 +224,13 @@ export default async function Home() {
     })),
   ];
 
-  const slides = heroSlides.length ? heroSlides : fallbackHeroSlides;
+  const baseSlides = heroSlides.length ? heroSlides : fallbackHeroSlides;
+
+  const slides = [
+    { src: "/demo/wedding.jpg", alt: "Editorial Wedding" },
+    { src: "/demo/himalaya.jpg", alt: "Himalayas Landscape" },
+    ...baseSlides.slice(0, 2),
+  ];
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -238,24 +244,24 @@ export default async function Home() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[100svh] max-w-6xl items-end px-4 pb-20 pt-24 sm:px-6 sm:pb-16 sm:pt-28 md:min-h-screen md:px-8">
-            <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
+          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-20 pt-24 sm:px-8 sm:pb-16 sm:pt-28 md:min-h-screen lg:px-12 xl:px-16">
+            <Reveal className="max-w-3xl">
+              <h1 className="font-heading text-xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                 {heroTitle}
               </h1>
-              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base md:text-lg max-w-xl">
+              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base md:text-lg lg:text-xl max-w-2xl">
                 {heroSubtitle}
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
                 <a
                   href="#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-zinc-100"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-12 md:px-8 md:text-base"
                 >
                   Book a shoot
                 </a>
                 <a
                   href="#work"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15 md:h-12 md:px-8 md:text-base"
                 >
                   Explore work
                 </a>
@@ -264,16 +270,16 @@ export default async function Home() {
           </div>
         </section>
 
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-8">
+        <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
           {/* Integrated Gallery Section - now receives pre-processed image URLs */}
           <GallerySection 
             initialProjects={allProjects}
             initialCategories={homeCategories}
           />
 
-          <section id="about" className="scroll-mt-24 py-16 sm:py-32">
+          <section id="about" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
             <Reveal>
-              <div className="mx-auto max-w-4xl text-center">
+              <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
                   title={demoAbout.title}
                   subtitle={demoAbout.body}
@@ -293,15 +299,15 @@ export default async function Home() {
 
           <BrandsSection />
 
-          <section id="services" className="scroll-mt-24 py-16 sm:py-32">
+          <section id="services" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
             <Reveal>
-              <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+              <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
                 <SectionHeading
                   title={serviceTitle}
                   subtitle={serviceIntro}
                 />
 
-                <div className="mx-auto mt-10 max-w-4xl sm:mt-12">
+                <div className="mx-auto mt-10 max-w-5xl sm:mt-16">
                   <ServicesAccordion items={servicePanels} />
                 </div>
               </div>
@@ -310,7 +316,7 @@ export default async function Home() {
 
           <ReviewsSection reviews={safeReviews} />
 
-          <section id="contact" className="scroll-mt-24 py-16 sm:py-32">
+          <section id="contact" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
             <Reveal>
               <div>
                 <SectionHeading
@@ -318,7 +324,7 @@ export default async function Home() {
                   subtitle="Share your date, location, and what you need. You’ll receive availability and a tailored quote within 24 to 48 hours."
                 />
 
-                <div className="mx-auto mt-10 w-full max-w-6xl sm:mt-12">
+                <div className="mx-auto mt-10 w-full max-w-7xl sm:mt-16">
                   <ContactForm categories={contactCategories} />
                 </div>
               </div>

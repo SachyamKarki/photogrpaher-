@@ -87,15 +87,7 @@ export function SiteFooter({
 }: Props) {
   return (
     <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white uppercase font-semibold">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
-        <div className="pointer-events-none mb-10 w-full select-none text-center">
-          <h2
-            className="font-calligraphy normal-case whitespace-nowrap py-2 text-[clamp(2.5rem,8.5vw,11rem)] font-normal tracking-wide text-white"
-          >
-            {siteTitle}
-          </h2>
-        </div>
-
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="mb-16 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
@@ -219,8 +211,17 @@ export function SiteFooter({
           </div>
         </div>
 
-        <div className="mt-20 border-t border-white/5 pt-10 pb-6 text-center">
-          <p className="text-[10px] tracking-[0.2em] text-white uppercase font-bold opacity-40">
+        <div className="pointer-events-none mt-32 md:mt-48 w-full select-none text-center">
+          <h2
+            className="uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif", lineHeight: 1 }}
+          >
+            {siteTitle}.
+          </h2>
+        </div>
+
+        <div className="mt-12 md:mt-20 border-t border-white/5 pt-12 pb-6 text-center">
+          <p className="text-[10px] tracking-[0.2em] text-white uppercase font-bold opacity-40" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
             © {new Date().getFullYear()} {siteTitle}. All rights reserved.
           </p>
         </div>

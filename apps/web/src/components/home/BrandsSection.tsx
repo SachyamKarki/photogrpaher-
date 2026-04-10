@@ -1,101 +1,58 @@
 "use client";
 
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-
-const brands = [
-  "VOGUE",
-  "GQ",
-  "SONY",
-  "LEICA",
-  "KINFOLK",
-  "CEREAL",
-  "MONOCLE",
-  "ARTFORUM",
-  "WALLPAPER*"
-];
+import { demoBrands } from "@/lib/demo/content";
 
 export function BrandsSection() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -400, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
-    }
-  };
+  // Duplicate the brands array to create a seamless loop
+  const duplicatedBrands = [...demoBrands, ...demoBrands];
 
   return (
-    <section className="relative w-full py-8 sm:py-12 overflow-hidden bg-zinc-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-10 flex flex-col justify-center">
-        <SectionHeading
-          title="Collaborated Partners"
+    <section className="relative w-full py-12 md:py-20 overflow-hidden bg-zinc-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-12">
+        <SectionHeading 
+          title="Industry Partners" 
+          align="center"
         />
       </div>
 
-      {/* Scrollable Area with Inline Controls */}
-      <div className="relative flex w-full items-center gap-6 sm:gap-10 mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="relative flex overflow-hidden">
+        {/* Gradients for smooth fade in/out - merging with bg-zinc-50 */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-l from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
 
-        {/* Left Arrow Button */}
-        <button
-          onClick={scrollLeft}
-          className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 hover:text-zinc-900 hover:border-zinc-300 transition-colors shadow-sm hidden sm:flex"
-          aria-label="Scroll left"
+        <motion.div
+          className="flex whitespace-nowrap gap-6 md:gap-12 items-center"
+          animate={{
+            x: [0, "-50%"],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear",
+          }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-
-        {/* Slider Container */}
-        <div className="relative flex-1 overflow-hidden mx-auto select-none">
-          {/* Left fade out mask */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 md:w-24 bg-gradient-to-r from-zinc-50 to-transparent z-10 pointer-events-none" />
-
-          <div
-            ref={scrollRef}
-            className="flex gap-10 md:gap-16 items-center whitespace-nowrap overflow-x-auto no-scrollbar py-2 px-6 snap-x snap-mandatory scroll-smooth w-full"
-          >
-            {brands.map((brand, i) => (
-              <span
-                key={i}
-                className="font-serif text-xl md:text-3xl font-light tracking-[0.2em] uppercase text-zinc-300 transition-all duration-500 hover:text-zinc-900 hover:scale-105 cursor-default snap-center shrink-0"
-              >
-                {brand}
-              </span>
-            ))}
-          </div>
-
-          <div className="absolute right-0 top-0 bottom-0 w-8 md:w-24 bg-gradient-to-l from-zinc-50 to-transparent z-10 pointer-events-none" />
-        </div>
-
-        {/* Right Arrow Button */}
-        <button
-          onClick={scrollRight}
-          className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 hover:text-zinc-900 hover:border-zinc-300 transition-colors shadow-sm hidden sm:flex"
-          aria-label="Scroll right"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-
+          {duplicatedBrands.map((brand, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-center min-w-[100px] md:min-w-[160px] h-12 md:h-20 px-2"
+            >
+              {brand.logo ? (
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="h-full w-auto max-w-[140px] md:max-w-[200px] object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+                />
+              ) : (
+                <span className="font-heading text-lg md:text-2xl font-bold tracking-[0.02em] uppercase text-zinc-400 hover:text-zinc-900 transition-colors duration-300 cursor-default">
+                  {brand.name}
+                </span>
+              )}
+            </div>
+          ))}
+        </motion.div>
       </div>
-
-      <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </section>
   );
 }

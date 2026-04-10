@@ -10,11 +10,17 @@ export const metadata: Metadata = {
   description: "Explore our full collection of professional photography across weddings, portraits, and commercial projects in a justified puzzle layout.",
 };
 
+import { Suspense } from "react";
+import { GalleryTransitionWrapper } from "@/components/gallery/GalleryTransitionWrapper";
+
 export default async function GalleryPage() {
   const { allImages, processedCategories } = await getAllGalleryImages();
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <Suspense fallback={null}>
+        <GalleryTransitionWrapper />
+      </Suspense>
       <main className="mx-auto max-w-[1440px] px-2 pb-20 pt-8 sm:px-10 lg:px-16">
         <Reveal>
           <div className="mb-8">

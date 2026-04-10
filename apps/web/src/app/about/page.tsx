@@ -26,26 +26,35 @@ export default function AboutPage() {
                 <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2">
                   <div className="space-y-6 text-zinc-600 leading-relaxed text-lg">
                     <p>
-                      {demoAbout.body}
+                      Based in the heart of Nepal, Rabinson is a filmmaker and
+                      photographer whose work is deeply intertwined with the 
+                      remote landscapes of the Himalayas. For over six years, 
+                      he has traversed high-altitude environments, documenting 
+                      not just the scale of the mountains, but the intimate, 
+                      human stories that reside within them.
                     </p>
                     <p>
-                      Every session is built around calm direction, thoughtful
-                      planning, and a visual style that feels timeless rather than
-                      overdone. I believe that the best photographs aren&apos;t forced;
-                      they are found in the quiet moments between the poses, in 
-                      the honest light of a late afternoon, and in the genuine 
-                      connection between people.
+                      His practice is rooted in a quiet, observational philosophy. 
+                      Eschewing the traditional &quot;director&quot; role, Rabinson allows 
+                      scenes to breathe and unfold naturally. This approach 
+                      relies on a mastery of natural light and a restrained 
+                      sense of composition, capturing the subtle nuances that 
+                      exist in the moments between action.
                     </p>
                   </div>
                   <div className="space-y-6 text-zinc-600 leading-relaxed text-lg">
                     <p>
-                      My technical background is rooted in traditional film 
-                      aesthetics—prioritizing natural skin tones, soft grain, 
-                      and a dynamic range that feels as close to the human 
-                      eye as possible. Whether it&apos;s an editorial portrait or a 
-                      large-scale commercial commission, the goal remains the 
-                      same: create photographs that feel personal, elevated, 
-                      and easy to return to for years.
+                      The harsh beauty of remote environments has refined his 
+                      visual language—a balance of raw authenticity and 
+                      sophisticated simplicity. His work seeks the 
+                      &quot;essential,&quot; stripping away noise to focus on 
+                      timeless tones and genuine feeling.
+                    </p>
+                    <p>
+                      Every project, whether editorial or commercial, is approached 
+                      with a rigorous intentionality and a commitment to elevated 
+                      execution. The result is imagery that feels honest, 
+                      immediate, and enduring.
                     </p>
                     <p className="text-sm font-medium uppercase tracking-[0.16em] text-zinc-500">
                       {demoAbout.note}

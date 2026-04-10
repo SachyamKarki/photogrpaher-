@@ -9,6 +9,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
 
+import { CategoryTransition } from "@/components/ui/CategoryTransition";
+
 type Category = {
   _id: string;
   title: string;
@@ -36,6 +38,8 @@ export function GallerySection({
   initialProjects,
 }: Props) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionTitle, setTransitionTitle] = useState("");
   const galleryRef = useRef<HTMLDivElement>(null);
 
   const filteredProjects = activeCategory
@@ -45,11 +49,21 @@ export function GallerySection({
   const router = useRouter();
 
   const handleCategoryClick = (slug: string) => {
-    router.push(`/gallery?category=${slug}`);
+    const category = initialCategories.find(c => c.slug === slug);
+    if (!category) return;
+
+    setTransitionTitle(category.title);
+    setIsTransitioning(true);
+
+    // Wait for the transition expansion (~800ms) before navigating
+    setTimeout(() => {
+      router.push(`/gallery?category=${slug}`);
+    }, 1000); // 1s to ensure the curtain is fully opaque and stable
   };
 
   return (
     <div ref={galleryRef} className="scroll-mt-32">
+      <CategoryTransition isVisible={isTransitioning} title={transitionTitle} />
       {/* Gallery Section */}
       <section id="work" className="py-16 sm:py-32">
         <Reveal>
@@ -121,11 +135,6 @@ export function GallerySection({
                             <div className="text-base font-semibold tracking-tight sm:text-lg uppercase">
                               {project.title}
                             </div>
-                            {project.excerpt ? (
-                              <div className="mt-1 line-clamp-2 text-sm text-zinc-200/90">
-                                {project.excerpt}
-                              </div>
-                            ) : null}
                           </div>
                           <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white/90">
                             View in gallery <span className="transition-transform group-hover:translate-x-0.5">→</span>

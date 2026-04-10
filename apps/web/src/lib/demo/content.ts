@@ -25,53 +25,81 @@ export const demoCategories: DemoCategory[] = [
   {
     title: "Weddings",
     slug: "weddings",
-    description: "Candid storytelling, timeless portraits, and elegant details.",
-    image: "/demo/category-weddings.jpg",
+    description: "Candid storytelling, timeless moments, and cultural traditions.",
+    image: "/demo/category-weddings.png",
   },
   {
-    title: "Portraits",
-    slug: "portraits",
-    description: "Studio and natural light portraits with refined direction.",
-    image: "/demo/category-portraits.jpg",
+    title: "Mountain",
+    slug: "mountain",
+    description: "Breathtaking landscapes and rugged terrains of the Himalayas.",
+    image: "/demo/category-mountain.jpg",
   },
   {
-    title: "Commercial",
-    slug: "commercial",
-    description: "Brand, product, and lifestyle imagery designed to convert.",
-    image: "/demo/category-commercial.jpg",
+    title: "Automobile",
+    slug: "automobile",
+    description: "Classic machines exploring the diverse roads of Nepal.",
+    image: "/demo/category-automobile.png",
   },
 ];
 
 export const demoServices = {
-  title: "What we do",
+  title: "Things We Do",
   intro:
     "A premium photography experience, from planning to delivery, tailored to your story.",
   items: [
     {
-      title: "Pre shoot planning",
+      title: "Mountains & High Altitude",
       description:
-        "Locations, styling, schedules, and shot lists to make the day effortless.",
+        "Specializing in raw, immersive storytelling across the world's most challenging terrains. We capture the grand scale of the Himalayas and the intimate endurance of the people within them, shaped by natural light and absolute technical precision.",
+      details: [
+        "Capture breathtaking landscapes from the Himalayas to remote alpine valleys.",
+        "Document the journey, struggle, and triumph of high altitude adventures.",
+        "Blend cinematic storytelling with technical precision for epic visuals.",
+        "Highlight the raw beauty and solitude of extreme mountain environments.",
+        "Create imagery that immerses viewers in the adventure, not just the scene.",
+      ],
     },
     {
-      title: "Professional capture",
+      title: "Automotive photography",
       description:
-        "A calm, guided shoot with an editorial approach and attention to light.",
+        "High-performance visuals that emphasize form, engineering, and presence. From rugged mountain passes to studio environments, we blend motion and light to tell the definitive story of every machine.",
+      details: [
+        "Showcase cars and bikes in cinematic, dynamic compositions.",
+        "Emphasize performance, design, and engineering in every shot.",
+        "Capture vehicles in rugged, natural, or adventurous landscapes.",
+        "Blend motion, light, and environment to tell a visual story.",
+      ],
     },
     {
-      title: "Retouch & delivery",
+      title: "Studio Portraits",
       description:
-        "Color grading, retouching, and a beautiful gallery with print ready exports.",
+        "Intentional, character-driven portraiture that prioritizes simplicity and genuine expression. We focus on capturing quiet, enduring moments that reflect the soul of the subject against any backdrop.",
+      details: [
+        "Create cinematic portraits against breathtaking high altitude backdrops.",
+        "Capture personalities, emotions, and intimate moments in adventure settings.",
+        "Combine storytelling with visual artistry to create memorable imagery.",
+      ],
+    },
+    {
+      title: "Pre-Wedding & Weddings",
+      description:
+        "Deeply personal, editorial wedding photography that merges the grandeur of the landscape with the intimacy of your connection. We stage and capture love stories that feel both timeless and epic.",
+      details: [
+        "Tell love stories against the grandeur of Himalayan landscapes.",
+        "Merge storytelling, emotion, and adventure into unforgettable visuals.",
+        "Stage and capture moments that feel both intimate and epic.",
+      ],
     },
   ],
 };
 
 export const demoAbout = {
   eyebrow: "About",
-  title: "A quiet, editorial approach to modern photography.",
+  title: "Remote landscapes. High altitudes.",
   body:
-    "Rabinson Photography focuses on honest light, strong composition, and images that feel refined without losing emotion. Each project is approached with calm direction, careful pacing, and a clean visual language built to last.",
+    "Rabinson is a Nepal based travel filmmaker and photographer working across remote landscapes and high altitude environments. His work is defined by a quiet, observational approach, rooted in natural light, restrained composition, and a sensitivity to the moments that exist between action. Rather than directing, he allows scenes to unfold, creating imagery that feels both immediate and enduring.",
   note:
-    "Available for weddings, portraits, and selected commercial commissions.",
+    "Available for travel, editorial, and selected commercial commissions.",
 };
 
 export const demoFooter = {
@@ -82,21 +110,32 @@ export const demoFooter = {
   locationLine: "Based in Kathmandu • Available worldwide",
 };
 
+export const demoBrands = [
+  { name: "Toyota", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/toyota.svg" },
+  { name: "Ather", logo: "" }, // Typographic fallback
+  { name: "Pelliot", logo: "" },
+  { name: "Seven Summit", logo: "" },
+  { name: "NMA", logo: "" },
+  { name: "NNMGA", logo: "" },
+  { name: "Freedom Adventure", logo: "" },
+  { name: "Freedom Foundation", logo: "" }
+];
+
 export const demoReviews = [
   {
-    _id: "rev-1",
+    _id: "rev1",
     author: "Sarah & James",
     role: "Wedding Clients",
     quote: "Working with Rabinson was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
   },
   {
-    _id: "rev-2",
+    _id: "rev2",
     author: "Alex Mercer",
     role: "Creative Director, Kinfolk",
     quote: "Rabinson brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
   },
   {
-    _id: "rev-3",
+    _id: "rev3",
     author: "Elena Rostova",
     role: "Portrait Session",
     quote: "I usually hate having my picture taken, but the session was incredibly calm and natural. When I saw the final gallery, I was speechless. These are images I will cherish for the rest of my life.",
