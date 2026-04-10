@@ -40,6 +40,7 @@ export function GallerySection({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionTitle, setTransitionTitle] = useState("");
+  const [transitionImage, setTransitionImage] = useState<string | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
   const filteredProjects = activeCategory
@@ -53,17 +54,18 @@ export function GallerySection({
     if (!category) return;
 
     setTransitionTitle(category.title);
+    setTransitionImage(category.imageUrl || null);
     setIsTransitioning(true);
 
     // Wait for the transition expansion (~800ms) before navigating
     setTimeout(() => {
       router.push(`/gallery?category=${slug}`);
-    }, 1000); // 1s to ensure the curtain is fully opaque and stable
+    }, 900);
   };
 
   return (
     <div ref={galleryRef} className="scroll-mt-32">
-      <CategoryTransition isVisible={isTransitioning} title={transitionTitle} />
+      <CategoryTransition isVisible={isTransitioning} title={transitionTitle} imageUrl={transitionImage} />
       {/* Gallery Section */}
       <section id="work" className="py-16 sm:py-32">
         <Reveal>

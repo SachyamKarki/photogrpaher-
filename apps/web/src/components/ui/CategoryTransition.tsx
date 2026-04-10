@@ -1,39 +1,134 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 
 interface CategoryTransitionProps {
   title: string;
+  imageUrl?: string | null;
   isVisible: boolean;
+  mode?: "expand" | "reveal";
 }
 
-export function CategoryTransition({ title, isVisible }: CategoryTransitionProps) {
+export function CategoryTransition({ title, imageUrl, isVisible, mode = "expand" }: CategoryTransitionProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState<boolean>(isVisible || mode === "reveal");
+
+  useEffect(() => {
+    if (isVisible) setIsMounted(true);
+    if (mode === "reveal") setIsMounted(true);
+  }, [isVisible, mode]);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = previousOverflow;
+    };
+  }, [isMounted]);
+
+  const portalInsets = useMemo(() => {
+    // ~40vw x 60vh centered “window”
+    const insetTop = "20vh";
+    const insetSide = "30vw";
+    const radius = "96px";
+    return {
+      closed: `inset(${insetTop} ${insetSide} ${insetTop} ${insetSide} round ${radius})`,
+      open: "inset(0vh 0vw 0vh 0vw round 0px)",
+    };
+  }, []);
+
+  const transitionOpen = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, stiffness: 140, damping: 22, mass: 0.9 };
+  const transitionClose = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
   return (
-    <motion.div
-      initial={{ scaleY: 0 }}
-      animate={{ scaleY: isVisible ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      style={{ originY: 1 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950 pointer-events-none"
+    <div
+      className={`fixed inset-0 z-[100] flex items-center justify-center pointer-events-none ${isMounted ? "block" : "hidden"}`}
     >
-      <div className="relative overflow-hidden text-center px-6">
-        <motion.h2
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: isVisible ? 0 : 100, opacity: isVisible ? 1 : 0 }}
-          transition={{ delay: 0.3, duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
-          className="font-heading text-4xl md:text-6xl xl:text-8xl font-bold uppercase tracking-tighter text-white"
-        >
-          {title}
-        </motion.h2>
-        
-        {/* Subtle decorative elements */}
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: isVisible ? "100%" : 0 }}
-          transition={{ delay: 0.5, duration: 1, ease: "easeInOut" }}
-          className="h-px bg-white/20 mt-8"
-        />
-      </div>
-    </motion.div>
+      {/* Background Dim */}
+      <motion.div
+        initial={{ opacity: mode === "reveal" ? 1 : 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 bg-zinc-950/40 backdrop-blur-sm"
+      />
+
+      {/* The "Airplane Window" Portal */}
+      <motion.div
+        initial={
+          mode === "reveal"
+            ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
+            : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(10px)" }
+        }
+        animate={
+          isVisible
+            ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
+            : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(12px)" }
+        }
+        transition={isVisible ? transitionOpen : transitionClose}
+        onAnimationComplete={() => {
+          if (!isVisible) setIsMounted(false);
+        }}
+        className="absolute inset-0 overflow-hidden bg-zinc-950 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_rgba(0,0,0,0.75)] will-change-[clip-path,transform,filter,opacity]"
+      >
+        <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10" />
+        {/* Category Image inside the portal */}
+        {imageUrl ? (
+          <motion.div
+            initial={{ scale: mode === "reveal" ? 1 : 1.06 }}
+            animate={{ scale: isVisible ? 1 : 1.03 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: isVisible ? 0.9 : 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 h-full w-full"
+          >
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              className="object-cover opacity-65"
+              priority
+            />
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),transparent_55%)]" />
+          </motion.div>
+        ) : (
+          <div className="absolute inset-0 bg-zinc-900" />
+        )}
+
+        {/* Content Overlay */}
+        <div className="relative z-10 text-center px-6">
+          <motion.h2
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: isVisible ? 0 : 50, opacity: isVisible ? 1 : 0 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { delay: isVisible ? 0.12 : 0, duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+            }
+            className="font-heading text-4xl md:text-6xl xl:text-8xl font-bold uppercase tracking-tighter text-white"
+          >
+            {title}
+          </motion.h2>
+          
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: isVisible ? "100%" : 0 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { delay: isVisible ? 0.22 : 0, duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+            }
+            className="mx-auto h-px bg-white/20 mt-8 max-w-xs"
+          />
+        </div>
+      </motion.div>
+    </div>
   );
 }
