@@ -18,6 +18,9 @@ export function GalleryTransitionWrapper() {
     // Force scroll to top instantly while the curtain is opaque
     window.scrollTo({ top: 0, behavior: "instant" });
 
+    // Ensure we start fully covered when navigating between categories.
+    setIsVisible(true);
+
     // If we have a category in the URL, lookup its data
     if (categorySlug) {
       const category = demoCategories.find(c => c.slug === categorySlug);
@@ -34,12 +37,19 @@ export function GalleryTransitionWrapper() {
       }
     }
 
-    // Small delay to ensure the page has started rendering behind the curtain
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 250);
+    // Let the new page paint behind the overlay (2 frames), then dissolve it.
+    let raf1 = 0;
+    let raf2 = 0;
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        setIsVisible(false);
+      });
+    });
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+    };
   }, [categorySlug]);
 
   if (!categorySlug) return null;

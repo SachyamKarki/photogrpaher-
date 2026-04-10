@@ -22,6 +22,15 @@ export function CategoryTransition({ title, imageUrl, isVisible, mode = "expand"
 
   useEffect(() => {
     if (!isMounted) return;
+    if (isVisible) return;
+
+    // Failsafe: some browsers can be flaky with `clip-path` completion callbacks.
+    const timeout = window.setTimeout(() => setIsMounted(false), prefersReducedMotion ? 0 : 900);
+    return () => window.clearTimeout(timeout);
+  }, [isMounted, isVisible, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!isMounted) return;
 
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -43,10 +52,23 @@ export function CategoryTransition({ title, imageUrl, isVisible, mode = "expand"
 
   const transitionOpen = prefersReducedMotion
     ? { duration: 0 }
-    : { type: "spring" as const, stiffness: 140, damping: 22, mass: 0.9 };
-  const transitionClose = prefersReducedMotion
+    : { type: "spring" as const, stiffness: 160, damping: 24, mass: 0.9 };
+
+  const transitionExit = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+    : { duration: 0.45, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
+  const portalInitial =
+    mode === "reveal"
+      ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
+      : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(10px)" };
+
+  const portalAnimate = isVisible
+    ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
+    : mode === "reveal"
+      ? // On the gallery page: keep it full-screen and simply dissolve away.
+        { clipPath: portalInsets.open, opacity: 0, scale: 1.01, filter: "blur(6px)" }
+      : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(12px)" };
 
   return (
     <div
@@ -54,25 +76,17 @@ export function CategoryTransition({ title, imageUrl, isVisible, mode = "expand"
     >
       {/* Background Dim */}
       <motion.div
-        initial={{ opacity: mode === "reveal" ? 1 : 0 }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: mode === "reveal" ? 0.6 : 0 }}
+        animate={{ opacity: isVisible ? (mode === "reveal" ? 0.55 : 1) : 0 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="absolute inset-0 bg-zinc-950/40 backdrop-blur-sm"
       />
 
       {/* The "Airplane Window" Portal */}
       <motion.div
-        initial={
-          mode === "reveal"
-            ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
-            : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(10px)" }
-        }
-        animate={
-          isVisible
-            ? { clipPath: portalInsets.open, opacity: 1, scale: 1, filter: "blur(0px)" }
-            : { clipPath: portalInsets.closed, opacity: 0, scale: 0.985, filter: "blur(12px)" }
-        }
-        transition={isVisible ? transitionOpen : transitionClose}
+        initial={portalInitial}
+        animate={portalAnimate}
+        transition={isVisible ? transitionOpen : transitionExit}
         onAnimationComplete={() => {
           if (!isVisible) setIsMounted(false);
         }}
