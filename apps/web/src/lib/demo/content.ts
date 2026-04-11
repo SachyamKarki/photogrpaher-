@@ -38,7 +38,7 @@ export const demoCategories: DemoCategory[] = [
     title: "Automobile",
     slug: "automobile",
     description: "Classic machines exploring the diverse roads of Nepal.",
-    image: "/demo/category-automobile.png",
+    image: "https://cdn.sanity.io/images/8gy5kmv3/production/e8e491d3880e3c9a680bf94461822e76a7771b4c-7437x4960.jpg?rect=0,156,7437,4648&w=1600&h=1000",
   },
 ];
 

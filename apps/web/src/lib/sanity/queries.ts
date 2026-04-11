@@ -86,11 +86,11 @@ export const GALLERY_PROJECTS_QUERY = defineQuery(`
     excerpt,
     coverImage {
       ...,
-      asset-> { metadata { dimensions } }
+      "dimensions": asset->metadata.dimensions
     },
     gallery[] {
       ...,
-      asset-> { metadata { dimensions } }
+      "dimensions": asset->metadata.dimensions
     },
     "category": category->{title, "slug": slug.current},
     publishedAt

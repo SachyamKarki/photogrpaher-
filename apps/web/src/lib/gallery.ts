@@ -100,7 +100,8 @@ export async function getAllGalleryImages() {
     let aspectRatio = 1.0; 
 
     // Metadata extraction
-    const dimensions = source?.asset?.metadata?.dimensions;
+    const dimensions = (source as SanityImage & { dimensions?: { width: number; height: number } }).dimensions
+      ?? source?.asset?.metadata?.dimensions;
     if (dimensions?.width && dimensions?.height) {
       aspectRatio = dimensions.width / dimensions.height;
     } else {
@@ -148,12 +149,12 @@ export async function getAllGalleryImages() {
     rawProjects.forEach((project: SanityProject) => {
       if (!project) return;
       if (project.coverImage) {
-        addImage(`${project._id}-cover`, project.title, project.coverImage, project);
+        addImage(`${project.slug}-cover`, project.title, project.coverImage, project);
       }
       if (Array.isArray(project.gallery)) {
         project.gallery.forEach((img: SanityImageSourcePlus, idx: number) => {
           if (!img) return;
-          addImage(`${project._id}-gal-${idx}`, `${project.title || "Project"} - Photo ${idx + 1}`, img, project);
+          addImage(`${project.slug}-${idx + 1}`, `${project.title || "Project"} - Photo ${idx + 1}`, img, project);
         });
       }
     });

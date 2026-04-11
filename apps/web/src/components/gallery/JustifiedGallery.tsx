@@ -41,7 +41,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const [isSearching, setIsSearching] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_PAGE = 20;
 
   // Sync internal state when URL changes (e.g., back button)
   // This pattern is recommended by React for syncing props to state
@@ -77,6 +77,10 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
   const paginatedImages = filteredImages.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const isEmpty = !isSearching && filteredImages.length === 0;
+  const activeCategoryLabel = activeCategory
+    ? (categories.find((c) => c.slug === activeCategory)?.title ?? activeCategory)
+    : "All";
 
   return (
     <div className="w-full">
@@ -86,7 +90,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
           <div className="flex flex-nowrap gap-8 sm:gap-12 min-w-full justify-start sm:justify-center px-4 sm:px-0">
             <button
               onClick={() => handleCategoryChange(null)}
-              className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
+              className={`relative text-sm sm:text-base font-semibold uppercase tracking-[0.24em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
                 selectedCategory === null
                   ? "text-zinc-900"
                   : "text-zinc-400 hover:text-zinc-900"
@@ -101,7 +105,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               <button
                 key={category._id}
                 onClick={() => handleCategoryChange(category.slug)}
-                className={`relative text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
+                className={`relative text-sm sm:text-base font-semibold uppercase tracking-[0.24em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
                   selectedCategory === category.slug
                     ? "text-zinc-900"
                     : "text-zinc-400 hover:text-zinc-900"
@@ -121,8 +125,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent sm:hidden" />
       </div>
 
-      {/* "Puzzle" Justified Grid */}
-      <div className="flex flex-wrap gap-4 sm:gap-6 min-h-[600px]">
+      {/* Clean Uniform Grid */}
+      <div className="grid grid-cols-2 gap-3 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         <AnimatePresence mode="popLayout" initial={false}>
           {isSearching ? (
             // Skeleton Loading State
@@ -133,36 +137,44 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                style={{
-                  flexGrow: i % 3 === 0 ? 1.5 : i % 3 === 1 ? 1 : 0.8,
-                  flexBasis: `${(i % 3 === 0 ? 1.5 : i % 3 === 1 ? 1 : 0.8) * 200}px`,
-                  aspectRatio: i % 3 === 0 ? "3/2" : i % 3 === 1 ? "1/1" : "4/5",
-                }}
-                className="relative overflow-hidden rounded-2xl bg-zinc-100"
+                className="relative aspect-[4/5] overflow-hidden rounded-lg bg-zinc-100"
               >
                 <Skeleton className="h-full w-full" />
               </motion.div>
             ))
+          ) : isEmpty ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="col-span-full flex min-h-[420px] items-center justify-center rounded-2xl border border-zinc-200 bg-white p-10 text-center shadow-sm"
+            >
+              <div className="max-w-xl">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                  Gallery
+                </p>
+                <h3 className="mt-4 font-heading text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900">
+                  Photos coming soon
+                </h3>
+                <p className="mt-4 text-base sm:text-lg leading-relaxed text-zinc-600">
+                  We're curating a focused selection for{" "}
+                  <span className="font-medium text-zinc-900">{activeCategoryLabel.toUpperCase()}</span>.
+                  Check back shortly.
+                </p>
+              </div>
+            </motion.div>
           ) : (
             paginatedImages.map((image) => (
               <motion.div
                 key={image._id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                style={{
-                  // Industry Standard Optimized Grid Logic:
-                  // 1. Flex Grow by aspect ratio (justified fill)
-                  flexGrow: image.aspectRatio,
-                  // 2. Responsive Flex Basis: 
-                  // - On mobile (< 640px): strictly 2 columns (max 48% to fit two per row)
-                  // - On larger screens: calculated based on aspect ratio height of 280px
-                  flexBasis: `calc(min(48%, max(44%, ${image.aspectRatio * 160}px)))`,
-                  aspectRatio: `${image.aspectRatio}`,
-                }}
-                className="relative overflow-hidden rounded-2xl bg-zinc-100 group cursor-pointer"
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-zinc-100 group cursor-pointer"
               >
                 <Link
                   href={`/photo/${image._id}${selectedCategory ? `?category=${selectedCategory}` : ""}`}
@@ -176,39 +188,25 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     src={image.imageUrl}
                     alt={image.title}
                     fill
-                    className="object-cover transition duration-700"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-sm font-medium text-zinc-400">
                     No image
                   </div>
                 )}
-                
-                {/* Refined Cinematic Overlay - More visible on mobile touch */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 sm:backdrop-blur-[2px] flex flex-col items-center justify-end pb-6 pointer-events-none p-4">
-                  <div className="text-center translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                    {image.category && (
-                      <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/90 mb-1 sm:text-[9px] sm:tracking-[0.25em]">
-                        {image.category.title}
-                      </p>
-                    )}
-                    <h3 className="text-sm font-heading tracking-wide text-white drop-shadow-md sm:text-lg md:text-xl">
-                      {image.title}
-                    </h3>
-                  </div>
-                </div>
+
+                {/* Subtle hover overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100 pointer-events-none" />
               </motion.div>
             ))
           )}
         </AnimatePresence>
-        
-        {/* Helper to keep the last row from stretching too much */}
-        {!isSearching && <div className="flex-grow-[100] basis-0" />}
       </div>
 
       {/* Pagination Controls - Touch Optimized */}
-      {totalPages > 1 && (
+      {!isEmpty && totalPages > 1 && (
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button

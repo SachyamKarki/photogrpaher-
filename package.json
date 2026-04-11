@@ -5,7 +5,7 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev -w @photographer/web",
+    "dev": "NODE_OPTIONS=\"--max-old-space-size=4096\" npm run dev -w @photographer/web",
     "dev:studio": "npm run dev -w @photographer/studio",
     "build": "npm run build -w @photographer/web",
     "build:studio": "npm run build -w @photographer/studio",

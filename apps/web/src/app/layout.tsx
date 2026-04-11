@@ -5,6 +5,7 @@ import "@fontsource/lato/700.css";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { ScrollToTopOnNav } from "@/components/layout/ScrollToTopOnNav";
 import { demoFooter } from "@/lib/demo/content";
 
 const calligraphy = Pinyon_Script({
@@ -64,6 +65,7 @@ export default function RootLayout({
       <body
         className={`${calligraphy.variable} ${montserrat.variable} font-sans bg-white text-zinc-950 antialiased`}
       >
+        <ScrollToTopOnNav />
         {children}
         <SiteFooter
           siteTitle={siteTitle}

@@ -10,6 +10,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GallerySection } from "@/components/home/GallerySection";
 import { BrandsSection } from "@/components/home/BrandsSection";
+import { HomeCategories } from "@/components/home/HomeCategories";
 import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
 import {
   demoAbout,
@@ -18,10 +19,12 @@ import {
   demoProjects,
   demoServices,
   demoReviews,
+  demoFooter,
 } from "@/lib/demo/content";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
+import { getAllGalleryImages } from "@/lib/gallery";
 import {
   HOME_CATEGORIES_QUERY,
   PROJECTS_QUERY,
@@ -176,7 +179,7 @@ export default async function Home() {
         category: p.categorySlug ? { title: p.categorySlug, slug: p.categorySlug } : undefined,
       }));
 
-  const homeCategories = (categories?.length ? categories : null)
+  const homeCategories = (((categories?.length ?? 0) > 0 ? categories : null)
     ? (categories as Category[]).map(c => ({
         ...c,
         imageUrl: (c.coverImage && sanityEnabled)
@@ -189,7 +192,7 @@ export default async function Home() {
         slug: c.slug,
         description: c.description,
         imageUrl: c.image,
-      }));
+      }))).slice(0, 3);
 
   const contactCategories = homeCategories.map((c) => ({
     title: c.title,
@@ -201,6 +204,12 @@ export default async function Home() {
   const siteTitle = settings?.title ?? "Rabinson Photography";
   const heroTitle = settings?.heroTitle ?? demoHero.title;
   const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
+  const socialLinks = {
+    email: settings?.email ?? demoFooter.email,
+    instagram: settings?.instagram ?? demoFooter.instagram,
+    facebook: settings?.facebook ?? demoFooter.facebook,
+    whatsapp: settings?.whatsapp ?? demoFooter.whatsapp,
+  };
   
   const heroSlides = allProjects
     .map((project) => {
@@ -231,6 +240,27 @@ export default async function Home() {
     { src: "/demo/himalaya.jpg", alt: "Himalayas Landscape" },
     ...baseSlides.slice(0, 2),
   ];
+
+  const { allImages: rawGalleryImages } = await getAllGalleryImages();
+  const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
+  
+  // Pick a beautifully curated variety of images across all domains (Studio, Himalayas, Automobile)
+  const mixIndices = [12, 35, 6, 45, 60, 28]; 
+  const mixedSelection = mixIndices
+    .map(i => validGalleryImages[i])
+    .filter(Boolean);
+
+  const finalBentoImages = mixedSelection.length === 6 
+    ? mixedSelection 
+    : validGalleryImages.slice(0, 6);
+
+  const bentoGridImages = finalBentoImages.map((img) => ({
+      _id: img._id,
+      title: img.category?.title || "Featured",
+      slug: "gallery",
+      imageUrl: img.imageUrl,
+      category: { title: "Project", slug: "project" }
+  }));
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -272,12 +302,13 @@ export default async function Home() {
 
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
           {/* Integrated Gallery Section - now receives pre-processed image URLs */}
+          {/* Integrated Gallery Section - uniquely curated mixed bento ignoring category covers */}
           <GallerySection 
-            initialProjects={allProjects}
+            initialProjects={bentoGridImages}
             initialCategories={homeCategories}
           />
 
-          <section id="about" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
+          <section id="about" className="scroll-mt-24 pt-16 sm:pt-32 xl:pt-40 pb-8 sm:pb-12">
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
@@ -296,6 +327,8 @@ export default async function Home() {
               </div>
             </Reveal>
           </section>
+
+          <HomeCategories categories={homeCategories} />
 
           <BrandsSection />
 
