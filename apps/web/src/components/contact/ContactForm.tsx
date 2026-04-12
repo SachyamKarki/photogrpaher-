@@ -174,7 +174,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-zinc-800">Name</span>
           <input
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-0"
+            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
@@ -187,7 +187,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
           <label className="flex flex-col gap-2 text-sm">
             <span className="font-medium text-zinc-800">Email</span>
             <input
-              className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-0"
+              className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -201,7 +201,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-zinc-800">Category</span>
           <select
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-400 focus:ring-0"
+            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
@@ -218,7 +218,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
         <label className="flex flex-col gap-2 text-sm lg:col-span-2">
           <span className="font-medium text-zinc-800">Message</span>
           <textarea
-            className="min-h-[120px] resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3 outline-none transition focus:border-zinc-400 focus:ring-0 sm:min-h-[160px]"
+            className="min-h-[120px] resize-y rounded-xl border border-zinc-200 bg-white px-4 py-3 outline-none transition focus:border-zinc-200 focus:ring-0 sm:min-h-[160px]"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Date, location, and what you're looking for…"

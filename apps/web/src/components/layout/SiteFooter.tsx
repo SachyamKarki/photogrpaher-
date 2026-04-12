@@ -106,7 +106,7 @@ export function SiteFooter({
               </div>
 
               <div className="flex flex-col gap-4">
-                <p className="text-2xs tracking-[0.2em] opacity-40 uppercase">
+                <p className="text-2xs font-semibold uppercase tracking-[0.18em] text-white/70">
                   FOLLOW ON SOCIAL MEDIA
                 </p>
                 <div className="flex flex-col items-start gap-4">
@@ -204,27 +204,28 @@ export function SiteFooter({
         </div>
 
         <div className="pointer-events-none mt-32 md:mt-48 w-full select-none text-center">
-          <h2
-            className="font-heading uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white leading-none"
-          >
+          <h2 className="font-heading uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white leading-none">
             {siteTitle}.
           </h2>
         </div>
 
-        <div className="mt-12 flex w-full flex-col items-center justify-between gap-6 border-t border-white/5 pb-6 pt-12 text-center md:mt-20 md:flex-row md:text-left">
-          <p className="font-body text-xs font-medium tracking-normal text-white/70 sm:text-sm">
-            © {new Date().getFullYear()} {siteTitle}. All rights reserved.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 font-body text-xs font-medium tracking-normal text-white/60 sm:text-sm md:justify-end">
-            <Link href="/privacy-policy" className="transition hover:text-white hover:underline underline-offset-4">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-service" className="transition hover:text-white hover:underline underline-offset-4">
-              Terms of Service
-            </Link>
-            <Link href="/cookie-policy" className="transition hover:text-white hover:underline underline-offset-4">
-              Cookie Policy
-            </Link>
+        <div className="mt-12 w-full border-t border-white/5 pb-6 pt-12 md:mt-20">
+          <div className="flex flex-col gap-16 sm:gap-36">
+            <p className="font-body text-center text-sm font-medium tracking-normal text-white/80">
+              © 2026 {siteTitle}. All rights reserved.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 font-body text-xs font-medium tracking-normal text-white/60 sm:text-sm md:justify-end">
+              <Link href="/privacy-policy" className="transition hover:text-white">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-of-service" className="transition hover:text-white">
+                Terms of Service
+              </Link>
+              <Link href="/cookie-policy" className="transition hover:text-white">
+                Cookie Policy
+              </Link>
+            </div>
           </div>
         </div>
       </div>
