@@ -28,19 +28,19 @@ export function SectionHeading({
       ].join(" ")}
     >
       {eyebrow ? (
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-heading mt-3 text-xl font-semibold uppercase leading-tight tracking-tight text-balance text-zinc-900 sm:text-2xl md:text-3xl">
+      <h2 className="font-heading mt-4 text-2xl font-semibold uppercase leading-[1.1] tracking-tight text-balance text-black sm:text-3xl md:text-4xl">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mx-auto mt-2 max-w-2xl text-[13px] leading-relaxed text-zinc-500 sm:text-sm md:text-[15px] sm:leading-loose">
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-500 sm:text-base sm:leading-loose">
           {subtitle}
         </p>
       ) : null}
-      {action ? <div className="mt-7 flex justify-center">{action}</div> : null}
+      {action ? <div className="mt-10 flex justify-center">{action}</div> : null}
     </div>
   );
 }

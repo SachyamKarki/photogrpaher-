@@ -55,7 +55,7 @@ export function GallerySection({
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
             <SectionHeading
-              title="Featured work"
+              title="Featured Work"
               subtitle="A curated grid to highlight signature images and recent projects."
             />
           </div>
@@ -109,7 +109,7 @@ export function GallerySection({
                     </div>
 
                     <div className="relative z-10 flex h-full w-full flex-col justify-between p-6 pointer-events-none">
-                      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+                      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-2xs font-bold uppercase tracking-[0.15em] text-white/90 backdrop-blur-md">
                         {project.category?.title || "Project"}
                       </div>
 
@@ -119,7 +119,7 @@ export function GallerySection({
                             {project.title}
                           </div>
                         </div>
-                        <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white/90">
+                        <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
                           View in gallery <span className="transition-transform group-hover:translate-x-0.5">→</span>
                         </div>
                       </div>

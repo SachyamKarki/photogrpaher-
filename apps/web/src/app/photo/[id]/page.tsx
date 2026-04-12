@@ -11,11 +11,11 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const image = allImages.find((img: GalleryImage) => img._id === params.id);
   
   if (!image) {
-    return { title: "Photo Not Found | Rabinson Photography" };
+    return { title: "Photo Not Found | Rabin Son Photography" };
   }
 
   return {
-    title: `${image.title} | Rabinson Photography`,
+    title: `${image.title} | Rabin Son Photography`,
     description: image.metadata?.description || "Professional photography capture.",
   };
 }
@@ -69,7 +69,7 @@ export default async function PhotoPage(props: {
   const catReturnQuery = categoryFilter ? `?category=${categoryFilter}` : "";
 
   return (
-    <div className="flex h-[100dvh] w-screen flex-col overflow-hidden bg-black text-white selection:bg-white/30 font-sans relative">
+    <div className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-black font-body text-white selection:bg-white/30">
       
       {/* Cinematic Ambient Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">

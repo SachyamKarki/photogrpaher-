@@ -4,8 +4,8 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+
 
 type GalleryImage = {
   _id: string;
@@ -55,65 +55,81 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const handleCategoryChange = (slug: string | null) => {
     if (slug === selectedCategory) return;
     
-    setIsSearching(true);
+    setSelectedCategory(slug);
+    setCurrentPage(1);
     
-    // Simulate a "search" phase for a premium feel
-    setTimeout(() => {
-      setSelectedCategory(slug);
-      setCurrentPage(1);
-      setIsSearching(false);
-      
-      if (slug) {
-        router.push(`/gallery?category=${slug}`, { scroll: false });
-      } else {
-        router.push(`/gallery`, { scroll: false });
-      }
-    }, 600);
+    const params = new URLSearchParams(searchParams);
+    if (slug) {
+      params.set("category", slug);
+    } else {
+      params.delete("category");
+    }
+    router.push(`/gallery?${params.toString()}`, { scroll: false });
   };
 
-  const filteredImages = activeCategory
-    ? images.filter((img) => img.category?.slug === activeCategory)
+  const filteredImages = selectedCategory
+    ? images.filter((img) => img.category?.slug === selectedCategory)
     : images;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
   const paginatedImages = filteredImages.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
-  const isEmpty = !isSearching && filteredImages.length === 0;
-  const activeCategoryLabel = activeCategory
-    ? (categories.find((c) => c.slug === activeCategory)?.title ?? activeCategory)
+  const isEmpty = filteredImages.length === 0;
+  const activeCategoryLabel = selectedCategory
+    ? (categories.find((c) => c.slug === selectedCategory)?.title ?? selectedCategory)
     : "All";
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.25, 0.1, 0.25, 1], // Custom cubic-bezier for a premium feel
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.98,
+      transition: { duration: 0.3 }
+    },
+  };
 
   return (
     <div className="w-full">
       {/* Refined Minimalist Category Filters - Scrollable on Mobile */}
       <div className="relative mb-12">
         <div className="flex overflow-x-auto no-scrollbar border-b border-zinc-200/50 pb-px scroll-smooth">
-          <div className="flex flex-nowrap gap-8 sm:gap-12 min-w-full justify-start sm:justify-center px-4 sm:px-0">
+          <div className="flex flex-nowrap gap-6 sm:gap-10 min-w-full justify-start sm:justify-center px-4 sm:px-0">
             <button
               onClick={() => handleCategoryChange(null)}
-              className={`relative text-sm sm:text-base font-semibold uppercase tracking-[0.24em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
-                selectedCategory === null
-                  ? "text-zinc-900"
-                  : "text-zinc-400 hover:text-zinc-900"
-              }`}
+              className={`relative font-heading text-xs sm:text-sm font-bold uppercase tracking-[0.25em] transition-colors pb-3 -mb-[1px] whitespace-nowrap text-black`}
             >
               All
               {selectedCategory === null && (
-                <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
+                <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
               )}
             </button>
             {categories.map((category) => (
               <button
                 key={category._id}
                 onClick={() => handleCategoryChange(category.slug)}
-                className={`relative text-sm sm:text-base font-semibold uppercase tracking-[0.24em] transition-colors pb-4 -mb-[1px] whitespace-nowrap ${
-                  selectedCategory === category.slug
-                    ? "text-zinc-900"
-                    : "text-zinc-400 hover:text-zinc-900"
-                }`}
+                className={`relative font-heading text-xs sm:text-sm font-bold uppercase tracking-[0.25em] transition-colors pb-3 -mb-[1px] whitespace-nowrap text-black`}
               >
                 {category.title}
                 {selectedCategory === category.slug && (
-                  <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-px bg-zinc-900" />
+                  <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
                 )}
               </button>
             ))}
@@ -125,24 +141,16 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent sm:hidden" />
       </div>
 
-      {/* Clean Uniform Grid */}
-      <div className="grid grid-cols-2 gap-3 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
+      {/* Clean Uniform Grid with Layout Animations */}
+      <motion.div 
+        layout
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-2 gap-3 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5"
+      >
         <AnimatePresence mode="popLayout" initial={false}>
-          {isSearching ? (
-            // Skeleton Loading State
-            Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={`skeleton-${i}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="relative aspect-[4/5] overflow-hidden rounded-lg bg-zinc-100"
-              >
-                <Skeleton className="h-full w-full" />
-              </motion.div>
-            ))
-          ) : isEmpty ? (
+          {isEmpty ? (
             <motion.div
               key="empty"
               initial={{ opacity: 0, y: 8 }}
@@ -151,15 +159,15 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               transition={{ duration: 0.35, ease: "easeOut" }}
               className="col-span-full flex min-h-[420px] items-center justify-center rounded-2xl border border-zinc-200 bg-white p-10 text-center shadow-sm"
             >
-              <div className="max-w-xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                <div className="max-w-xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
                   Gallery
                 </p>
                 <h3 className="mt-4 font-heading text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900">
                   Photos coming soon
                 </h3>
                 <p className="mt-4 text-base sm:text-lg leading-relaxed text-zinc-600">
-                  We're curating a focused selection for{" "}
+                  We&apos;re curating a focused selection for{" "}
                   <span className="font-medium text-zinc-900">{activeCategoryLabel.toUpperCase()}</span>.
                   Check back shortly.
                 </p>
@@ -170,10 +178,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               <motion.div
                 key={image._id}
                 layout
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                variants={itemVariants}
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-zinc-100 group cursor-pointer"
               >
                 <Link
@@ -190,6 +195,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     fill
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    priority={false}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-sm font-medium text-zinc-400">
@@ -203,7 +209,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             ))
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
       {/* Pagination Controls - Touch Optimized */}
       {!isEmpty && totalPages > 1 && (

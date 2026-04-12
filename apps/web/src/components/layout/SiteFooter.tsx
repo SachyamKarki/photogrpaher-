@@ -1,17 +1,17 @@
 import Link from "next/link";
 
+type SocialLink = {
+  label: string;
+  url: string;
+};
+
 type Props = {
   siteTitle: string;
   email?: string | null;
-  instagram?: string | null;
-  facebook?: string | null;
-  whatsapp?: string | null;
+  instagramLinks?: SocialLink[] | null;
+  phoneNumber?: string | null;
   locationLine?: string | null;
 };
-
-function isExternalUrl(url: string) {
-  return /^https?:\/\//i.test(url);
-}
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -36,21 +36,6 @@ function InstagramIcon({ className }: { className?: string }) {
         stroke="currentColor"
         strokeWidth="2.2"
         strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-    >
-      <path
-        d="M13.5 21v-7.3h2.45l.37-2.85H13.5V9.03c0-.83.23-1.4 1.42-1.4h1.52V5.07c-.26-.04-1.16-.11-2.21-.11-2.19 0-3.69 1.34-3.69 3.8v2.12H8.06v2.85h2.48V21h2.96Z"
       />
     </svg>
   );
@@ -81,74 +66,82 @@ function WhatsAppIcon({ className }: { className?: string }) {
 export function SiteFooter({
   siteTitle,
   email,
-  instagram,
-  facebook,
-  whatsapp,
+  instagramLinks,
+  phoneNumber,
+  locationLine,
 }: Props) {
   return (
-    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white uppercase font-semibold">
+    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white uppercase font-semibold font-body">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="mb-16 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
-            <p className="max-w-md text-sm leading-[1.8] text-white tracking-wide lg:text-base normal-case opacity-90">
-              A refined photography experience for weddings, portraits, and
-              commercial stories. Crafted with calm direction, timeless light,
-              and honest detail.
-            </p>
+            <div className="flex flex-col gap-4">
+              <p className="max-w-md text-sm leading-[1.8] text-white tracking-wide lg:text-base normal-case opacity-90">
+                A refined visual storytelling experience specializing in high-altitude, automotive, and editorial portraiture. Crafted with absolute technical precision and honest detail.
+              </p>
+              {locationLine && (
+                <p className="max-w-md text-sm text-white/50 normal-case tracking-wide">
+                  {locationLine}
+                </p>
+              )}
+            </div>
 
             <div className="flex flex-col gap-10">
-              <div className="flex flex-wrap gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
                 <Link
                   href="/#contact"
-                  className="inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                 >
                   BOOK A SHOOT
                 </Link>
                 {email ? (
                   <a
                     href={`mailto:${email}`}
-                    className="inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
+                    className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                   >
                     EMAIL US
                   </a>
                 ) : null}
+
               </div>
 
-              <div className="flex flex-wrap items-center gap-5">
-                {facebook && isExternalUrl(facebook) ? (
-                  <a
-                    href={facebook}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Facebook"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white transition-all hover:brightness-110 hover:scale-105"
-                  >
-                    <FacebookIcon className="h-5 w-5" />
-                  </a>
-                ) : null}
-                {instagram && isExternalUrl(instagram) ? (
-                  <a
-                    href={instagram}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Instagram"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white transition-all hover:brightness-110 hover:scale-105"
-                  >
-                    <InstagramIcon className="h-5 w-5" />
-                  </a>
-                ) : null}
-                {whatsapp && isExternalUrl(whatsapp) ? (
-                  <a
-                    href={whatsapp}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="WhatsApp"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366] text-white transition-all hover:brightness-110 hover:scale-105"
-                  >
-                    <WhatsAppIcon className="h-5 w-5" />
-                  </a>
-                ) : null}
+              <div className="flex flex-col gap-4">
+                <p className="text-2xs tracking-[0.2em] opacity-40 uppercase">
+                  FOLLOW ON SOCIAL MEDIA
+                </p>
+                <div className="flex flex-col items-start gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
+                    {instagramLinks?.map((link) => (
+                      <a
+                        key={link.url}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={link.label}
+                        className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-bold text-white transition-all hover:border-white/40 hover:bg-white/10"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white">
+                          <InstagramIcon className="h-4 w-4" />
+                        </div>
+                        <span className="opacity-80 group-hover:opacity-100">{link.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                  {phoneNumber ? (
+                    <a
+                      href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-bold text-white transition-all hover:border-white/40 hover:bg-white/10"
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
+                        <WhatsAppIcon className="h-4 w-4" />
+                      </div>
+                      <span className="opacity-80 group-hover:opacity-100">WhatsApp</span>
+                    </a>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
@@ -160,7 +153,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#work"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Featured Work
                   </Link>
@@ -168,7 +161,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/gallery"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Gallery
                   </Link>
@@ -176,7 +169,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#categories"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Categories
                   </Link>
@@ -184,7 +177,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/about"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     About
                   </Link>
@@ -192,7 +185,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#services"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Services
                   </Link>
@@ -200,7 +193,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#contact"
-                    className="font-heading block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
                   >
                     Contact
                   </Link>
@@ -213,17 +206,21 @@ export function SiteFooter({
 
         <div className="pointer-events-none mt-32 md:mt-48 w-full select-none text-center">
           <h2
-            className="uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white"
-            style={{ fontFamily: "var(--font-montserrat), sans-serif", lineHeight: 1 }}
+            className="font-heading uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white leading-none"
           >
             {siteTitle}.
           </h2>
         </div>
 
-        <div className="mt-12 md:mt-20 border-t border-white/5 pt-12 pb-6 text-center">
-          <p className="text-[10px] tracking-[0.2em] text-white uppercase font-bold opacity-40" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+        <div className="mt-12 md:mt-20 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/5 pt-12 pb-6 text-center md:text-left">
+          <p className="font-body text-2xs uppercase font-bold tracking-[0.25em] text-white opacity-40">
             © {new Date().getFullYear()} {siteTitle}. All rights reserved.
           </p>
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 font-body text-2xs uppercase font-bold tracking-[0.25em] text-white opacity-40">
+            <Link href="#" className="transition hover:opacity-100 hover:text-white">Privacy Policy</Link>
+            <Link href="#" className="transition hover:opacity-100 hover:text-white">Terms of Service</Link>
+            <Link href="#" className="transition hover:opacity-100 hover:text-white">Cookie Policy</Link>
+          </div>
         </div>
       </div>
     </footer>

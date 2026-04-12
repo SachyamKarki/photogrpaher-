@@ -125,7 +125,7 @@ export function Lightbox({
           {/* Simple Title Caption (always visible if not showing info) */}
           {!showInfo && (
             <div className="absolute bottom-6 left-6 right-6 text-center">
-              <p className="font-heading text-xs uppercase tracking-[0.2em] text-white/40">
+              <p className="font-body text-xs uppercase tracking-[0.2em] text-white/40">
                 {title}
               </p>
             </div>
@@ -144,34 +144,38 @@ export function Lightbox({
               <div className="mx-auto max-w-4xl">
                 <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
                   <div>
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-white/40">Technical Standard</h4>
+                    <h4 className="text-2xs font-bold uppercase tracking-widest text-white/40">
+                      Technical Standard
+                    </h4>
                     <div className="mt-4 space-y-4">
                       {metadata?.camera && (
                         <div>
-                          <p className="text-[11px] text-white/30 uppercase tracking-widest">Camera</p>
+                          <p className="text-xs uppercase tracking-widest text-white/30">Camera</p>
                           <p className="mt-1 text-sm font-medium text-white">{metadata.camera}</p>
                         </div>
                       )}
                       {metadata?.lens && (
                         <div>
-                          <p className="text-[11px] text-white/30 uppercase tracking-widest">Lens</p>
+                          <p className="text-xs uppercase tracking-widest text-white/30">Lens</p>
                           <p className="mt-1 text-sm font-medium text-white">{metadata.lens}</p>
                         </div>
                       )}
                       {metadata?.settings && (
                         <div>
-                          <p className="text-[11px] text-white/30 uppercase tracking-widest">Exif Data</p>
+                          <p className="text-xs uppercase tracking-widest text-white/30">Exif Data</p>
                           <p className="mt-1 text-sm font-medium text-white tracking-wide">{metadata.settings}</p>
                         </div>
                       )}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-white/40">Artistic Context</h4>
+                    <h4 className="text-2xs font-bold uppercase tracking-widest text-white/40">
+                      Artistic Context
+                    </h4>
                     <p className="mt-5 text-sm leading-relaxed text-white/70 italic">
                       {metadata?.description || "A focus on honest light and careful composition to create a timeless, editorial aesthetic that lasts beyond the current moment."}
                     </p>
-                    <p className="mt-8 text-[11px] font-medium uppercase tracking-widest text-white/40">
+                    <p className="mt-8 text-xs font-medium uppercase tracking-widest text-white/40">
                       Photography — {title}
                     </p>
                   </div>

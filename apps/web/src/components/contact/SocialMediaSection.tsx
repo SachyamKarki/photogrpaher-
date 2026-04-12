@@ -104,7 +104,7 @@ export function SocialMediaSection({ email, instagram, facebook, whatsapp }: Pro
   return (
     <div className="mt-10 rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-sm sm:mt-14 sm:p-10 lg:p-12">
       <div className="mx-auto max-w-5xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
           Social
         </p>
         <h3 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">

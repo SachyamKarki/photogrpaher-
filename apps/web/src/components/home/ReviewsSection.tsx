@@ -18,7 +18,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   if (!reviews || reviews.length === 0) return null;
 
   return (
-    <section id="reviews" className="scroll-mt-24 py-16 sm:py-32 bg-zinc-50 border-t border-zinc-200">
+    <section id="reviews" className="scroll-mt-24 py-16 sm:py-32 bg-white">
       <Reveal>
         <SectionHeading
           title="Testimonials"
@@ -30,10 +30,12 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reviews.map((review, idx) => (
             <Reveal key={review._id} delayMs={idx * 100}>
-              <div className="flex flex-col justify-between h-full p-8 rounded-[2rem] bg-white border border-zinc-100 shadow-sm transition hover:shadow-md">
+              <div className="group/card flex flex-col justify-between h-full p-8 rounded-[2rem] bg-white border border-zinc-100 transition-all duration-500 hover:border-zinc-200 hover:-translate-y-1">
                 <blockquote>
-                  <span className="text-4xl text-zinc-300 font-serif leading-none absolute -mt-4 -ml-2">&quot;</span>
-                  <p className="relative text-zinc-600 text-[15px] leading-relaxed italic z-10">
+                  <span className="font-heading absolute -mt-4 -ml-2 text-4xl leading-none text-zinc-300">
+                    &quot;
+                  </span>
+                  <p className="relative z-10 text-sm leading-relaxed italic text-zinc-600 md:text-base">
                     {review.quote}
                   </p>
                 </blockquote>

@@ -1,10 +1,24 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-export function HomeHeader({ siteTitle }: { siteTitle: string }) {
+type SocialLink = {
+  label: string;
+  url: string;
+};
+
+export function HomeHeader({ 
+  siteTitle,
+  email,
+  phoneNumber,
+  instagramLinks
+}: { 
+  siteTitle: string;
+  email?: string;
+  phoneNumber?: string;
+  instagramLinks?: SocialLink[];
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -37,15 +51,10 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
     <>
       <header className="absolute inset-x-0 top-0 z-40 py-8">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 sm:px-8 lg:px-12 xl:px-16">
-          <Link href="/" className="relative block h-11 w-48 xs:w-56 sm:w-64">
-            <Image
-              src="/brand/rabinson-photography-light.svg"
-              alt={siteTitle}
-              width={280}
-              height={56}
-              className="h-11 w-auto drop-shadow-sm brightness-110 contrast-125"
-              priority
-            />
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="font-heading text-lg font-bold uppercase tracking-[0.2em] text-white transition-opacity group-hover:opacity-70 sm:text-2xl">
+              {siteTitle}
+            </div>
           </Link>
 
           <nav className="hidden items-center gap-6 text-sm font-medium text-white/90 lg:flex">
@@ -114,7 +123,7 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
                       setIsMenuOpen(false);
                     }
                   }}
-                  className="text-[13px] font-sans font-bold uppercase tracking-[0.25em] transition-colors hover:text-zinc-400"
+                  className="text-ui font-body font-bold uppercase tracking-[0.25em] transition-colors hover:text-zinc-400"
                 >
                   {link.title}
                 </Link>
@@ -125,33 +134,64 @@ export function HomeHeader({ siteTitle }: { siteTitle: string }) {
           <div className="flex shrink-0 flex-col gap-12 pt-12 border-t border-white/5">
             <div className="space-y-8">
               <div className="space-y-3">
-                <p className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-zinc-500">Contact</p>
+                <p className="text-2xs font-body font-bold uppercase tracking-[0.25em] text-zinc-500">
+                  Contact
+                </p>
                 <div className="flex flex-col gap-3">
-                  <a href="mailto:hello@rabinson.com" className="text-[13px] font-sans text-zinc-300 hover:text-white transition-colors">hello@rabinson.com</a>
-                  <a href="tel:+9779800000000" className="text-[13px] font-sans text-zinc-300 hover:text-white transition-colors">+977 980-0000000</a>
+                  {email && (
+                    <a
+                      href={`mailto:${email}`}
+                      className="text-ui font-body text-zinc-300 transition-colors hover:text-white"
+                    >
+                      {email}
+                    </a>
+                  )}
+                  {phoneNumber && (
+                    <a 
+                      href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="group flex items-center gap-3 text-zinc-300 transition-colors hover:text-white"
+                    >
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-zinc-400 group-hover:bg-[#25D366] group-hover:text-white transition-all">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+                          <path d="M12 21a9 9 0 0 1-4.2-1.04L3 21l1.1-4.2A9 9 0 1 1 12 21Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                          <path d="M9.05 8.9c.2-.49.4-.5.74-.5h.6c.17 0 .39.06.6.47.2.41.7 1.7.76 1.82.06.12.1.27.02.43-.08.16-.12.27-.25.41-.12.14-.26.32-.37.43-.12.12-.24.24-.1.47.14.23.64 1.04 1.38 1.68.95.83 1.75 1.09 1.98 1.21.23.12.36.1.49-.06.14-.16.56-.65.71-.87.14-.22.29-.18.49-.1.2.08 1.28.6 1.5.71.22.1.37.16.43.25.06.08.06.49-.12.96-.18.47-1.02.92-1.42.97-.39.05-.88.07-1.42-.1-.33-.1-.76-.25-1.3-.49-2.29-1-3.78-3.33-3.9-3.49-.12-.16-.93-1.23-.93-2.35s.58-1.67.79-1.9Z" fill="currentColor" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-wider">
+                        {phoneNumber} (WhatsApp)
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <p className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-zinc-500">Socials</p>
-                <div className="flex items-center gap-7">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 transition-colors hover:text-white" aria-label="Instagram">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                  </a>
-                  <a href="https://behance.net" target="_blank" rel="noopener noreferrer" className="text-zinc-400 transition-colors hover:text-white" aria-label="Behance">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
-                    </svg>
-                  </a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 transition-colors hover:text-white" aria-label="Facebook">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                    </svg>
-                  </a>
+              <div className="space-y-4">
+                <p className="text-2xs font-body font-bold uppercase tracking-[0.25em] text-zinc-500">
+                  Socials
+                </p>
+                <div className="flex flex-col gap-4">
+                  {instagramLinks?.map((link) => (
+                    <a 
+                      key={link.url}
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="group flex items-center gap-3 text-zinc-400 transition-colors hover:text-white"
+                    >
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-zinc-400 group-hover:bg-gradient-to-tr group-hover:from-[#f9ce34] group-hover:via-[#ee2a7b] group-hover:to-[#6228d7] group-hover:text-white transition-all">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-wider">
+                        {link.label}
+                      </span>
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
