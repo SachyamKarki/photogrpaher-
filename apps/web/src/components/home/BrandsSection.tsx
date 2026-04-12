@@ -2,25 +2,25 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { demoBrands } from "@/lib/demo/content";
+import { brandPartners } from "@/lib/portfolio/data";
 
 export function BrandsSection() {
   // Duplicate the brands array to create a seamless loop
-  const duplicatedBrands = [...demoBrands, ...demoBrands];
+  const duplicatedBrands = [...brandPartners, ...brandPartners];
 
   return (
-    <section className="relative w-full py-12 md:py-20 overflow-hidden bg-zinc-50">
+    <section className="relative w-full py-12 md:py-20 overflow-hidden bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-12">
-        <SectionHeading 
-          title="Industry Partners" 
+        <SectionHeading
+          title="Industry Partners"
           align="center"
         />
       </div>
 
       <div className="relative flex overflow-hidden">
         {/* Gradients for smooth fade in/out - merging with bg-zinc-50 */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-l from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
         <motion.div
           className="flex whitespace-nowrap gap-6 md:gap-12 items-center"

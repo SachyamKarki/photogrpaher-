@@ -7,7 +7,7 @@ import {
   GALLERY_PROJECTS_QUERY,
   HOME_CATEGORIES_QUERY,
 } from "@/lib/sanity/queries";
-import { demoCategories, demoProjects } from "@/lib/demo/content";
+import { portfolioCategories, portfolioProjects } from "@/lib/portfolio/data";
 
 export interface SanityImage {
   asset?: {
@@ -87,17 +87,37 @@ export async function getAllGalleryImages() {
         title: c?.title || "Untitled",
         slug: c?.slug || "uncategorized",
       }))
-    : demoCategories.map((c) => ({
-        _id: `demo:${c.slug}`,
+    : portfolioCategories.map((c) => ({
+        _id: `portfolio:${c.slug}`,
         title: c.title,
         slug: c.slug,
       }));
 
   const allImages: GalleryImage[] = [];
+  const handledImageUrls = new Set<string>();
 
   const addImage = (id: string, title: string, source: SanityImageSourcePlus, project: SanityProject) => {
-    let imageUrl = null;
+    let imageUrl: string | null = null;
     let aspectRatio = 1.0; 
+
+    // 1. Compute Image URL first to check for duplicates
+    if (typeof source === "string") {
+      imageUrl = source;
+    } else if (sanityEnabled && source) {
+      try {
+        imageUrl = urlFor(source)?.width(1600).url() ?? null;
+      } catch (e) {
+        console.error("Gallery Resource: Image Processing Error", e);
+      }
+    }
+
+    // 2. Skip if we don't have a URL or if we've already handled this image
+    if (!imageUrl || handledImageUrls.has(imageUrl)) {
+      return;
+    }
+
+    // 3. Mark image as handled
+    handledImageUrls.add(imageUrl);
 
     // Metadata extraction
     const dimensions = (source as SanityImage & { dimensions?: { width: number; height: number } }).dimensions
@@ -120,29 +140,17 @@ export async function getAllGalleryImages() {
       description: (source as SanityImage).description || project?.excerpt || "A focus on honest light and careful composition to create a timeless, editorial aesthetic."
     };
 
-    if (typeof source === "string") {
-      imageUrl = source;
-    } else if (sanityEnabled && source) {
-      try {
-        imageUrl = urlFor(source)?.width(1600).url() ?? null;
-      } catch (e) {
-        console.error("Gallery Resource: Image Processing Error", e);
-      }
-    }
-
-    if (imageUrl) {
-      allImages.push({
-        _id: id,
-        title: title || "Untitled Image",
-        imageUrl,
-        aspectRatio,
-        metadata,
-        category: project?.category || { 
-          title: project?.categorySlug || "Photography", 
-          slug: project?.categorySlug || "photography" 
-        },
-      });
-    }
+    allImages.push({
+      _id: id,
+      title: title || "Untitled Image",
+      imageUrl,
+      aspectRatio,
+      metadata,
+      category: project?.category || { 
+        title: project?.categorySlug || "Photography", 
+        slug: project?.categorySlug || "photography" 
+      },
+    });
   };
 
   if (rawProjects && rawProjects.length > 0) {
@@ -161,11 +169,11 @@ export async function getAllGalleryImages() {
   }
 
   if (allImages.length === 0) {
-    demoProjects.forEach((p) => {
-      addImage(`demo-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject);
+    portfolioProjects.forEach((p) => {
+      addImage(`portfolio-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject);
       if (Array.isArray(p.gallery)) {
         p.gallery.forEach((img, idx) => {
-          addImage(`demo-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject);
+          addImage(`portfolio-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject);
         });
       }
     });

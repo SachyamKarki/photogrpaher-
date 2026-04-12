@@ -13,14 +13,14 @@ import { BrandsSection } from "@/components/home/BrandsSection";
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
 import {
-  demoAbout,
-  demoCategories,
-  demoHero,
-  demoProjects,
-  demoServices,
-  demoReviews,
-  demoFooter,
-} from "@/lib/demo/content";
+  aboutContent,
+  portfolioCategories,
+  siteHero,
+  portfolioProjects,
+  siteServices,
+  clientReviews,
+  footerContent,
+} from "@/lib/portfolio/data";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
@@ -150,12 +150,12 @@ export default async function Home() {
     }
   }
 
-  const serviceTitle = settings?.servicesTitle ?? demoServices.title;
-  const serviceIntro = settings?.servicesIntro ?? demoServices.intro;
+  const serviceTitle = settings?.servicesTitle ?? siteServices.title;
+  const serviceIntro = settings?.servicesIntro ?? siteServices.intro;
   const serviceItems =
     settings?.services?.length && settings.services.some((s) => s?.title)
       ? settings.services
-      : demoServices.items;
+      : siteServices.items;
   const servicePanels = serviceItems.map((service) => ({
     title: service.title ?? "Service",
     description:
@@ -165,106 +165,101 @@ export default async function Home() {
 
   const allProjects = (projects?.length ? projects : null)
     ? (projects as ProjectListItem[]).map(p => ({
-        ...p,
-        imageUrl: (p.coverImage && sanityEnabled)
-          ? (typeof p.coverImage === "string" ? p.coverImage : urlFor(p.coverImage)?.width(1600).height(1200).url() ?? null)
-          : (typeof p.coverImage === "string" ? p.coverImage : null)
-      }))
-    : demoProjects.map((p) => ({
-        _id: `demo:${p.slug}`,
-        title: p.title,
-        slug: p.slug,
-        excerpt: p.excerpt,
-        imageUrl: p.coverImage,
-        category: p.categorySlug ? { title: p.categorySlug, slug: p.categorySlug } : undefined,
-      }));
+      ...p,
+      imageUrl: (p.coverImage && sanityEnabled)
+        ? (typeof p.coverImage === "string" ? p.coverImage : urlFor(p.coverImage)?.width(1600).height(1200).url() ?? null)
+        : (typeof p.coverImage === "string" ? p.coverImage : null)
+    }))
+    : portfolioProjects.map((p) => ({
+      _id: `portfolio:${p.slug}`,
+      title: p.title,
+      slug: p.slug,
+      excerpt: p.excerpt,
+      imageUrl: p.coverImage,
+      category: p.categorySlug ? { title: p.categorySlug, slug: p.categorySlug } : undefined,
+    }));
 
   const homeCategories = (((categories?.length ?? 0) > 0 ? categories : null)
     ? (categories as Category[]).map(c => ({
-        ...c,
-        imageUrl: (c.coverImage && sanityEnabled)
-          ? (typeof c.coverImage === "string" ? c.coverImage : urlFor(c.coverImage)?.width(1600).height(1000).url() ?? null)
-          : (typeof c.coverImage === "string" ? c.coverImage : null)
-      }))
-    : demoCategories.map((c) => ({
-        _id: `demo:${c.slug}`,
-        title: c.title,
-        slug: c.slug,
-        description: c.description,
-        imageUrl: c.image,
-      }))).slice(0, 3);
+      ...c,
+      imageUrl: (c.coverImage && sanityEnabled)
+        ? (typeof c.coverImage === "string" ? c.coverImage : urlFor(c.coverImage)?.width(1600).height(1000).url() ?? null)
+        : (typeof c.coverImage === "string" ? c.coverImage : null)
+    }))
+    : portfolioCategories.map((c) => ({
+      _id: `portfolio:${c.slug}`,
+      title: c.title,
+      slug: c.slug,
+      description: c.description,
+      imageUrl: c.image,
+    }))).slice(0, 3);
 
   const contactCategories = homeCategories.map((c) => ({
     title: c.title,
     slug: c.slug,
   }));
 
-  const safeReviews = (reviews?.length ? reviews : null) ?? demoReviews;
+  const safeReviews = (reviews?.length ? reviews : null) ?? clientReviews;
 
-  const siteTitle = settings?.title ?? "Rabinson Photography";
-  const heroTitle = settings?.heroTitle ?? demoHero.title;
-  const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
+  const siteTitle = settings?.title ?? "Rabin Son Photography";
+  const heroTitle = settings?.heroTitle ?? siteHero.title;
+  const heroSubtitle = settings?.heroSubtitle ?? siteHero.subtitle;
   const socialLinks = {
-    email: settings?.email ?? demoFooter.email,
-    instagram: settings?.instagram ?? demoFooter.instagram,
-    facebook: settings?.facebook ?? demoFooter.facebook,
-    whatsapp: settings?.whatsapp ?? demoFooter.whatsapp,
+    email: settings?.email ?? footerContent.email,
+    whatsapp: settings?.whatsapp ?? footerContent.whatsapp,
   };
-  
-  const heroSlides = allProjects
-    .map((project) => {
-      const image = project.imageUrl;
-
-      return image
-        ? {
-            src: image,
-            alt: project.title,
-          }
-        : null;
-    })
-    .filter((slide): slide is { src: string; alt: string } => Boolean(slide))
-    .slice(0, 5);
-
-  const fallbackHeroSlides = [
-    { src: demoHero.image, alt: siteTitle },
-    ...demoProjects.slice(0, 4).map((project) => ({
-      src: project.coverImage,
-      alt: project.title,
-    })),
-  ];
-
-  const baseSlides = heroSlides.length ? heroSlides : fallbackHeroSlides;
-
-  const slides = [
-    { src: "/demo/wedding.jpg", alt: "Editorial Wedding" },
-    { src: "/demo/himalaya.jpg", alt: "Himalayas Landscape" },
-    ...baseSlides.slice(0, 2),
-  ];
 
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
-  
-  // Pick a beautifully curated variety of images across all domains (Studio, Himalayas, Automobile)
-  const mixIndices = [12, 35, 6, 45, 60, 28]; 
-  const mixedSelection = mixIndices
-    .map(i => validGalleryImages[i])
-    .filter(Boolean);
 
-  const finalBentoImages = mixedSelection.length === 6 
-    ? mixedSelection 
+  // Curate exactly 4 high-quality hero slides for the professional "4-dot" look
+  const categoriesForHero = ["mountain", "automobile", "studio-portraits", "mountain"];
+  const slides = categoriesForHero.map((slug, idx) => {
+    const catImages = validGalleryImages.filter(img => img.category?.slug === slug);
+    // Pick different images if we use the same category twice (like mountain)
+    const heroImage = idx === 3 && catImages.length > 5 ? catImages[5] : catImages[idx === 0 ? 0 : 1];
+
+    return {
+      src: heroImage?.imageUrl || (idx === 0 ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format" : idx === 1 ? "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format" : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format"),
+      alt: heroImage?.category?.title || "Featured Work"
+    };
+  }).slice(0, 4);
+
+  // Programmatically pick a balanced mix (2 from each category if possible)
+  const categoriesToFind = ["automobile", "mountain", "studio-portraits"];
+  const bentoSelection: typeof validGalleryImages = [];
+
+  categoriesToFind.forEach(slug => {
+    const catImages = validGalleryImages.filter(img => img.category?.slug === slug);
+    if (catImages.length > 5) {
+      // Pick images from different parts of the gallery for visual variety
+      bentoSelection.push(catImages[2]);  // Near start
+      bentoSelection.push(catImages[Math.floor(catImages.length / 2)]); // Middle
+    } else {
+      bentoSelection.push(...catImages.slice(0, 2));
+    }
+  });
+
+  const finalBentoImages = bentoSelection.length >= 6
+    ? bentoSelection.slice(0, 6)
     : validGalleryImages.slice(0, 6);
 
   const bentoGridImages = finalBentoImages.map((img) => ({
-      _id: img._id,
-      title: img.category?.title || "Featured",
-      slug: "gallery",
-      imageUrl: img.imageUrl,
-      category: { title: "Project", slug: "project" }
+    _id: img._id,
+    title: img.category?.title || "Featured",
+    slug: "gallery",
+    imageUrl: img.imageUrl,
+    category: { title: "Project", slug: "project" }
   }));
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <HomeHeader siteTitle={siteTitle} />
+    <div className="min-h-screen bg-white text-zinc-900">
+      <HomeHeader 
+        siteTitle={siteTitle} 
+        email={footerContent.email}
+        phoneNumber={footerContent.phoneNumber}
+        instagramLinks={footerContent.instagramLinks}
+      />
 
       <main className="w-full">
         <section className="relative min-h-[100svh] overflow-hidden bg-zinc-900 md:min-h-screen">
@@ -285,15 +280,17 @@ export default async function Home() {
               <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
                 <a
                   href="#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-12 md:px-8 md:text-base"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium uppercase tracking-widest text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-12 md:px-8 md:text-base focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Book a shoot
                 </a>
                 <a
-                  href="#work"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15 md:h-12 md:px-8 md:text-base"
+                  href={`https://wa.me/${footerContent.whatsapp.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15 md:h-12 md:px-8 md:text-base focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
-                  Explore work
+                  WhatsApp Us
                 </a>
               </div>
             </Reveal>
@@ -303,17 +300,17 @@ export default async function Home() {
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
           {/* Integrated Gallery Section - now receives pre-processed image URLs */}
           {/* Integrated Gallery Section - uniquely curated mixed bento ignoring category covers */}
-          <GallerySection 
+          <GallerySection
             initialProjects={bentoGridImages}
             initialCategories={homeCategories}
           />
 
-          <section id="about" className="scroll-mt-24 pt-16 sm:pt-32 xl:pt-40 pb-8 sm:pb-12">
+          <section id="about" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
-                  title={demoAbout.title}
-                  subtitle={demoAbout.body}
+                  title={aboutContent.title}
+                  subtitle={aboutContent.body}
                   containerClassName="max-w-4xl"
                   action={
                     <Link
@@ -328,11 +325,15 @@ export default async function Home() {
             </Reveal>
           </section>
 
-          <HomeCategories categories={homeCategories} />
+          <section className="py-8 sm:py-16 xl:py-20">
+            <HomeCategories categories={homeCategories} />
+          </section>
 
-          <BrandsSection />
+          <section className="py-8 sm:py-16 xl:py-20">
+            <BrandsSection />
+          </section>
 
-          <section id="services" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
+          <section id="services" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
             <Reveal>
               <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
                 <SectionHeading
@@ -349,16 +350,19 @@ export default async function Home() {
 
           <ReviewsSection reviews={safeReviews} />
 
-          <section id="contact" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
+          <section id="contact" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
             <Reveal>
               <div>
                 <SectionHeading
-                  title="Contact us"
+                  title="Contact"
                   subtitle="Share your date, location, and what you need. You’ll receive availability and a tailored quote within 24 to 48 hours."
                 />
 
                 <div className="mx-auto mt-10 w-full max-w-7xl sm:mt-16">
-                  <ContactForm categories={contactCategories} />
+                  <ContactForm
+                    categories={contactCategories}
+                    whatsappNumber={socialLinks.whatsapp?.replace("https://wa.me/", "") || "9779800000000"}
+                  />
                 </div>
               </div>
             </Reveal>

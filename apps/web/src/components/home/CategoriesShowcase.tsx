@@ -17,25 +17,36 @@ type Category = {
 type Props = {
   categories: Category[];
   onCategoryClick: (slug: string) => void;
+  title?: string;
+  subtitle?: string;
+  sectionClassName?: string;
+  headingContainerClassName?: string;
 };
 
-export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
+export function CategoriesShowcase({
+  categories,
+  onCategoryClick,
+  title = "Categories",
+  subtitle = "A curated selection of work across distinct photographic styles.",
+  sectionClassName = "scroll-mt-24 py-16 sm:py-24",
+  headingContainerClassName = "mb-10 sm:mb-16",
+}: Props) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
-    <section id="categories" className="scroll-mt-24 py-16 sm:py-24">
+    <section id="categories" className={sectionClassName}>
       {/* Section heading */}
       <Reveal>
-        <div className="mb-10 sm:mb-16">
+        <div className={headingContainerClassName}>
           <SectionHeading
-            title="Explore by category"
-            subtitle="A curated selection of work across distinct photographic styles."
+            title={title}
+            subtitle={subtitle}
           />
         </div>
       </Reveal>
 
       {/* Elite Floating Accordion Carousel — Large Desktop */}
-      <div className="hidden xl:flex w-full h-[600px] xl:h-[700px] gap-3 group/container" onMouseLeave={() => setHoveredIdx(null)}>
+      <div className="hidden xl:flex w-full h-[500px] xl:h-[600px] gap-3 group/container" onMouseLeave={() => setHoveredIdx(null)}>
         {categories.map((c, idx) => {
           const isHovered = hoveredIdx === idx;
           
@@ -75,7 +86,11 @@ export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
               {/* Animated Text Content */}
               <motion.div layout="position" className="absolute inset-x-0 bottom-0 p-8 xl:p-10 flex flex-col justify-end h-full pointer-events-none">
                 <div className="mt-auto">
-                  <h3 className="font-heading text-2xl xl:text-4xl font-bold uppercase tracking-tight text-white transition-all duration-700 w-full truncate mb-0 group-hover/card:mb-4">
+                  <h3 className={`font-heading font-bold uppercase tracking-tight text-white transition-all duration-700 mb-0 group-hover/card:mb-4 whitespace-nowrap ${
+                    hoveredIdx !== null && !isHovered 
+                      ? "text-xs xl:text-sm scale-95 origin-left" 
+                      : "text-2xl xl:text-4xl opacity-100 scale-100"
+                  }`}>
                     {c.title}
                   </h3>
                 
@@ -109,7 +124,7 @@ export function CategoriesShowcase({ categories, onCategoryClick }: Props) {
           <Reveal key={c._id} delayMs={idx * 100}>
             <div
               onClick={() => onCategoryClick(c.slug)}
-              className="group relative h-[320px] sm:h-[400px] w-full cursor-pointer overflow-hidden rounded-[2rem]"
+              className="group relative h-[280px] sm:h-[350px] w-full cursor-pointer overflow-hidden rounded-[2rem]"
             >
               <div className="absolute inset-0 bg-zinc-900">
                 {c.imageUrl ? (

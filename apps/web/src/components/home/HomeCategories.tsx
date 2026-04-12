@@ -13,9 +13,19 @@ type Category = {
 
 type Props = {
   categories: Category[];
+  title?: string;
+  subtitle?: string;
+  sectionClassName?: string;
+  headingContainerClassName?: string;
 };
 
-export function HomeCategories({ categories }: Props) {
+export function HomeCategories({
+  categories,
+  title,
+  subtitle,
+  sectionClassName,
+  headingContainerClassName,
+}: Props) {
   const router = useRouter();
 
   const handleCategoryClick = (slug: string) => {
@@ -26,7 +36,11 @@ export function HomeCategories({ categories }: Props) {
     <div>
       <CategoriesShowcase 
         categories={categories} 
-        onCategoryClick={handleCategoryClick} 
+        onCategoryClick={handleCategoryClick}
+        title={title}
+        subtitle={subtitle}
+        sectionClassName={sectionClassName}
+        headingContainerClassName={headingContainerClassName}
       />
     </div>
   );

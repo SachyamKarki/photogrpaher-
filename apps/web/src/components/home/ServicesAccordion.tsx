@@ -68,7 +68,7 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               className={`grid transition-all duration-500 ease-out ${isOpen ? "mt-8 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
             >
               <div className="overflow-hidden">
-                <div className="pl-8 sm:pl-12 sm:max-w-2xl">
+                <div className="pl-8 sm:pl-12">
                   {/* Service Description in Expanded View */}
                   <p className="text-sm leading-7 text-zinc-600 mb-8">
                     {item.description}

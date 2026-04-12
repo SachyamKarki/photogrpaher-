@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { sanityWriteClient } from "@/lib/sanity/writeClient";
+import { sendContactEmail } from "@/lib/email/nodemailer";
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -87,6 +88,16 @@ export async function POST(req: Request) {
       { status: 500 },
     );
   }
+
+  // Send email notification (non-blocking — failure won't affect the response)
+  sendContactEmail({
+    name: name.trim(),
+    email: email.trim(),
+    category: category.trim() || undefined,
+    message: message.trim(),
+  }).catch((err) => {
+    console.error("[Contact API] Email delivery failed:", err);
+  });
 
   return NextResponse.json({ ok: true });
 }

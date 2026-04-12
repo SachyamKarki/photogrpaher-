@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 import { LogoMark } from "@/components/brand/LogoMark";
-import { demoCategories, demoProjects } from "@/lib/demo/content";
+import { portfolioCategories, portfolioProjects } from "@/lib/portfolio/data";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import {
@@ -50,19 +50,19 @@ export default async function CategoryPage({
       ),
     ]);
   } else {
-    const demoCategory = demoCategories.find((c) => c.slug === slug);
-    if (!demoCategory) notFound();
+    const selection = portfolioCategories.find((c) => c.slug === slug);
+    if (!selection) notFound();
     category = {
-      _id: `demo:${demoCategory.slug}`,
-      title: demoCategory.title,
-      slug: demoCategory.slug,
-      description: demoCategory.description,
-      coverImage: demoCategory.image,
+      _id: `portfolio:${selection.slug}`,
+      title: selection.title,
+      slug: selection.slug,
+      description: selection.description,
+      coverImage: selection.image,
     };
-    projects = demoProjects
+    projects = portfolioProjects
       .filter((p) => p.categorySlug === slug)
       .map((p) => ({
-        _id: `demo:${p.slug}`,
+        _id: `portfolio:${p.slug}`,
         title: p.title,
         slug: p.slug,
         excerpt: p.excerpt,
@@ -89,7 +89,7 @@ export default async function CategoryPage({
               <LogoMark className="h-5 w-5" />
             </div>
             <div className="font-heading font-semibold tracking-tight">
-              Rabinson Photography
+              Rabin Son Photography
             </div>
           </Link>
           <nav className="text-sm text-zinc-600">

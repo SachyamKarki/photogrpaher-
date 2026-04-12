@@ -71,17 +71,17 @@ export function SiteFooter({
   locationLine,
 }: Props) {
   return (
-    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white uppercase font-semibold font-body">
+    <footer className="relative z-0 mt-20 w-full overflow-hidden border-t border-white/5 bg-black pb-12 pt-16 text-white font-body">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="mb-16 grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
             <div className="flex flex-col gap-4">
-              <p className="max-w-md text-sm leading-[1.8] text-white tracking-wide lg:text-base normal-case opacity-90">
+              <p className="max-w-md text-sm leading-relaxed text-white/80 lg:text-base">
                 A refined visual storytelling experience specializing in high-altitude, automotive, and editorial portraiture. Crafted with absolute technical precision and honest detail.
               </p>
               {locationLine && (
-                <p className="max-w-md text-sm text-white/50 normal-case tracking-wide">
+                <p className="max-w-md text-sm text-white/55">
                   {locationLine}
                 </p>
               )}
@@ -91,19 +91,18 @@ export function SiteFooter({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
                 <Link
                   href="/#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                 >
                   BOOK A SHOOT
                 </Link>
                 {email ? (
                   <a
                     href={`mailto:${email}`}
-                    className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-bold text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
+                    className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white transition-all hover:border-white hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/15 lg:text-sm"
                   >
                     EMAIL US
                   </a>
                 ) : null}
-
               </div>
 
               <div className="flex flex-col gap-4">
@@ -119,7 +118,7 @@ export function SiteFooter({
                         target="_blank"
                         rel="noreferrer"
                         aria-label={link.label}
-                        className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-bold text-white transition-all hover:border-white/40 hover:bg-white/10"
+                        className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-semibold text-white transition-all hover:border-white/40 hover:bg-white/10"
                       >
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white">
                           <InstagramIcon className="h-4 w-4" />
@@ -133,7 +132,7 @@ export function SiteFooter({
                       href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-bold text-white transition-all hover:border-white/40 hover:bg-white/10"
+                      className="group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 pl-2 pr-5 py-2 text-xs font-semibold text-white transition-all hover:border-white/40 hover:bg-white/10"
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
                         <WhatsAppIcon className="h-4 w-4" />
@@ -153,7 +152,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#work"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Featured Work
                   </Link>
@@ -161,7 +160,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/gallery"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Gallery
                   </Link>
@@ -169,7 +168,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#categories"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Categories
                   </Link>
@@ -177,7 +176,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/about"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     About
                   </Link>
@@ -185,7 +184,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#services"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Services
                   </Link>
@@ -193,7 +192,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#contact"
-                    className="block text-xs font-bold uppercase tracking-[0.25em] text-white transition-colors hover:opacity-70 lg:text-sm"
+                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Contact
                   </Link>
@@ -212,14 +211,20 @@ export function SiteFooter({
           </h2>
         </div>
 
-        <div className="mt-12 md:mt-20 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/5 pt-12 pb-6 text-center md:text-left">
-          <p className="font-body text-2xs uppercase font-bold tracking-[0.25em] text-white opacity-40">
+        <div className="mt-12 flex w-full flex-col items-center justify-between gap-6 border-t border-white/5 pb-6 pt-12 text-center md:mt-20 md:flex-row md:text-left">
+          <p className="font-body text-xs font-medium tracking-normal text-white/70 sm:text-sm">
             © {new Date().getFullYear()} {siteTitle}. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 font-body text-2xs uppercase font-bold tracking-[0.25em] text-white opacity-40">
-            <Link href="#" className="transition hover:opacity-100 hover:text-white">Privacy Policy</Link>
-            <Link href="#" className="transition hover:opacity-100 hover:text-white">Terms of Service</Link>
-            <Link href="#" className="transition hover:opacity-100 hover:text-white">Cookie Policy</Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 font-body text-xs font-medium tracking-normal text-white/60 sm:text-sm md:justify-end">
+            <Link href="/privacy-policy" className="transition hover:text-white hover:underline underline-offset-4">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" className="transition hover:text-white hover:underline underline-offset-4">
+              Terms of Service
+            </Link>
+            <Link href="/cookie-policy" className="transition hover:text-white hover:underline underline-offset-4">
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>

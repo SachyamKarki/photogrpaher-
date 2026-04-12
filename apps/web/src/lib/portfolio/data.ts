@@ -1,11 +1,11 @@
-export type DemoCategory = {
+export type PortfolioCategory = {
   title: string;
   slug: string;
   description: string;
   image: string;
 };
 
-export type DemoProject = {
+export type PortfolioProject = {
   title: string;
   slug: string;
   excerpt: string;
@@ -14,36 +14,36 @@ export type DemoProject = {
   categorySlug: string;
 };
 
-export const demoHero = {
-  title: "Quiet frames. Lasting stories.",
-  subtitle: "Wedding, portrait, and commercial photography.",
+export const siteHero = {
+  title: "Honest Light. Timeless Detail.",
+  subtitle: "Wedding, Editorial, and Adventure Photography.",
   mediaType: "image" as const,
-  image: "/demo/hero.jpg",
+  image: "/content/hero.jpg",
 };
 
-export const demoCategories: DemoCategory[] = [
+export const portfolioCategories: PortfolioCategory[] = [
   {
-    title: "Weddings",
-    slug: "weddings",
+    title: "Studio Portraits",
+    slug: "studio-portraits",
     description: "Candid storytelling, timeless moments, and cultural traditions.",
-    image: "/demo/category-weddings.png",
+    image: "/content/category-portraits.jpg",
   },
   {
-    title: "Mountain",
-    slug: "mountain",
+    title: "Himalayas",
+    slug: "himalayas",
     description: "Breathtaking landscapes and rugged terrains of the Himalayas.",
-    image: "/demo/category-mountain.jpg",
+    image: "/content/category-mountain.jpg",
   },
   {
     title: "Automobile",
     slug: "automobile",
     description: "Classic machines exploring the diverse roads of Nepal.",
-    image: "https://cdn.sanity.io/images/8gy5kmv3/production/e8e491d3880e3c9a680bf94461822e76a7771b4c-7437x4960.jpg?rect=0,156,7437,4648&w=1600&h=1000",
+    image: "/content/category-automobile.jpg",
   },
 ];
 
-export const demoServices = {
-  title: "Things We Do",
+export const siteServices = {
+  title: "Services",
   intro:
     "A premium photography experience, from planning to delivery, tailored to your story.",
   items: [
@@ -93,46 +93,61 @@ export const demoServices = {
   ],
 };
 
-export const demoAbout = {
-  eyebrow: "About",
-  title: "Remote landscapes. High altitudes.",
+export const aboutContent = {
+  eyebrow: "The Photographer",
+  title: "The Vision Behind the Frames.",
   body:
-    "Rabinson is a Nepal based travel filmmaker and photographer working across remote landscapes and high altitude environments. His work is defined by a quiet, observational approach, rooted in natural light, restrained composition, and a sensitivity to the moments that exist between action. Rather than directing, he allows scenes to unfold, creating imagery that feels both immediate and enduring.",
+    "Rabin Son is a Nepal-based photographer focused on honest light, calm direction, and clean composition. From Himalayan passes to studio sets, the work balances documentary sincerity with an editorial finish—built to feel timeless, not trendy.",
+  longBody: [
+    "His approach is rooted in observation first: reading the scene, shaping small details, and letting real moments unfold. Whether photographing people, machines, or landscapes, the goal is the same—clarity, intention, and images that hold up years later.",
+    "On set, direction is minimal and precise. You’ll get clear prompts, confident pacing, and enough structure to keep everything effortless while still protecting the frame. This is especially important for portraits and weddings, where comfort and tempo matter as much as light.",
+    "In post-production, the edit stays true-to-life: consistent skin tones, natural contrast, and a refined color palette. Deliveries are curated—so you receive the strongest photographs, sequenced like a story, ready for print and web.",
+  ],
+  principles: [
+    "Natural light first, with deliberate shaping when needed.",
+    "Simple composition and clean backgrounds—no visual noise.",
+    "True-to-life color and consistent finishing across the set.",
+    "A calm experience: clear direction, no over-posing.",
+  ],
   note:
-    "Available for travel, editorial, and selected commercial commissions.",
+    "Currently accepting commissions for travel, editorial, automotive, and adventure photography.",
 };
 
-export const demoFooter = {
-  email: "hello@example.com",
-  instagram: "https://instagram.com",
-  facebook: "https://facebook.com",
-  whatsapp: "https://wa.me/9779800000000",
+export const footerContent = {
+  email: "Rabinson2055@gmail.com",
+  instagramLinks: [
+    { label: "Art of Rabin Son", url: "https://www.instagram.com/art_of_rabinson?igsh=bTh1Y2xpb3Zid2pz" },
+    { label: "AutoVibes Nepal", url: "https://www.instagram.com/autovibes_nepal?igsh=NGhveXMzanZrZzIw" },
+    { label: "Personal", url: "https://www.instagram.com/rabinson01?igsh=MXh5YTZkcm42ZHZvbA==" },
+  ],
+  whatsapp: "https://wa.me/9779803612055",
+  phoneNumber: "+977 980-3612055",
   locationLine: "Based in Kathmandu • Available worldwide",
 };
 
-export const demoBrands = [
+export const brandPartners = [
   { name: "Toyota", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/toyota.svg" },
-  { name: "Ather", logo: "" }, // Typographic fallback
-  { name: "Pelliot", logo: "" },
-  { name: "Seven Summit", logo: "" },
-  { name: "NMA", logo: "" },
-  { name: "NNMGA", logo: "" },
-  { name: "Freedom Adventure", logo: "" },
-  { name: "Freedom Foundation", logo: "" }
+  { name: "Ather", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ather-logo.svg" },
+  { name: "Pelliot", logo: "https://gsrventuresglobal.com/wp-content/uploads/2018/10/Pelliot.png" },
+  { name: "Seven Summit", logo: "https://sevensummittreks.com/themes-assets/images/logo.png" },
+  { name: "NMA", logo: "https://www.nepalmountaineering.org/themes/site/img/logo.png" },
+  { name: "NNMGA", logo: "https://www.nnmga.org/wp-content/uploads/2019/12/logo.png" },
+  { name: "Freedom Adventure", logo: "https://freedomadventuretreks.com/assets/images/logo.png" },
+  { name: "Freedom Foundation", logo: "https://www.freedomfoundation.org.np/img/logo.png" }
 ];
 
-export const demoReviews = [
+export const clientReviews = [
   {
     _id: "rev1",
     author: "Sarah & James",
     role: "Wedding Clients",
-    quote: "Working with Rabinson was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
+    quote: "Working with Rabin Son was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
   },
   {
     _id: "rev2",
     author: "Alex Mercer",
     role: "Creative Director, Kinfolk",
-    quote: "Rabinson brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
+    quote: "Rabin Son brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
   },
   {
     _id: "rev3",
@@ -142,53 +157,53 @@ export const demoReviews = [
   }
 ];
 
-export const demoProjects: DemoProject[] = [
+export const portfolioProjects: PortfolioProject[] = [
   {
     title: "Golden Hour Ceremony",
     slug: "golden-hour-ceremony",
     excerpt: "Warm light, natural emotion, and a cinematic finish.",
-    coverImage: "/demo/bento-1.jpg",
-    gallery: ["/demo/bento-1.jpg", "/demo/bento-2.jpg", "/demo/bento-3.jpg"],
-    categorySlug: "weddings",
+    coverImage: "/content/bento-1.jpg",
+    gallery: ["/content/bento-1.jpg", "/content/bento-2.jpg", "/content/bento-3.jpg"],
+    categorySlug: "studio-portraits",
   },
   {
     title: "Modern Portrait Session",
     slug: "modern-portrait-session",
     excerpt: "Clean frames with confident direction and texture.",
-    coverImage: "/demo/bento-2.jpg",
-    gallery: ["/demo/bento-2.jpg", "/demo/bento-4.jpg", "/demo/bento-5.jpg"],
-    categorySlug: "portraits",
+    coverImage: "/content/bento-2.jpg",
+    gallery: ["/content/bento-2.jpg", "/content/bento-4.jpg", "/content/bento-5.jpg"],
+    categorySlug: "studio-portraits",
   },
   {
     title: "Editorial Couple Shoot",
     slug: "editorial-couple-shoot",
     excerpt: "Minimal styling and strong composition for timeless images.",
-    coverImage: "/demo/bento-3.jpg",
-    gallery: ["/demo/bento-3.jpg", "/demo/bento-1.jpg", "/demo/bento-6.jpg"],
-    categorySlug: "weddings",
+    coverImage: "/content/bento-3.jpg",
+    gallery: ["/content/bento-3.jpg", "/content/bento-1.jpg", "/content/bento-6.jpg"],
+    categorySlug: "studio-portraits",
   },
   {
     title: "Product Studio Set",
     slug: "product-studio-set",
     excerpt: "High contrast lighting and premium product detail.",
-    coverImage: "/demo/bento-4.jpg",
-    gallery: ["/demo/bento-4.jpg", "/demo/bento-5.jpg", "/demo/bento-6.jpg"],
+    coverImage: "/content/bento-4.jpg",
+    gallery: ["/content/bento-4.jpg", "/content/bento-5.jpg", "/content/bento-6.jpg"],
     categorySlug: "commercial",
   },
   {
     title: "Lifestyle Brand Story",
     slug: "lifestyle-brand-story",
     excerpt: "Natural moments, true color, and modern brand presence.",
-    coverImage: "/demo/bento-5.jpg",
-    gallery: ["/demo/bento-5.jpg", "/demo/bento-2.jpg", "/demo/bento-1.jpg"],
+    coverImage: "/content/bento-5.jpg",
+    gallery: ["/content/bento-5.jpg", "/content/bento-2.jpg", "/content/bento-1.jpg"],
     categorySlug: "commercial",
   },
   {
     title: "Black and White Portraits",
     slug: "black-and-white-portraits",
     excerpt: "Classic monochrome with modern edge and soft contrast.",
-    coverImage: "/demo/bento-6.jpg",
-    gallery: ["/demo/bento-6.jpg", "/demo/bento-2.jpg", "/demo/bento-3.jpg"],
-    categorySlug: "portraits",
+    coverImage: "/content/bento-6.jpg",
+    gallery: ["/content/bento-6.jpg", "/content/bento-2.jpg", "/content/bento-3.jpg"],
+    categorySlug: "studio-portraits",
   },
 ];

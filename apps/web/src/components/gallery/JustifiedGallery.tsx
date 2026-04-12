@@ -114,7 +114,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
           <div className="flex flex-nowrap gap-6 sm:gap-10 min-w-full justify-start sm:justify-center px-4 sm:px-0">
             <button
               onClick={() => handleCategoryChange(null)}
-              className={`relative font-heading text-xs sm:text-sm font-bold uppercase tracking-[0.25em] transition-colors pb-3 -mb-[1px] whitespace-nowrap text-black`}
+              className={[
+                "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
+                "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+                selectedCategory === null
+                  ? "text-zinc-900"
+                  : "text-zinc-500 hover:text-zinc-900",
+              ].join(" ")}
             >
               All
               {selectedCategory === null && (
@@ -125,7 +131,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               <button
                 key={category._id}
                 onClick={() => handleCategoryChange(category.slug)}
-                className={`relative font-heading text-xs sm:text-sm font-bold uppercase tracking-[0.25em] transition-colors pb-3 -mb-[1px] whitespace-nowrap text-black`}
+                className={[
+                  "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
+                  "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+                  selectedCategory === category.slug
+                    ? "text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-900",
+                ].join(" ")}
               >
                 {category.title}
                 {selectedCategory === category.slug && (
