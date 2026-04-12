@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 type SocialLink = {
@@ -8,12 +9,12 @@ type SocialLink = {
   url: string;
 };
 
-export function HomeHeader({ 
+export function HomeHeader({
   siteTitle,
   email,
   phoneNumber,
   instagramLinks
-}: { 
+}: {
   siteTitle: string;
   email?: string;
   phoneNumber?: string;
@@ -52,8 +53,16 @@ export function HomeHeader({
       <header className="absolute inset-x-0 top-0 z-40 py-8">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 sm:px-8 lg:px-12 xl:px-16">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="font-heading text-lg font-bold uppercase tracking-[0.2em] text-white transition-opacity group-hover:opacity-70 sm:text-2xl">
-              {siteTitle}
+            <div className="relative w-48 sm:w-64 md:w-80 h-6 sm:h-8 flex items-center transition-opacity group-hover:opacity-70">
+              <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-6 md:-left-8 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+4rem)] h-[60px] sm:h-[80px] md:h-[100px]">
+                <Image
+                  src="/brand/rabinson_logo-Photoroom.png"
+                  alt={`${siteTitle} Logo`}
+                  fill
+                  className="object-contain object-left brightness-0 invert"
+                  priority
+                />
+              </div>
             </div>
           </Link>
 
@@ -147,10 +156,10 @@ export function HomeHeader({
                     </a>
                   )}
                   {phoneNumber && (
-                    <a 
-                      href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                    <a
+                      href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="group flex items-center gap-3 text-zinc-300 transition-colors hover:text-white"
                     >
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-zinc-400 group-hover:bg-[#25D366] group-hover:text-white transition-all">
@@ -173,11 +182,11 @@ export function HomeHeader({
                 </p>
                 <div className="flex flex-col gap-4">
                   {instagramLinks?.map((link) => (
-                    <a 
+                    <a
                       key={link.url}
-                      href={link.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="group flex items-center gap-3 text-zinc-400 transition-colors hover:text-white"
                     >
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-zinc-400 group-hover:bg-gradient-to-tr group-hover:from-[#f9ce34] group-hover:via-[#ee2a7b] group-hover:to-[#6228d7] group-hover:text-white transition-all">

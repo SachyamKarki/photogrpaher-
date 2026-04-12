@@ -212,25 +212,49 @@ export default async function Home() {
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
 
-  // Curate exactly 4 high-quality hero slides for the professional "4-dot" look
-  const categoriesForHero = ["mountain", "automobile", "studio-portraits", "mountain"];
-  const slides = categoriesForHero.map((slug, idx) => {
-    const catImages = validGalleryImages.filter(img => img.category?.slug === slug);
-    // Pick different images if we use the same category twice (like mountain)
-    const heroImage = idx === 3 && catImages.length > 5 ? catImages[5] : catImages[idx === 0 ? 0 : 1];
+  const getImagesForCategory = (slugs: string[]) =>
+    validGalleryImages.filter((img) => {
+      const imgSlug = img.category?.slug;
+      return Boolean(imgSlug && slugs.includes(imgSlug));
+    });
 
-    return {
-      src: heroImage?.imageUrl || (idx === 0 ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format" : idx === 1 ? "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format" : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format"),
-      alt: heroImage?.category?.title || "Featured Work"
-    };
-  }).slice(0, 4);
+  // Curate exactly 4 high-quality hero slides for the professional "4-dot" look
+  const categoriesForHero = [
+    { label: "Himalayas", slugs: ["himalayas", "mountain"] },
+    { label: "Vehicles", slugs: ["automobile", "vehicles", "automotive"] },
+    { label: "Portraits", slugs: ["studio-portraits", "portraits"] },
+    { label: "Himalayas", slugs: ["himalayas", "mountain"] },
+  ];
+
+  const slides = categoriesForHero
+    .map((category, idx) => {
+      const catImages = getImagesForCategory(category.slugs);
+      const pickIndex = idx === 3 ? 5 : idx === 0 ? 0 : 1;
+      const heroImage = catImages.length ? catImages[Math.min(pickIndex, catImages.length - 1)] : null;
+
+      return {
+        src:
+          heroImage?.imageUrl ||
+          (idx === 0
+            ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format"
+            : idx === 1
+              ? "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format"
+              : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format"),
+        alt: heroImage?.category?.title || category.label,
+      };
+    })
+    .slice(0, 4);
 
   // Programmatically pick a balanced mix (2 from each category if possible)
-  const categoriesToFind = ["automobile", "mountain", "studio-portraits"];
+  const categoriesToFind = [
+    ["automobile", "vehicles", "automotive"],
+    ["himalayas", "mountain"],
+    ["studio-portraits", "portraits"],
+  ];
   const bentoSelection: typeof validGalleryImages = [];
 
-  categoriesToFind.forEach(slug => {
-    const catImages = validGalleryImages.filter(img => img.category?.slug === slug);
+  categoriesToFind.forEach((slugs) => {
+    const catImages = getImagesForCategory(slugs);
     if (catImages.length > 5) {
       // Pick images from different parts of the gallery for visual variety
       bentoSelection.push(catImages[2]);  // Near start
@@ -269,18 +293,18 @@ export default async function Home() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-20 pt-24 sm:px-8 sm:pb-16 sm:pt-28 md:min-h-screen lg:px-12 xl:px-16">
-            <Reveal className="max-w-3xl">
-              <h1 className="font-heading text-xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-14 pt-24 sm:px-8 sm:pb-12 sm:pt-28 md:min-h-screen lg:px-12 xl:px-16">
+            <Reveal className="max-w-2xl">
+              <h1 className="font-heading text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
                 {heroTitle}
               </h1>
-              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base md:text-lg lg:text-xl max-w-2xl">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg line-clamp-3">
                 {heroSubtitle}
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
+              <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">
                 <a
                   href="#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium uppercase tracking-widest text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-12 md:px-8 md:text-base focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-10 items-center justify-center rounded-full bg-white px-5 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-11 md:px-7 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Book a shoot
                 </a>
@@ -288,7 +312,7 @@ export default async function Home() {
                   href={`https://wa.me/${footerContent.whatsapp.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15 md:h-12 md:px-8 md:text-base focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-10 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 text-xs font-semibold uppercase tracking-[0.14em] text-white backdrop-blur transition hover:bg-white/15 md:h-11 md:px-7 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   WhatsApp Us
                 </a>
