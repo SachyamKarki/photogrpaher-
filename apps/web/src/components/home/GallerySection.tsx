@@ -62,7 +62,7 @@ export function GallerySection({
         </Reveal>
 
         <div className="mt-12 sm:mt-16">
-          <motion.div 
+          <motion.div
             layout
             className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[220px] xl:auto-rows-[240px]"
           >
@@ -70,13 +70,13 @@ export function GallerySection({
               {filteredProjects.slice(0, 6).map((project, idx) => {
                 const isBento = !activeCategory;
                 const cardClass = isBento
-                  ? idx === 0 
+                  ? idx === 0
                     ? "lg:col-span-7 lg:row-span-3"
-                    : idx === 1 
-                    ? "lg:col-span-5 lg:row-span-2"
-                    : idx === 2 
-                    ? "lg:col-span-5 lg:row-span-1"
-                    : "lg:col-span-4 lg:row-span-1"
+                    : idx === 1
+                      ? "lg:col-span-5 lg:row-span-2"
+                      : idx === 2
+                        ? "lg:col-span-5 lg:row-span-1"
+                        : "lg:col-span-4 lg:row-span-1"
                   : "lg:col-span-4 lg:row-span-1";
 
                 return (
@@ -108,19 +108,19 @@ export function GallerySection({
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40" />
                     </div>
 
-                    <div className="relative z-10 flex h-full w-full flex-col justify-between p-6 pointer-events-none">
-                      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-2xs font-bold uppercase tracking-[0.15em] text-white/90 backdrop-blur-md">
+                    <div className="relative z-10 flex h-full w-full flex-col justify-between p-5 sm:p-6 pointer-events-none">
+                      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-[0.08em] text-white/90 backdrop-blur-md">
                         {project.category?.title || "Project"}
                       </div>
 
-                      <div>
+                      <div className="max-w-[90%]">
                         <div className="text-white">
-                          <div className="text-base font-semibold tracking-tight sm:text-lg uppercase drop-shadow-md">
+                          <div className="text-sm font-semibold tracking-wide sm:text-base uppercase drop-shadow-sm leading-tight">
                             {project.title}
                           </div>
                         </div>
-                        <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-                          View in gallery <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                        <div className="mt-3 inline-flex items-center gap-2 text-[0.6rem] font-bold uppercase tracking-[0.1em] text-white/80">
+                          Explore <span className="transition-transform group-hover:translate-x-0.5">→</span>
                         </div>
                       </div>
                     </div>

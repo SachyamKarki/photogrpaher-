@@ -105,3 +105,18 @@ export const REVIEWS_QUERY = defineQuery(`
     quote
   }
 `);
+
+export const PARTNERS_QUERY = defineQuery(`
+  *[_type == "partner"] | order(order asc, _createdAt desc) {
+    _id,
+    name,
+    logo {
+      asset->{
+        _id,
+        url
+      }
+    },
+    website,
+    order
+  }
+`);

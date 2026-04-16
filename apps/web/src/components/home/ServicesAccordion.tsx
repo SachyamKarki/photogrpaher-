@@ -80,17 +80,7 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
                         key={detail}
                         className="flex items-start gap-4 text-sm leading-7 text-zinc-600"
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mt-[6px] h-3.5 w-3.5 shrink-0 text-zinc-900"
-                        >
-                          <path d="M5 12h14m-7-7 7 7-7 7" />
-                        </svg>
+                        <div className="mt-[11px] h-1.5 w-1.5 rounded-full bg-zinc-900 shrink-0" aria-hidden="true" />
                         <span>{detail}</span>
                       </li>
                     ))}

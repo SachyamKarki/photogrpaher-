@@ -1,18 +1,4 @@
-export type PortfolioCategory = {
-  title: string;
-  slug: string;
-  description: string;
-  image: string;
-};
-
-export type PortfolioProject = {
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage: string;
-  gallery: string[];
-  categorySlug: string;
-};
+import { PortfolioCategory, PortfolioProject } from "@/types";
 
 export const siteHero = {
   title: "Honest Light. Timeless Detail.",
@@ -43,7 +29,7 @@ export const portfolioCategories: PortfolioCategory[] = [
 ];
 
 export const siteServices = {
-  title: "Services",
+  title: "What WE DO",
   intro:
     "A premium photography experience, from planning to delivery, tailored to your story.",
   items: [
@@ -114,26 +100,26 @@ export const aboutContent = {
 };
 
 export const footerContent = {
-  email: "Rabinson2055@gmail.com",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Rabinson2055@gmail.com",
   instagramLinks: [
     { label: "Art of Rabin Son", url: "https://www.instagram.com/art_of_rabinson?igsh=bTh1Y2xpb3Zid2pz" },
     { label: "AutoVibes Nepal", url: "https://www.instagram.com/autovibes_nepal?igsh=NGhveXMzanZrZzIw" },
     { label: "Personal", url: "https://www.instagram.com/rabinson01?igsh=MXh5YTZkcm42ZHZvbA==" },
   ],
-  whatsapp: "https://wa.me/9779803612055",
-  phoneNumber: "+977 980-3612055",
-  locationLine: "Based in Kathmandu • Available worldwide",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/9779803612055",
+  phoneNumber: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+977 980-3612055",
+  locationLine: null,
 };
 
 export const brandPartners = [
   { name: "Toyota", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/toyota.svg" },
   { name: "Ather", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ather-logo.svg" },
-  { name: "Pelliot", logo: "https://gsrventuresglobal.com/wp-content/uploads/2018/10/Pelliot.png" },
-  { name: "Seven Summit", logo: "https://sevensummittreks.com/themes-assets/images/logo.png" },
-  { name: "NMA", logo: "https://www.nepalmountaineering.org/themes/site/img/logo.png" },
-  { name: "NNMGA", logo: "https://www.nnmga.org/wp-content/uploads/2019/12/logo.png" },
-  { name: "Freedom Adventure", logo: "https://freedomadventuretreks.com/assets/images/logo.png" },
-  { name: "Freedom Foundation", logo: "https://www.freedomfoundation.org.np/img/logo.png" }
+  { name: "Pelliot", logo: "https://gsrventuresglobal.com/wp-content/uploads/2024/05/Pelliot-Logo.png" },
+  { name: "Seven Summit Treks", logo: "https://www.sevensummittreks.com/upload/logo/1585210134_SST%20LOGO-01.png" },
+  { name: "NMA", logo: "https://nepalmountaineering.org/img/nma-logo.png" },
+  { name: "NNMGA", logo: "https://www.nnmga.org/wp-content/uploads/2019/07/nnmga-logo.png" },
+  { name: "Freedom Adventure Treks", logo: "https://freedomadventuretreks.com/assets/images/logos/freedom-logo-normal.png" },
+  { name: "Freedom Foundation Nepal", logo: "https://www.freedomfoundation.org.np/img/logo.png" }
 ];
 
 export const clientReviews = [

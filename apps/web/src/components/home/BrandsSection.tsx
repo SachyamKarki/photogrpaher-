@@ -2,11 +2,37 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { urlFor } from "@/lib/sanity/image";
 import { brandPartners } from "@/lib/portfolio/data";
 
-export function BrandsSection() {
-  // Duplicate the brands array to create a seamless loop
-  const duplicatedBrands = [...brandPartners, ...brandPartners];
+interface Partner {
+  _id: string;
+  name: string;
+  logo?: {
+    asset?: {
+      _id: string;
+      url: string;
+    };
+  } | null;
+}
+
+export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
+  // Use Sanity partners if available, otherwise fall back to the hardcoded list for resilience
+  const activePartners = (partners && partners.length > 0)
+    ? partners.map(p => {
+        let logoUrl = "";
+        const logo = p.logo;
+        if (logo?.asset?._id) {
+          const builder = urlFor(logo);
+          logoUrl = builder ? builder.url() : (logo.asset.url || "");
+        } else {
+          logoUrl = logo?.asset?.url || "";
+        }
+        return { name: p.name, logo: logoUrl };
+      })
+    : brandPartners;
+
+  const duplicatedBrands = [...activePartners, ...activePartners];
 
   return (
     <section className="relative w-full py-12 md:py-20 overflow-hidden bg-white">
@@ -18,7 +44,7 @@ export function BrandsSection() {
       </div>
 
       <div className="relative flex overflow-hidden">
-        {/* Gradients for smooth fade in/out - merging with bg-zinc-50 */}
+        {/* Gradients for smooth fade in/out */}
         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 

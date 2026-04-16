@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node -e \"const fs = require('fs'); try { const rootEnv = fs.readFileSync('../../.env', 'utf8'); const webEnv = rootEnv.split('\\n').filter(line => line.startsWith('NEXT_PUBLIC_SANITY_') || line.startsWith('SANITY_API_')).join('\\n'); fs.writeFileSync('.env', webEnv); } catch (e) { console.error('Root .env not found'); }\"",
+    "predev": "node -e \"const fs = require('fs'); try { const rootEnv = fs.readFileSync('../../.env', 'utf8'); const webEnv = rootEnv.split('\\n').filter(line => line.startsWith('NEXT_PUBLIC_') || line.startsWith('SANITY_API_') || line.startsWith('SMTP_') || line.startsWith('CONTACT_')).join('\\n'); fs.writeFileSync('.env', webEnv); } catch (e) { console.error('Root .env not found'); }\"",
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",

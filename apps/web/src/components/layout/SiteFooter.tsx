@@ -147,13 +147,13 @@ export function SiteFooter({
           </div>
 
           {/* Right Column: Navigation & Back to Top */}
-          <div className="flex flex-col gap-16 md:col-span-5 md:items-end lg:col-span-4">
+          <div className="flex flex-col gap-10 md:col-span-5 md:items-end lg:col-span-4">
             <nav aria-label="Footer">
-              <ul className="grid grid-cols-2 gap-x-12 gap-y-6 text-left md:gap-x-16 md:text-right">
+              <ul className="grid grid-cols-2 gap-x-8 gap-y-3.5 text-left md:gap-x-10 md:text-right">
                 <li>
                   <Link
                     href="/#work"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Featured Work
                   </Link>
@@ -161,7 +161,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/gallery"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Gallery
                   </Link>
@@ -169,7 +169,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#categories"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Categories
                   </Link>
@@ -177,7 +177,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/about"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     About
                   </Link>
@@ -185,15 +185,15 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#services"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
-                    Services
+                    What WE DO
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/#contact"
-                    className="block text-2xs font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Contact
                   </Link>
@@ -216,14 +216,14 @@ export function SiteFooter({
               © 2026 {siteTitle}. All rights reserved.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:justify-end">
-              <Link href="/privacy-policy" className="inline-flex h-10 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-[0.15em] text-white/70 transition-all hover:text-white">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-end">
+              <Link href="/privacy-policy" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 transition-all hover:text-white">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="inline-flex h-10 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-[0.15em] text-white/70 transition-all hover:text-white">
+              <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 transition-all hover:text-white">
                 Terms of Service
               </Link>
-              <Link href="/cookie-policy" className="inline-flex h-10 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-[0.15em] text-white/70 transition-all hover:text-white">
+              <Link href="/cookie-policy" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30 transition-all hover:text-white">
                 Cookie Policy
               </Link>
             </div>

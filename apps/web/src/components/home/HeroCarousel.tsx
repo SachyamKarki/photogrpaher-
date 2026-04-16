@@ -74,8 +74,10 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
             aria-label={`Show slide ${index + 1}`}
             onClick={() => setActiveIndex(index)}
             className={[
-              "h-1.5 rounded-full bg-white/55 transition-all",
-              index === activeIndex ? "w-8 bg-white" : "w-3 hover:bg-white/80",
+              "rounded-full transition-all duration-300",
+              index === activeIndex 
+                ? "h-2 w-2 bg-white scale-125 shadow-[0_0_10px_rgba(255,255,255,0.5)]" 
+                : "h-2 w-2 bg-white/40 hover:bg-white/70",
             ].join(" ")}
           />
         ))}

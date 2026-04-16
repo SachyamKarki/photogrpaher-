@@ -49,7 +49,7 @@ export function CategoriesShowcase({
       <div className="hidden xl:flex w-full h-[500px] xl:h-[600px] gap-3 group/container" onMouseLeave={() => setHoveredIdx(null)}>
         {categories.map((c, idx) => {
           const isHovered = hoveredIdx === idx;
-          
+
           return (
             <motion.div
               key={c._id}
@@ -86,14 +86,13 @@ export function CategoriesShowcase({
               {/* Animated Text Content */}
               <motion.div layout="position" className="absolute inset-x-0 bottom-0 p-8 xl:p-10 flex flex-col justify-end h-full pointer-events-none">
                 <div className="mt-auto">
-                  <h3 className={`font-heading font-bold uppercase tracking-tight text-white transition-all duration-700 mb-0 group-hover/card:mb-4 whitespace-nowrap ${
-                    hoveredIdx !== null && !isHovered 
-                      ? "text-xs xl:text-sm scale-95 origin-left" 
+                  <h3 className={`font-heading font-bold uppercase tracking-tight text-white transition-all duration-700 mb-0 group-hover/card:mb-4 whitespace-nowrap ${hoveredIdx !== null && !isHovered
+                      ? "text-xs xl:text-sm scale-95 origin-left"
                       : "text-2xl xl:text-4xl opacity-100 scale-100"
-                  }`}>
+                    }`}>
                     {c.title}
                   </h3>
-                
+
                   {/* CSS Grid trick for perfectly smooth accordion height animation */}
                   <div className="grid grid-rows-[0fr] group-[.is-hovered]/card:grid-rows-[1fr] transition-[grid-template-rows] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
                     <div className="overflow-hidden">
@@ -139,7 +138,7 @@ export function CategoriesShowcase({
                   <div className="h-full w-full bg-gradient-to-br from-zinc-800 to-zinc-950" />
                 )}
               </div>
-              
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/5 opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
 
               <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
@@ -151,7 +150,7 @@ export function CategoriesShowcase({
                     {c.description}
                   </p>
                 )}
-                
+
                 <div className="mt-6 flex items-center gap-4 overflow-hidden">
                   <div className="h-px w-12 bg-white/30 transform origin-left transition-all duration-500 group-hover:w-16 group-hover:bg-white/60" />
                   <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-500 group-hover:text-white transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">

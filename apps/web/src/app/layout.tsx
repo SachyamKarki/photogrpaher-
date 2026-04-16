@@ -21,11 +21,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Rabin Son Photography",
+  title: "RabinSon Photography",
   description: "A professional photography portfolio powered by Next.js and Sanity.",
+  icons: {
+    icon: "/brand/rabinson_logo-Photoroom.png",
+    apple: "/brand/rabinson_logo-Photoroom.png",
+  },
 };
 
-const siteTitle = "Rabin Son Photography";
+const siteTitle = "RabinSon Photography";
 
 export default function RootLayout({
   children,

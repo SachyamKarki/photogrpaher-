@@ -168,6 +168,11 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
             WhatsApp
           </button>
         </div>
+        {contactMethod === "whatsapp" && (
+          <p className="mt-3 text-xs font-medium text-emerald-600 animate-in fade-in slide-in-from-top-1">
+            Direct to Nepal (+977) — {whatsappNumber.slice(-10).replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}
+          </p>
+        )}
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">

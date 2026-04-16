@@ -8,17 +8,17 @@ export const metadata: Metadata = {
 
 export default function CookiePolicyPage() {
   return (
-    <article className="space-y-10">
+    <article className="space-y-16">
       <header className="space-y-4">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+        <h1 className="font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Cookie Policy
         </h1>
-        <p className="text-sm text-zinc-600">
+        <p className="text-xs uppercase tracking-widest text-white/40">
           Effective date: April 12, 2026
         </p>
       </header>
 
-      <section className="space-y-3 text-sm leading-7 text-zinc-700 sm:text-[15px]">
+      <section className="space-y-6 text-base leading-8 text-white/70">
         <p>
           Cookies are small files stored on your device. This site may use
           cookies and similar technologies to improve performance and provide a
@@ -26,48 +26,50 @@ export default function CookiePolicyPage() {
         </p>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
-          Types of Cookies
-        </h2>
-        <ul className="space-y-2 text-sm leading-7 text-zinc-700 sm:text-[15px]">
-          <li>
-            Essential: required for basic site functionality and security.
-          </li>
-          <li>
-            Preferences: remember choices that improve your experience.
-          </li>
-          <li>
-            Analytics (optional): helps understand traffic and improve content.
-          </li>
-        </ul>
-      </section>
+      <div className="space-y-12">
+        <section className="space-y-4">
+          <h2 className="font-heading text-xl font-semibold tracking-tight text-white">
+            Types of Cookies
+          </h2>
+          <ul className="list-disc space-y-3 pl-5 text-sm leading-7 text-white/60">
+            <li>
+              Essential: required for basic site functionality and security.
+            </li>
+            <li>
+              Preferences: remember choices that improve your experience.
+            </li>
+            <li>
+              Analytics (optional): helps understand traffic and improve content.
+            </li>
+          </ul>
+        </section>
 
-      <section className="space-y-4">
-        <h2 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
-          Managing Cookies
-        </h2>
-        <p className="text-sm leading-7 text-zinc-700 sm:text-[15px]">
-          You can control cookies through your browser settings. Disabling
-          certain cookies may affect site functionality.
-        </p>
-      </section>
+        <section className="space-y-4">
+          <h2 className="font-heading text-xl font-semibold tracking-tight text-white">
+            Managing Cookies
+          </h2>
+          <p className="text-sm leading-7 text-white/60">
+            You can control cookies through your browser settings. Disabling
+            certain cookies may affect site functionality.
+          </p>
+        </section>
 
-      <section className="space-y-4">
-        <h2 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
-          Contact
-        </h2>
-        <p className="text-sm leading-7 text-zinc-700 sm:text-[15px]">
-          For questions about cookies, contact{" "}
-          <a
-            className="underline underline-offset-4 hover:text-zinc-900"
-            href={`mailto:${footerContent.email}`}
-          >
-            {footerContent.email}
-          </a>
-          .
-        </p>
-      </section>
+        <section className="space-y-4 border-t border-white/10 pt-12">
+          <h2 className="font-heading text-lg font-semibold tracking-tight text-white">
+            Contact
+          </h2>
+          <p className="text-sm leading-7 text-white/60">
+            For questions about cookies, contact{" "}
+            <a
+              className="text-white underline underline-offset-4 transition-colors hover:text-white/80"
+              href={`mailto:${footerContent.email}`}
+            >
+              {footerContent.email}
+            </a>
+            .
+          </p>
+        </section>
+      </div>
     </article>
   );
 }

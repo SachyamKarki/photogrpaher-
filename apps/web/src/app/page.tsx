@@ -30,6 +30,7 @@ import {
   PROJECTS_QUERY,
   SITE_SETTINGS_QUERY,
   REVIEWS_QUERY,
+  PARTNERS_QUERY,
 } from "@/lib/sanity/queries";
 
 type SiteSettings = {
@@ -133,20 +134,23 @@ export default async function Home() {
   let projects: ProjectListItem[] | null = null;
   let categories: Category[] | null = null;
   let reviews: Review[] | null = null;
+  let partners: any[] | null = null;
 
   if (sanityEnabled) {
     try {
-      [settings, projects, categories, reviews] = await Promise.all([
+      [settings, projects, categories, reviews, partners] = await Promise.all([
         sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY),
         sanityServerClient!.fetch<ProjectListItem[]>(PROJECTS_QUERY),
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
         sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
+        sanityServerClient!.fetch<any[]>(PARTNERS_QUERY),
       ]);
     } catch {
       settings = null;
       projects = null;
       categories = null;
       reviews = null;
+      partners = null;
     }
   }
 
@@ -226,29 +230,28 @@ export default async function Home() {
     { label: "Himalayas", slugs: ["himalayas", "mountain"] },
   ];
 
-  const slides = categoriesForHero
-    .map((category, idx) => {
-      const catImages = getImagesForCategory(category.slugs);
-      const pickIndex = idx === 3 ? 5 : idx === 0 ? 0 : 1;
-      const heroImage = catImages.length ? catImages[Math.min(pickIndex, catImages.length - 1)] : null;
-
-      return {
-        src:
-          heroImage?.imageUrl ||
-          (idx === 0
-            ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format"
-            : idx === 1
-              ? "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format"
-              : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format"),
-        alt: heroImage?.category?.title || category.label,
-      };
+  // Explicitly curate the hero content as requested by the user
+  const curatedHeroIds = ["mountain-3", "mountain-15", "mountain-17"];
+  const slides = curatedHeroIds
+    .map((id) => {
+      const img = validGalleryImages.find((i) => i._id === id);
+      return img ? { src: img.imageUrl, alt: img.category?.title || "Himalayas" } : null;
     })
-    .slice(0, 4);
+    .filter((s): s is { src: string; alt: string } => s !== null);
+
+  // If we couldn't find the curated images, fall back to a safe list of high-quality defaults
+  if (slides.length === 0) {
+    slides.push(
+      { src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format", alt: "Himalayas" },
+      { src: "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format", alt: "Vehicles" },
+      { src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format", alt: "Portraits" }
+    );
+  }
 
   // Programmatically pick a balanced mix (2 from each category if possible)
   const categoriesToFind = [
-    ["automobile", "vehicles", "automotive"],
     ["himalayas", "mountain"],
+    ["automobile", "vehicles", "automotive"],
     ["studio-portraits", "portraits"],
   ];
   const bentoSelection: typeof validGalleryImages = [];
@@ -273,13 +276,16 @@ export default async function Home() {
     title: img.category?.title || "Featured",
     slug: "gallery",
     imageUrl: img.imageUrl,
-    category: { title: "Project", slug: "project" }
+    category: {
+      title: img.category?.title || "Editorial",
+      slug: img.category?.slug || "editorial"
+    }
   }));
 
   return (
     <div className="min-h-screen bg-white text-zinc-900">
-      <HomeHeader 
-        siteTitle={siteTitle} 
+      <HomeHeader
+        siteTitle={siteTitle}
         email={footerContent.email}
         phoneNumber={footerContent.phoneNumber}
         instagramLinks={footerContent.instagramLinks}
@@ -293,18 +299,18 @@ export default async function Home() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-14 pt-24 sm:px-8 sm:pb-12 sm:pt-28 md:min-h-screen lg:px-12 xl:px-16">
+          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
             <Reveal className="max-w-2xl">
               <h1 className="font-heading text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
                 {heroTitle}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg line-clamp-3">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg line-clamp-3">
                 {heroSubtitle}
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">
+              <div className="mt-3 flex flex-wrap items-center gap-3 sm:mt-7">
                 <a
                   href="#contact"
-                  className="inline-flex h-10 items-center justify-center rounded-full bg-white px-5 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-11 md:px-7 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-7 text-xs font-bold uppercase tracking-[0.05em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Book a shoot
                 </a>
@@ -312,7 +318,7 @@ export default async function Home() {
                   href={`https://wa.me/${footerContent.whatsapp.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-10 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 text-xs font-semibold uppercase tracking-[0.14em] text-white backdrop-blur transition hover:bg-white/15 md:h-11 md:px-7 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-7 text-xs font-bold uppercase tracking-[0.05em] text-white backdrop-blur transition hover:bg-white/15 md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   WhatsApp Us
                 </a>
@@ -354,7 +360,7 @@ export default async function Home() {
           </section>
 
           <section className="py-8 sm:py-16 xl:py-20">
-            <BrandsSection />
+            <BrandsSection partners={partners} />
           </section>
 
           <section id="services" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
