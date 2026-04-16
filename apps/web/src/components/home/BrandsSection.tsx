@@ -17,8 +17,8 @@ interface Partner {
 }
 
 export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
-  // Use Sanity partners if available, otherwise fall back to the hardcoded list for resilience
-  const activePartners = (partners && partners.length > 0)
+  // Map Sanity partners for easy access and normalization
+  const sanityPartners = (partners && partners.length > 0)
     ? partners.map(p => {
         let logoUrl = "";
         const logo = p.logo;
@@ -30,7 +30,24 @@ export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
         }
         return { name: p.name, logo: logoUrl };
       })
-    : brandPartners;
+    : [];
+
+  // Merge Sanity partners with local brandPartners
+  // We prioritize Sanity data but ensure every brand from data.ts is represented
+  const mergedPartners = [...brandPartners];
+  
+  sanityPartners.forEach(sp => {
+    const localIndex = mergedPartners.findIndex(lp => lp.name.toLowerCase() === sp.name.toLowerCase());
+    if (localIndex !== -1) {
+      // Update existing local entry with Sanity data if available
+      if (sp.logo) mergedPartners[localIndex] = sp;
+    } else {
+      // Add new partner from Sanity that isn't in local data
+      mergedPartners.push(sp);
+    }
+  });
+
+  const activePartners = mergedPartners;
 
   const duplicatedBrands = [...activePartners, ...activePartners];
 

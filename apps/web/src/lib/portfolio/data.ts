@@ -106,20 +106,20 @@ export const footerContent = {
     { label: "AutoVibes Nepal", url: "https://www.instagram.com/autovibes_nepal?igsh=NGhveXMzanZrZzIw" },
     { label: "Personal", url: "https://www.instagram.com/rabinson01?igsh=MXh5YTZkcm42ZHZvbA==" },
   ],
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/9779803612055",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/14437806166",
   phoneNumber: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+977 980-3612055",
   locationLine: null,
 };
 
 export const brandPartners = [
-  { name: "Toyota", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/toyota.svg" },
-  { name: "Ather", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ather-logo.svg" },
-  { name: "Pelliot", logo: "https://gsrventuresglobal.com/wp-content/uploads/2024/05/Pelliot-Logo.png" },
-  { name: "Seven Summit Treks", logo: "https://www.sevensummittreks.com/upload/logo/1585210134_SST%20LOGO-01.png" },
-  { name: "NMA", logo: "https://nepalmountaineering.org/img/nma-logo.png" },
-  { name: "NNMGA", logo: "https://www.nnmga.org/wp-content/uploads/2019/07/nnmga-logo.png" },
-  { name: "Freedom Adventure Treks", logo: "https://freedomadventuretreks.com/assets/images/logos/freedom-logo-normal.png" },
-  { name: "Freedom Foundation Nepal", logo: "https://www.freedomfoundation.org.np/img/logo.png" }
+  { name: "Toyota", logo: "/content/partners/toyota.svg" },
+  { name: "Ather", logo: "/content/partners/ather.svg" },
+  { name: "Pelliot", logo: "/content/partners/pelliot.png" },
+  { name: "Seven Summit Treks", logo: "/content/partners/sevensummit.jpg" },
+  { name: "NMA", logo: "/content/partners/nma.png" },
+  { name: "NNMGA", logo: "/content/partners/nnmga.png" },
+  { name: "Freedom Adventure Treks", logo: "/content/partners/freedom-adventure.png" },
+
 ];
 
 export const clientReviews = [

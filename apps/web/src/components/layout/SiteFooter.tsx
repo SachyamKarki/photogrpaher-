@@ -73,7 +73,7 @@ export function SiteFooter({
   return (
     <footer className="relative z-0 mt-16 w-full overflow-hidden border-t border-white/5 bg-black pb-10 pt-12 text-white font-body">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mb-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
+        <div className="mb-12 grid grid-cols-1 gap-12 md:grid-cols-12 md:items-start">
           {/* Left Column: Brand Info & Actions */}
           <div className="flex flex-col gap-12 md:col-span-7 lg:col-span-8">
             <div className="flex flex-col gap-4">
@@ -204,8 +204,8 @@ export function SiteFooter({
           </div>
         </div>
 
-        <div className="pointer-events-none mt-16 md:mt-24 w-full select-none text-center">
-          <h2 className="font-heading uppercase whitespace-nowrap py-2 text-[clamp(1.5rem,5.5vw,5.5rem)] font-bold tracking-tight text-white leading-none">
+        <div className="pointer-events-none mt-12 sm:mt-16 md:mt-24 w-full select-none text-center overflow-hidden">
+          <h2 className="font-heading uppercase whitespace-nowrap py-2 text-[clamp(1.2rem,5.5vw,5.5rem)] font-bold tracking-tight text-white leading-none">
             {siteTitle}.
           </h2>
         </div>

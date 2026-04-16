@@ -12,30 +12,63 @@ type Props = {
 type FormState = "idle" | "submitting" | "success" | "error";
 type ContactMethod = "email" | "whatsapp";
 
+const countryCodes = [
+  { code: "+977", country: "Nepal", flag: "🇳🇵" },
+  { code: "+91", country: "India", flag: "🇮🇳" },
+  { code: "+1", country: "USA", flag: "🇺🇸" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+61", country: "Australia", flag: "🇦🇺" },
+  { code: "+86", country: "China", flag: "🇨🇳" },
+  { code: "+81", country: "Japan", flag: "🇯🇵" },
+  { code: "+49", country: "Germany", flag: "🇩🇪" },
+  { code: "+33", country: "France", flag: "🇫🇷" },
+  { code: "+971", country: "UAE", flag: "🇦🇪" },
+  { code: "+974", country: "Qatar", flag: "🇶🇦" },
+  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "+82", country: "South Korea", flag: "🇰🇷" },
+  { code: "+65", country: "Singapore", flag: "🇸🇬" },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+  { code: "+66", country: "Thailand", flag: "🇹🇭" },
+  { code: "+39", country: "Italy", flag: "🇮🇹" },
+  { code: "+34", country: "Spain", flag: "🇪🇸" },
+  { code: "+7", country: "Russia", flag: "🇷🇺" },
+  { code: "+55", country: "Brazil", flag: "🇧🇷" },
+];
+
 export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Props) {
   const [state, setState] = useState<FormState>("idle");
   const [contactMethod, setContactMethod] = useState<ContactMethod>("email");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("+977");
+  const [phone, setPhone] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
 
   const isValid = useMemo(() => {
     if (!name.trim()) return false;
     if (contactMethod === "email" && !email.trim()) return false;
+    if (contactMethod === "whatsapp" && !phone.trim()) return false;
     if (message.trim().length < 10) return false;
     return true;
-  }, [name, email, message, contactMethod]);
+  }, [name, email, phone, message, contactMethod]);
 
   function openWhatsApp() {
     const cleanNumber = whatsappNumber.replace(/[^0-9]/g, "");
+    const senderNumber = `${countryCode} ${phone.replace(/[^0-9]/g, "")}`;
     const lines = [
-      `Hi, I'm *${name.trim()}*.`,
-      category ? `I'm interested in: *${category}*` : "",
-      "",
+      `--- New Inquiry ---`,
+      ``,
+      `Name: ${name.trim()}`,
+      `Phone: ${senderNumber}`,
+      category ? `Category: ${category}` : "",
+      ``,
+      `Message:`,
       message.trim(),
-    ].filter(Boolean);
+      ``,
+      `--- Sent from rabinson.com ---`,
+    ].filter((line) => line !== false && line !== null && line !== undefined);
 
     const text = encodeURIComponent(lines.join("\n"));
     window.open(`https://wa.me/${cleanNumber}?text=${text}`, "_blank");
@@ -55,6 +88,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
         setState("success");
         setName("");
         setEmail("");
+        setPhone("");
         setCategory("");
         setMessage("");
       } catch {
@@ -94,6 +128,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
       setState("success");
       setName("");
       setEmail("");
+      setPhone("");
       setCategory("");
       setMessage("");
       return json;
@@ -110,6 +145,36 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
     } catch {
       setState("error");
     }
+  }
+
+  if (state === "success") {
+    return (
+      <div className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8 md:p-10">
+        <div className="flex flex-col items-center justify-center py-6 sm:py-10 text-center">
+          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
+            <svg className="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+          <h3 className="font-heading text-xl font-semibold tracking-tight text-zinc-900">
+            Thank you for reaching out!
+          </h3>
+          <p className="mt-2 max-w-sm text-sm text-zinc-500">
+            We&apos;ve received your inquiry and will get back to you within 24–48 hours. Looking forward to working with you.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setState("idle");
+              setContactMethod("email");
+            }}
+            className="mt-8 inline-flex h-10 items-center justify-center rounded-full border border-zinc-200 px-6 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+          >
+            Send another inquiry
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -131,7 +196,7 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
         <span className="mb-3 block text-sm font-medium text-zinc-800">
           How would you like to reach us?
         </span>
-        <div className="relative inline-grid grid-cols-2 w-64 rounded-full border border-zinc-200 bg-zinc-100 p-1">
+        <div className="relative inline-grid grid-cols-2 w-full sm:w-64 rounded-full border border-zinc-200 bg-zinc-100 p-1">
           {/* Sliding indicator */}
           <div
             className={[
@@ -168,11 +233,6 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
             WhatsApp
           </button>
         </div>
-        {contactMethod === "whatsapp" && (
-          <p className="mt-3 text-xs font-medium text-emerald-600 animate-in fade-in slide-in-from-top-1">
-            Direct to Nepal (+977) — {whatsappNumber.slice(-10).replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}
-          </p>
-        )}
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -200,6 +260,34 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
               type="email"
               required
             />
+          </label>
+        )}
+
+        {contactMethod === "whatsapp" && (
+          <label className="flex flex-col gap-2 text-sm">
+            <span className="font-medium text-zinc-800">Your Phone Number</span>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <select
+                className="h-11 w-full sm:w-[130px] shrink-0 rounded-xl border border-zinc-200 bg-white px-2 text-sm outline-none transition focus:border-zinc-200 focus:ring-0"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+              >
+                {countryCodes.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.flag} {c.code} {c.country}
+                  </option>
+                ))}
+              </select>
+              <input
+                className="h-11 flex-1 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                autoComplete="tel"
+                placeholder="98XXXXXXXX"
+                type="tel"
+                required
+              />
+            </div>
           </label>
         )}
 
@@ -264,3 +352,4 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
     </form>
   );
 }
+

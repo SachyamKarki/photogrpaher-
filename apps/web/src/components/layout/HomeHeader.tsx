@@ -105,11 +105,11 @@ export function HomeHeader({
       {/* Side Drawer */}
       <aside
         className={[
-          "fixed inset-y-0 right-0 z-[70] w-[70%] border-l border-white/5 bg-zinc-950 shadow-2xl transition-transform duration-500 ease-out",
+          "fixed inset-y-0 right-0 z-[70] w-[85%] sm:w-[70%] border-l border-white/5 bg-zinc-950 shadow-2xl transition-transform duration-500 ease-out",
           isMenuOpen ? "translate-x-0" : "translate-x-full",
         ].join(" ")}
       >
-        <div className="flex h-full flex-col px-10 py-12 text-white">
+        <div className="flex h-full flex-col px-6 sm:px-10 py-10 sm:py-12 text-white">
           <div className="flex shrink-0 items-center justify-end">
             <button
               onClick={() => setIsMenuOpen(false)}

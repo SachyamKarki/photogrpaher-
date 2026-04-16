@@ -104,17 +104,17 @@ export default async function PhotoPage(props: {
         
         {/* Invisible Click Zones for Nav (Awwwards Standard) */}
         {prevUrl && (
-          <Link href={prevUrl} className="absolute inset-y-0 left-0 w-[15vw] sm:w-[20vw] z-40 group cursor-w-resize flex items-center pointer-events-auto" aria-label="Previous">
-            <div className="ml-4 sm:ml-12 opacity-0 group-hover:opacity-100 transition-all duration-700 -translate-x-8 group-hover:translate-x-0 hidden sm:block text-white/50 hover:text-white drop-shadow-md">
-               <ChevronLeft className="h-12 w-12 stroke-[1]" />
+          <Link href={prevUrl} className="absolute inset-y-0 left-0 w-[20vw] sm:w-[20vw] z-40 group cursor-w-resize flex items-center pointer-events-auto" aria-label="Previous">
+            <div className="ml-2 sm:ml-12 opacity-50 sm:opacity-0 group-hover:opacity-100 transition-all duration-700 sm:-translate-x-8 sm:group-hover:translate-x-0 text-white/50 hover:text-white drop-shadow-md">
+               <ChevronLeft className="h-8 w-8 sm:h-12 sm:w-12 stroke-[1.5] sm:stroke-[1]" />
             </div>
           </Link>
         )}
 
         {nextUrl && (
-          <Link href={nextUrl} className="absolute inset-y-0 right-0 w-[15vw] sm:w-[20vw] z-40 group cursor-e-resize flex items-center justify-end pointer-events-auto" aria-label="Next">
-            <div className="mr-4 sm:mr-12 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-8 group-hover:translate-x-0 hidden sm:block text-white/50 hover:text-white drop-shadow-md">
-               <ChevronRight className="h-12 w-12 stroke-[1]" />
+          <Link href={nextUrl} className="absolute inset-y-0 right-0 w-[20vw] sm:w-[20vw] z-40 group cursor-e-resize flex items-center justify-end pointer-events-auto" aria-label="Next">
+            <div className="mr-2 sm:mr-12 opacity-50 sm:opacity-0 group-hover:opacity-100 transition-all duration-700 sm:translate-x-8 sm:group-hover:translate-x-0 text-white/50 hover:text-white drop-shadow-md">
+               <ChevronRight className="h-8 w-8 sm:h-12 sm:w-12 stroke-[1.5] sm:stroke-[1]" />
             </div>
           </Link>
         )}

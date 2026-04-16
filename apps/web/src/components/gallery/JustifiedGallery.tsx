@@ -159,7 +159,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-2 gap-3 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5"
+        className="grid grid-cols-2 gap-1.5 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5"
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {isEmpty ? (
@@ -191,7 +191,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                 key={image._id}
                 layout
                 variants={itemVariants}
-                className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-zinc-100 group cursor-pointer"
+                className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-100 group cursor-pointer"
               >
                 <Link
                   href={`/photo/${image._id}${selectedCategory ? `?category=${selectedCategory}` : ""}`}
