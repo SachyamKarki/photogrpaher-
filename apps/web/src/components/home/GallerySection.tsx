@@ -96,7 +96,7 @@ export function GallerySection({
         <div className="mt-12 sm:mt-16">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
+            className="grid grid-cols-2 gap-2 grid-auto-rows-[120px] sm:grid-auto-rows-[140px] md:grid-auto-rows-[150px] lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {
@@ -118,7 +118,7 @@ export function GallerySection({
                 };
                 const cardClass = getCardClass(idx);
                 // On mobile (below md), we span 2 columns every few items to keep the bento feel
-                const mobileClass = idx % 5 === 0 ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-square";
+                const mobileClass = idx % 5 === 0 ? "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto" : "col-span-1 row-span-1 aspect-square md:aspect-auto";
 
                 return (
                   <motion.div
