@@ -11,9 +11,10 @@ dotenv.config({ path: path.join(repoRoot, ".env") });
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
-    style-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' blob: data:;
     img-src 'self' blob: data: https://cdn.sanity.io https://images.unsplash.com;
     font-src 'self' data:;
+    connect-src 'self' ws: wss: https://cdn.sanity.io;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
@@ -27,10 +28,10 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
-          {
+          ...(process.env.NODE_ENV === 'production' ? [{
             key: 'Content-Security-Policy',
             value: cspHeader.replace(/\n/g, ''),
-          },
+          }] : []),
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on'

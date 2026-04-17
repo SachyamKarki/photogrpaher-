@@ -59,7 +59,9 @@ export function HomeHeader({
                   src="/brand/rabinson_logo-Photoroom.png"
                   alt={`${siteTitle} Logo`}
                   fill
+                  sizes="(max-width: 768px) 250px, 400px"
                   className="object-contain object-left brightness-0 invert"
+                  unoptimized
                   priority
                 />
               </div>

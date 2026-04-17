@@ -90,6 +90,7 @@ export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
                     fill
                     sizes="(max-width: 768px) 140px, 200px"
                     className="object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+                    unoptimized={!brand.logo.startsWith("http")}
                   />
                 </div>
               ) : (
