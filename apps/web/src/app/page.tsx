@@ -216,33 +216,22 @@ export default async function Home() {
     );
   }
 
-  // Programmatically pick a balanced mix (2 from each category if possible)
-  const categoriesToFind = [
-    ["himalayas", "mountain"],
-    ["automobile", "vehicles", "automotive"],
-    ["studio-portraits", "portraits"],
-  ];
-  const bentoSelection: typeof validGalleryImages = [];
+  // Dynamically select Featured Work (up to 10 images) prioritizing those marked as isFeatured in Sanity
+  const explicitlyFeatured = validGalleryImages.filter((img) => (img as any).isFeatured);
+  let bentoSelection = explicitlyFeatured;
 
-  categoriesToFind.forEach((slugs) => {
-    const catImages = getImagesForCategory(slugs);
-    if (catImages.length > 5) {
-      // Pick images from different parts of the gallery for visual variety
-      bentoSelection.push(catImages[2]);  // Near start
-      bentoSelection.push(catImages[Math.floor(catImages.length / 2)]); // Middle
-    } else {
-      bentoSelection.push(...catImages.slice(0, 2));
-    }
-  });
+  if (bentoSelection.length < 10) {
+    const missing = 10 - bentoSelection.length;
+    const remainingImages = validGalleryImages.filter((img) => !(img as any).isFeatured);
+    bentoSelection = [...bentoSelection, ...remainingImages.slice(0, missing)];
+  } else {
+    bentoSelection = bentoSelection.slice(0, 10);
+  }
 
-  const finalBentoImages = bentoSelection.length >= 6
-    ? bentoSelection.slice(0, 6)
-    : validGalleryImages.slice(0, 6);
-
-  const bentoGridImages = finalBentoImages.map((img) => ({
+  const bentoGridImages = bentoSelection.map((img) => ({
     _id: img._id,
     title: img.category?.title || "Featured",
-    slug: "gallery",
+    slug: img.category?.slug || "gallery",
     imageUrl: img.imageUrl,
     category: {
       title: img.category?.title || "Editorial",
@@ -295,7 +284,7 @@ export default async function Home() {
 
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
           {/* About Me */}
-          <section id="about" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
+          <section id="about" className="scroll-mt-24 pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pt-48 lg:pb-32">
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
@@ -316,12 +305,12 @@ export default async function Home() {
           </section>
 
           {/* Category */}
-          <section className="py-8 sm:py-16 xl:py-20">
+          <section>
             <HomeCategories categories={homeCategories} />
           </section>
 
           {/* Partners */}
-          <section className="py-8 sm:py-16 xl:py-20">
+          <section>
             <BrandsSection partners={partners} />
           </section>
 
@@ -331,7 +320,7 @@ export default async function Home() {
           />
 
           {/* What We Do */}
-          <section id="services" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
+          <section id="services" className="scroll-mt-24 py-16 sm:py-24 lg:py-32">
             <Reveal>
               <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
                 <SectionHeading
@@ -348,7 +337,7 @@ export default async function Home() {
 
           <ReviewsSection reviews={safeReviews} />
 
-          <section id="contact" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
+          <section id="contact" className="scroll-mt-24 py-16 sm:py-24 lg:py-32">
             <Reveal>
               <div>
                 <SectionHeading

@@ -37,6 +37,13 @@ export const projectType = defineType({
           title: "Alt Text",
           type: "string",
         }),
+        defineField({
+          name: "isFeatured",
+          title: "Show in Featured Work (Home)",
+          type: "boolean",
+          description: "Checking this will display the image in the Bento Grid on the homepage.",
+          initialValue: false,
+        }),
       ],
     }),
     defineField({
@@ -51,6 +58,13 @@ export const projectType = defineType({
               name: "alt",
               title: "Alt Text",
               type: "string",
+            }),
+            defineField({
+              name: "isFeatured",
+              title: "Show in Featured Work (Home)",
+              type: "boolean",
+              description: "Checking this will display the image in the Bento Grid on the homepage.",
+              initialValue: false,
             }),
           ],
         },

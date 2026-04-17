@@ -97,6 +97,17 @@ export const GALLERY_PROJECTS_QUERY = defineQuery(`
   }
 `);
 
+export const FEATURED_IMAGES_QUERY = defineQuery(`
+  *[_type == "project" && defined(slug.current) && (coverImage.isFeatured == true || count(gallery[isFeatured == true]) > 0)]
+  | order(publishedAt desc)[0...50]{
+    _id,
+    title,
+    "category": category->{title, "slug": slug.current},
+    coverImage,
+    gallery
+  }
+`);
+
 export const REVIEWS_QUERY = defineQuery(`
   *[_type == "review" && featured == true] | order(_createdAt desc) {
     _id,

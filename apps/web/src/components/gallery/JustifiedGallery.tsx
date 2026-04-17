@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,6 +41,15 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  // Track a stably randomized core pool of images
+  const [shuffledImages, setShuffledImages] = useState(images);
+
+  // Shuffle images on client mount securely
+  useEffect(() => {
+    setShuffledImages([...images].sort(() => Math.random() - 0.5));
+  }, [images]);
 
   // Sync internal state when URL changes (e.g., back button)
   // This pattern is recommended by React for syncing props to state
@@ -52,8 +61,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const handleCategoryChange = (slug: string | null) => {
     if (slug === selectedCategory) return;
     
+    setIsFiltering(true);
     setSelectedCategory(slug);
     setCurrentPage(1);
+    
+    setTimeout(() => {
+      setIsFiltering(false);
+    }, 500); // Premium skeleton loading duration
     
     const params = new URLSearchParams(searchParams);
     if (slug) {
@@ -65,8 +79,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   const filteredImages = selectedCategory
-    ? images.filter((img) => img.category?.slug === selectedCategory)
-    : images;
+    ? shuffledImages.filter((img) => img.category?.slug === selectedCategory)
+    : shuffledImages;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
   const paginatedImages = filteredImages.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -159,7 +173,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         className="grid grid-cols-2 gap-1.5 min-h-[600px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5"
       >
         <AnimatePresence mode="popLayout" initial={false}>
-          {isEmpty ? (
+          {isEmpty && !isFiltering ? (
             <motion.div
               key="empty"
               initial={{ opacity: 0, y: 8 }}
@@ -182,10 +196,21 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                 </p>
               </div>
             </motion.div>
+          ) : isFiltering ? (
+            Array.from({ length: 8 }).map((_, i) => (
+              <motion.div
+                key={`skeleton-${i}`}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.15 } }}
+                transition={{ duration: 0.3 }}
+                className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-200/60 animate-pulse"
+              />
+            ))
           ) : (
             paginatedImages.map((image) => (
               <motion.div
-                key={image._id}
+                key={`${selectedCategory || 'all'}-${image._id}`}
                 layout
                 variants={itemVariants}
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-100 group cursor-pointer"

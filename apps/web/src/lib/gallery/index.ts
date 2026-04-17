@@ -105,6 +105,7 @@ export async function getAllGalleryImages() {
         title: project?.categorySlug || "Photography", 
         slug: project?.categorySlug || "photography" 
       },
+      isFeatured: (source as any)?.isFeatured === true || false,
     });
   };
 

@@ -28,7 +28,7 @@ export function CategoriesShowcase({
   onCategoryClick,
   title = "Categories",
   subtitle = "A curated selection of work across distinct photographic styles.",
-  sectionClassName = "scroll-mt-24 py-16 sm:py-24",
+  sectionClassName = "scroll-mt-24 py-16 sm:py-24 lg:py-32",
   headingContainerClassName = "mb-10 sm:mb-16",
 }: Props) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
