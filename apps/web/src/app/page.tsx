@@ -294,12 +294,7 @@ export default async function Home() {
         </section>
 
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
-          {/* Integrated Gallery Section - now receives pre-processed image URLs */}
-          {/* Integrated Gallery Section - uniquely curated mixed bento ignoring category covers */}
-          <GallerySection
-            initialProjects={bentoGridImages}
-          />
-
+          {/* About Me */}
           <section id="about" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
@@ -320,14 +315,22 @@ export default async function Home() {
             </Reveal>
           </section>
 
+          {/* Category */}
           <section className="py-8 sm:py-16 xl:py-20">
             <HomeCategories categories={homeCategories} />
           </section>
 
+          {/* Partners */}
           <section className="py-8 sm:py-16 xl:py-20">
             <BrandsSection partners={partners} />
           </section>
 
+          {/* Featured Works */}
+          <GallerySection
+            initialProjects={bentoGridImages}
+          />
+
+          {/* What We Do */}
           <section id="services" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">
             <Reveal>
               <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
