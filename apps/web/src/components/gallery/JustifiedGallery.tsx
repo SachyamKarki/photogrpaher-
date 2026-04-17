@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-
 
 type GalleryImage = {
   _id: string;
@@ -32,16 +31,6 @@ type JustifiedGalleryProps = {
   categories: Category[];
 };
 
-// Robust Fisher-Yates Shuffle algorithm for a truly random grid
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
 const ITEMS_PER_PAGE = 12;
 
 function GalleryInner({ images, categories }: JustifiedGalleryProps) {
@@ -49,45 +38,15 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const router = useRouter();
   const categoryParam = searchParams.get("category");
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam || null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => setHasMounted(true));
-    return () => cancelAnimationFrame(handle);
-  }, []);
-
-  // Client-side shuffle to ensure a fresh experience on every visit without hydration errors
-  const [shuffledAll, setShuffledAll] = useState<GalleryImage[]>(images);
-  
-  useEffect(() => {
-    if (hasMounted) {
-      const handle = requestAnimationFrame(() => {
-        setShuffledAll(shuffleArray(images));
-      });
-      return () => cancelAnimationFrame(handle);
-    }
-  }, [images, hasMounted]);
-
-  const allImages = shuffledAll;
-
-
-
-
-
-  // Sync internal state when URL changes (e.g., back button)
-  // This pattern is recommended by React for syncing props to state
-  if (categoryParam !== selectedCategory) {
-    setSelectedCategory(categoryParam);
-  }
+  const allImages = images;
 
   const handleCategoryChange = (slug: string | null) => {
-    if (slug === selectedCategory) return;
+    if (slug === categoryParam) return;
     
     setIsFiltering(true);
-    setSelectedCategory(slug);
     setCurrentPage(1); // Reset to first page when category changes
     
     setTimeout(() => {
@@ -103,8 +62,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     router.push(`/gallery?${params.toString()}`, { scroll: false });
   };
 
-  const filteredImages = selectedCategory
-    ? allImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
+  const filteredImages = categoryParam
+    ? allImages.filter((img: GalleryImage) => img.category?.slug === categoryParam)
     : allImages;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
@@ -114,6 +73,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   );
 
   const handlePageChange = (page: number) => {
+    if (page === currentPage) return;
     setIsFiltering(true);
     setCurrentPage(page);
     window.scrollTo({ top: 300, behavior: "smooth" });
@@ -124,8 +84,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   const isEmpty = filteredImages.length === 0;
-  const activeCategoryLabel = selectedCategory
-    ? (categories.find((c) => c.slug === selectedCategory)?.title ?? selectedCategory)
+  const activeCategoryLabel = categoryParam
+    ? (categories.find((c) => c.slug === categoryParam)?.title ?? categoryParam)
     : "All";
 
   const containerVariants = {
@@ -185,13 +145,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             className={[
               "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
               "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
-              selectedCategory === null
+              categoryParam === null
                 ? "text-zinc-900"
                 : "text-zinc-500 hover:text-zinc-900",
             ].join(" ")}
           >
             All
-            {selectedCategory === null && (
+            {categoryParam === null && (
               <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
             )}
           </button>
@@ -199,21 +159,21 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             <button
               key={category._id}
               onClick={() => handleCategoryChange(category.slug)}
-              className={[
-                "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
-                "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
-                selectedCategory === category.slug
-                  ? "text-zinc-900"
-                  : "text-zinc-500 hover:text-zinc-900",
-              ].join(" ")}
-            >
-              {category.title}
-              {selectedCategory === category.slug && (
-                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
-              )}
-            </button>
-          ))}
-        </div>
+                className={[
+                  "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
+                  "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+                  categoryParam === category.slug
+                    ? "text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-900",
+                ].join(" ")}
+              >
+                {category.title}
+                {categoryParam === category.slug && (
+                  <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                )}
+              </button>
+            ))}
+          </div>
       </div>
 
       {/* Clean Uniform Grid with Layout Animations */}
@@ -267,12 +227,12 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
           ) : (
             paginatedImages.map((image: GalleryImage) => (
               <motion.div
-                key={`${selectedCategory || 'all'}-${image._id}`}
+                key={`${categoryParam || "all"}-${image._id}`}
                 variants={itemVariants}
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-100 group cursor-pointer"
               >
                 <Link
-                  href={`/photo/${image._id}${selectedCategory ? `?category=${selectedCategory}` : ""}`}
+                  href={`/photo/${image._id}${categoryParam ? `?category=${categoryParam}` : ""}`}
                   className="absolute inset-0 z-10"
                 >
                   <span className="sr-only">View {image.title}</span>
@@ -283,7 +243,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     src={image.imageUrl}
                     alt={image.title}
                     fill
-                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    className="object-cover transition-opacity duration-300 group-hover:opacity-95"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     loading="lazy"
                   />
@@ -293,8 +253,6 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                   </div>
                 )}
 
-                {/* Subtle hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100 pointer-events-none" />
               </motion.div>
             ))
           )}
@@ -308,11 +266,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`rounded-full h-11 w-11 text-sm font-semibold transition-all active:scale-95 ${
+              className={[
+                "h-10 w-10 rounded-full text-sm font-medium transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
                 currentPage === i + 1
-                  ? "bg-black text-white shadow-md scale-105"
-                  : "border border-zinc-200 bg-white text-zinc-600 hover:border-black hover:text-black"
-              }`}
+                  ? "bg-zinc-900 text-white"
+                  : "bg-white text-zinc-700 hover:bg-zinc-100",
+              ].join(" ")}
             >
               {i + 1}
             </button>
@@ -326,7 +286,13 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 export function JustifiedGallery(props: JustifiedGalleryProps) {
   return (
     <Suspense fallback={<div className="min-h-[400px] w-full animate-pulse bg-zinc-100 rounded-2xl" />}>
-      <GalleryInner {...props} />
+      <JustifiedGalleryKeyed {...props} />
     </Suspense>
   );
+}
+
+function JustifiedGalleryKeyed(props: JustifiedGalleryProps) {
+  const searchParams = useSearchParams();
+  const key = searchParams.get("category") ?? "all";
+  return <GalleryInner key={key} {...props} />;
 }
