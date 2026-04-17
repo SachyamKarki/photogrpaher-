@@ -1,5 +1,14 @@
 import nodemailer from "nodemailer";
 
+/**
+ * Strips carriage returns \r and newlines \n strictly from headers.
+ * Resolves SMTP Head Injection bypass vulnerabilities.
+ */
+function sanitizeHeader(input: string): string {
+  if (typeof input !== "string") return "";
+  return input.replace(/[\r\n]/g, "").trim();
+}
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -76,11 +85,15 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
 </html>`;
 
   try {
+    const safeName = sanitizeHeader(name);
+    const safeEmail = sanitizeHeader(email);
+    const safeCategory = category ? sanitizeHeader(category) : "";
+
     const info = await transporter.sendMail({
       from: `"RabinSon Notifications" <${process.env.SMTP_USER}>`,
       to: toEmail,
-      replyTo: email,
-      subject: `New Inquiry: ${name}${category ? ` — ${category}` : ""}`,
+      replyTo: safeEmail,
+      subject: `New Inquiry: ${safeName}${safeCategory ? ` — ${safeCategory}` : ""}`,
       html,
     });
     return { success: true, messageId: info.messageId };
@@ -126,9 +139,12 @@ export async function sendClientConfirmation(payload: ContactEmailPayload) {
 </html>`;
 
   try {
+    const safeFrom = sanitizeHeader(fromEmail || "");
+    const safeTo = sanitizeHeader(email || "");
+
     const info = await transporter.sendMail({
-      from: `"RabinSon" <${fromEmail}>`,
-      to: email,
+      from: `"RabinSon" <${safeFrom}>`,
+      to: safeTo,
       subject: `Thank you for reaching out — RabinSon`,
       html,
     });

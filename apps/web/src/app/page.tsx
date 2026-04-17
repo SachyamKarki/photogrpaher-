@@ -16,7 +16,6 @@ import {
   aboutContent,
   portfolioCategories,
   siteHero,
-  portfolioProjects,
   siteServices,
   clientReviews,
   footerContent,
@@ -27,7 +26,6 @@ import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { getAllGalleryImages } from "@/lib/gallery";
 import {
   HOME_CATEGORIES_QUERY,
-  PROJECTS_QUERY,
   SITE_SETTINGS_QUERY,
   REVIEWS_QUERY,
   PARTNERS_QUERY,
@@ -58,15 +56,12 @@ type Category = {
   coverImage?: SanityImageSource | string;
 };
 
-type ProjectListItem = {
+type Partner = {
   _id: string;
-  title: string;
-  slug: string;
-  excerpt?: string;
-  coverImage?: SanityImageSource | string;
-  category?: { title: string; slug: string };
-  publishedAt?: string;
+  name: string;
+  logo?: { asset?: { _id: string; url: string } } | null;
 };
+
 
 function getServiceSummary(title?: string) {
   const normalized = title?.toLowerCase() ?? "";
@@ -131,23 +126,20 @@ export default async function Home() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
 
   let settings: SiteSettings | null = null;
-  let projects: ProjectListItem[] | null = null;
   let categories: Category[] | null = null;
   let reviews: Review[] | null = null;
-  let partners: any[] | null = null;
+  let partners: Partner[] | null = null;
 
   if (sanityEnabled) {
     try {
-      [settings, projects, categories, reviews, partners] = await Promise.all([
+      [settings, categories, reviews, partners] = await Promise.all([
         sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY),
-        sanityServerClient!.fetch<ProjectListItem[]>(PROJECTS_QUERY),
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
         sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
-        sanityServerClient!.fetch<any[]>(PARTNERS_QUERY),
+        sanityServerClient!.fetch<Partner[]>(PARTNERS_QUERY),
       ]);
     } catch {
       settings = null;
-      projects = null;
       categories = null;
       reviews = null;
       partners = null;
@@ -166,22 +158,6 @@ export default async function Home() {
       service.description ?? getServiceSummary(service.title),
     details: service.details ?? getServiceDetails(service.title),
   }));
-
-  const allProjects = (projects?.length ? projects : null)
-    ? (projects as ProjectListItem[]).map(p => ({
-      ...p,
-      imageUrl: (p.coverImage && sanityEnabled)
-        ? (typeof p.coverImage === "string" ? p.coverImage : urlFor(p.coverImage)?.width(1600).height(1200).url() ?? null)
-        : (typeof p.coverImage === "string" ? p.coverImage : null)
-    }))
-    : portfolioProjects.map((p) => ({
-      _id: `portfolio:${p.slug}`,
-      title: p.title,
-      slug: p.slug,
-      excerpt: p.excerpt,
-      imageUrl: p.coverImage,
-      category: p.categorySlug ? { title: p.categorySlug, slug: p.categorySlug } : undefined,
-    }));
 
   const homeCategories = (((categories?.length ?? 0) > 0 ? categories : null)
     ? (categories as Category[]).map(c => ({
@@ -221,14 +197,6 @@ export default async function Home() {
       const imgSlug = img.category?.slug;
       return Boolean(imgSlug && slugs.includes(imgSlug));
     });
-
-  // Curate exactly 4 high-quality hero slides for the professional "4-dot" look
-  const categoriesForHero = [
-    { label: "Himalayas", slugs: ["himalayas", "mountain"] },
-    { label: "Vehicles", slugs: ["automobile", "vehicles", "automotive"] },
-    { label: "Portraits", slugs: ["studio-portraits", "portraits"] },
-    { label: "Himalayas", slugs: ["himalayas", "mountain"] },
-  ];
 
   // Explicitly curate the hero content as requested by the user
   const curatedHeroIds = ["mountain-3", "mountain-15", "mountain-17"];
@@ -332,7 +300,6 @@ export default async function Home() {
           {/* Integrated Gallery Section - uniquely curated mixed bento ignoring category covers */}
           <GallerySection
             initialProjects={bentoGridImages}
-            initialCategories={homeCategories}
           />
 
           <section id="about" className="scroll-mt-24 py-8 sm:py-16 xl:py-20">

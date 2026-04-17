@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { urlFor } from "@/lib/sanity/image";
 import { brandPartners } from "@/lib/portfolio/data";
@@ -82,11 +83,15 @@ export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
               className="flex items-center justify-center min-w-[100px] md:min-w-[160px] h-12 md:h-20 px-2"
             >
               {brand.logo ? (
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-full w-auto max-w-[140px] md:max-w-[200px] object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
-                />
+                <div className="relative h-full w-[140px] md:w-[200px]">
+                  <Image
+                    src={brand.logo}
+                    alt={brand.name}
+                    fill
+                    sizes="(max-width: 768px) 140px, 200px"
+                    className="object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+                  />
+                </div>
               ) : (
                 <span className="font-heading text-lg md:text-2xl font-bold tracking-[0.02em] uppercase text-zinc-400 hover:text-zinc-900 transition-colors duration-300 cursor-default">
                   {brand.name}

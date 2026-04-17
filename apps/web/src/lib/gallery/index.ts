@@ -1,4 +1,3 @@
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { isSanityConfigured } from "@/lib/sanity/config";

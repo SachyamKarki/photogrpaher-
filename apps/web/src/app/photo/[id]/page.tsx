@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getAllGalleryImages, type GalleryImage } from "@/lib/gallery";
+import { getAllGalleryImages } from "@/lib/gallery";
+import type { GalleryImage } from "@/types";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ZoomableImage } from "@/components/gallery/ZoomableImage";
 

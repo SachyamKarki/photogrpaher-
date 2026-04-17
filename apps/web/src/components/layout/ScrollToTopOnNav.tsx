@@ -1,28 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-function scrollToHashTarget(): boolean {
-  const hash = window.location.hash;
-  if (!hash || hash.length < 2) return false;
 
-  const id = decodeURIComponent(hash.slice(1));
-  const element = document.getElementById(id);
-  if (!element) return false;
 
-  // Keep consistent with header offset used elsewhere.
-  const headerOffset = 100;
-  const elementPosition = element.getBoundingClientRect().top;
-  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-  window.scrollTo({ top: offsetPosition, left: 0, behavior: "smooth" });
-  return true;
-}
-
-export function ScrollToTopOnNav() {
+function ScrollToTopOnNavContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const search = searchParams.toString();
 
   useEffect(() => {
     const html = document.documentElement;
@@ -30,6 +16,22 @@ export function ScrollToTopOnNav() {
 
     let raf = 0;
     let tries = 0;
+
+    const scrollToHashTarget = (): boolean => {
+      const hash = window.location.hash;
+      if (!hash || hash.length < 2) return false;
+
+      const id = decodeURIComponent(hash.slice(1));
+      const element = document.getElementById(id);
+      if (!element) return false;
+
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({ top: offsetPosition, left: 0, behavior: "smooth" });
+      return true;
+    };
 
     const tick = () => {
       // If we navigated to a hash (e.g. "/#contact"), scroll to it smoothly
@@ -58,7 +60,15 @@ export function ScrollToTopOnNav() {
       window.cancelAnimationFrame(raf);
       html.style.scrollBehavior = previous;
     };
-  }, [pathname, searchParams.toString()]);
+  }, [pathname, search]);
 
   return null;
+}
+
+export function ScrollToTopOnNav() {
+  return (
+    <Suspense fallback={null}>
+      <ScrollToTopOnNavContent />
+    </Suspense>
+  );
 }

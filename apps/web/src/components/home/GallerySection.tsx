@@ -1,21 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
 
-type Category = {
-  _id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  imageUrl?: string | null;
-};
 
 type Project = {
   _id: string;
@@ -27,26 +18,13 @@ type Project = {
 };
 
 type Props = {
-  initialCategories: Category[];
   initialProjects: Project[];
 };
 
 export function GallerySection({
-  initialCategories,
   initialProjects,
 }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
-
-  const filteredProjects = activeCategory
-    ? initialProjects.filter((p) => p.category?.slug === activeCategory)
-    : initialProjects;
-
-  const router = useRouter();
-
-  const handleCategoryClick = (slug: string) => {
-    router.push(`/gallery?category=${slug}`);
-  };
 
   return (
     <div ref={galleryRef} className="scroll-mt-32">
@@ -67,8 +45,8 @@ export function GallerySection({
             className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[220px] xl:auto-rows-[240px]"
           >
             <AnimatePresence mode="popLayout">
-              {filteredProjects.slice(0, 6).map((project, idx) => {
-                const isBento = !activeCategory;
+              {initialProjects.slice(0, 6).map((project, idx) => {
+                const isBento = true;
                 const cardClass = isBento
                   ? idx === 0
                     ? "lg:col-span-7 lg:row-span-3"

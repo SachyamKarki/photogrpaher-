@@ -38,19 +38,16 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const categoryParam = searchParams.get("category");
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam || null);
-  const [isSearching, setIsSearching] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
 
   // Sync internal state when URL changes (e.g., back button)
   // This pattern is recommended by React for syncing props to state
-  if (categoryParam !== selectedCategory && !isSearching) {
+  if (categoryParam !== selectedCategory) {
     setSelectedCategory(categoryParam);
     setCurrentPage(1);
   }
-
-  const activeCategory = isSearching ? (selectedCategory !== categoryParam ? selectedCategory : categoryParam) : categoryParam;
 
   const handleCategoryChange = (slug: string | null) => {
     if (slug === selectedCategory) return;

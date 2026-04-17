@@ -7,6 +7,22 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+function sanitizeInput(str: string): string {
+  if (typeof str !== 'string') return '';
+  // Strips generic HTML symbols preventing aggressive embedded attacks
+  return str.replace(/[<>]/g, '').trim(); 
+}
+
+const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_REQUESTS = 3;
+
+function getClientIp(req: Request): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  const ip = forwarded ? forwarded.split(",")[0] : "unknown";
+  return ip.trim();
+}
+
 function getStringField(
   record: Record<string, unknown>,
   field: string,
@@ -27,6 +43,26 @@ export async function POST(req: Request) {
     );
   }
 
+  // Deep Security Layer: DDOS & Spam Preventative Rate Limiting
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const rl = rateLimitMap.get(ip) ?? { count: 0, lastReset: now };
+
+  if (now - rl.lastReset > RATE_LIMIT_WINDOW_MS) {
+    rl.count = 0;
+    rl.lastReset = now;
+  }
+
+  if (rl.count >= MAX_REQUESTS && ip !== "unknown" && ip !== "::1" && ip !== "127.0.0.1") {
+    return NextResponse.json(
+      { ok: false, error: "Rate limit exceeded. Please try again later." }, 
+      { status: 429 }
+    );
+  }
+  
+  rl.count++;
+  rateLimitMap.set(ip, rl);
+
   let body: unknown;
   try {
     body = await req.json();
@@ -46,26 +82,27 @@ export async function POST(req: Request) {
 
   const data = body as Record<string, unknown>;
 
-  const name = getStringField(data, "name");
-  const email = getStringField(data, "email");
-  const message = getStringField(data, "message");
-  const category = getStringField(data, "category");
+  // Deep Security Layer: Sanitized Data
+  const name = sanitizeInput(getStringField(data, "name"));
+  const email = sanitizeInput(getStringField(data, "email"));
+  const message = sanitizeInput(getStringField(data, "message"));
+  const category = sanitizeInput(getStringField(data, "category"));
 
-  if (!name.trim() || name.trim().length > 120) {
+  if (!name || name.length > 120) {
     return NextResponse.json(
       { ok: false, error: "Please enter your name." },
       { status: 400 },
     );
   }
 
-  if (!email.trim() || !isValidEmail(email.trim()) || email.length > 200) {
+  if (!email || !isValidEmail(email) || email.length > 200) {
     return NextResponse.json(
       { ok: false, error: "Please enter a valid email address." },
       { status: 400 },
     );
   }
 
-  if (!message.trim() || message.trim().length < 10 || message.length > 4000) {
+  if (!message || message.length < 10 || message.length > 4000) {
     return NextResponse.json(
       { ok: false, error: "Please enter a message (min 10 characters)." },
       { status: 400 },
@@ -75,10 +112,10 @@ export async function POST(req: Request) {
   try {
     await sanityWriteClient.create({
       _type: "contactSubmission",
-      name: name.trim(),
-      email: email.trim(),
-      message: message.trim(),
-      category: category.trim() || undefined,
+      name: name,
+      email: email,
+      message: message,
+      category: category || undefined,
       createdAt: new Date().toISOString(),
     });
   } catch (error) {
@@ -92,15 +129,15 @@ export async function POST(req: Request) {
   // Send email notifications (non-blocking)
   Promise.all([
     sendContactEmail({
-      name: name.trim(),
-      email: email.trim(),
-      category: category.trim() || undefined,
-      message: message.trim(),
+      name: name,
+      email: email,
+      category: category || undefined,
+      message: message,
     }),
     sendClientConfirmation({
-      name: name.trim(),
-      email: email.trim(),
-      message: message.trim(),
+      name: name,
+      email: email,
+      message: message,
     })
   ]).catch((err) => {
     console.error("[Contact API] Email notification process failed:", err);

@@ -68,10 +68,10 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
       message.trim(),
       ``,
       `--- Sent from rabinson.com ---`,
-    ].filter((line) => line !== false && line !== null && line !== undefined);
+    ].filter(Boolean);
 
     const text = encodeURIComponent(lines.join("\n"));
-    window.open(`https://wa.me/${cleanNumber}?text=${text}`, "_blank");
+    window.open(`/api/contact/whatsapp?text=${text}`, "_blank");
   }
 
   async function onSubmit(e: React.FormEvent) {
