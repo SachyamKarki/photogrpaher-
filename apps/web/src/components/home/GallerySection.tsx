@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,17 +34,14 @@ export function GallerySection({
 }: Props) {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-  const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  // Shuffle images on client mount securely, but rigorously respect explicitly pinned array positions
+  // Build a deterministic 10-slot bento order:
+  // - `featuredOrder` (1..10) pins an image into that exact bento position.
+  // - Remaining slots fill in the incoming order (no shuffle) for a professional, stable layout.
   const projects = useMemo(() => {
-    if (!hasMounted || !initialProjects || initialProjects.length === 0) return [];
+    if (!initialProjects || initialProjects.length === 0) return [];
 
-    const newOrder = Array(10).fill(null);
+    const newOrder: Array<Project | null> = Array(10).fill(null);
     const unpinnedImages: Project[] = [];
 
     // 1. Lock explicitly pinned images to their assigned slots (1 to 10)
@@ -62,21 +59,17 @@ export function GallerySection({
       }
     });
 
-    // 2. Randomly shuffle all remaining unpinned images
-    // eslint-disable-next-line react-hooks/purity
-    const shuffledUnpinned = [...unpinnedImages].sort(() => Math.random() - 0.5);
-
-    // 3. Smoothly fill any gaps with the random shuffled images
+    // 2. Fill any gaps with the remaining (unshuffled) images
     let shufflePtr = 0;
     for (let i = 0; i < 10; i++) {
-        if (!newOrder[i] && shufflePtr < shuffledUnpinned.length) {
-            newOrder[i] = shuffledUnpinned[shufflePtr];
-            shufflePtr++;
-        }
+      if (!newOrder[i] && shufflePtr < unpinnedImages.length) {
+        newOrder[i] = unpinnedImages[shufflePtr];
+        shufflePtr++;
+      }
     }
 
     return newOrder.filter(Boolean) as Project[];
-  }, [initialProjects, hasMounted]);
+  }, [initialProjects]);
 
   if (!initialProjects || initialProjects.length === 0) return null;
 
@@ -96,7 +89,7 @@ export function GallerySection({
         <div className="mt-12 sm:mt-16">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-2 grid-auto-rows-[120px] sm:grid-auto-rows-[140px] md:grid-auto-rows-[150px] lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
+            className="grid grid-cols-2 gap-2 auto-rows-[120px] sm:auto-rows-[140px] md:grid-cols-3 md:auto-rows-[150px] lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {

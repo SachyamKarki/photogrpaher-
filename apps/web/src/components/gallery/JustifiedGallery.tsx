@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, Suspense, useEffect, useMemo } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getMoreGalleryImages } from "@/app/gallery/actions";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
@@ -43,15 +42,15 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
+const ITEMS_PER_PAGE = 12;
+
 function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get("category");
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam || null);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [extraImages, setExtraImages] = useState<GalleryImage[]>([]);
-  const [hasMore, setHasMore] = useState(images.length >= 20); // Sync with initial fetch limit
+  const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -61,12 +60,19 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   }, []);
 
   // Client-side shuffle to ensure a fresh experience on every visit without hydration errors
-  const shuffledInitial = useMemo(() => {
-    if (!hasMounted) return images;
-    return shuffleArray(images);
+  const [shuffledAll, setShuffledAll] = useState<GalleryImage[]>(images);
+  
+  useEffect(() => {
+    if (hasMounted) {
+      const handle = requestAnimationFrame(() => {
+        setShuffledAll(shuffleArray(images));
+      });
+      return () => cancelAnimationFrame(handle);
+    }
   }, [images, hasMounted]);
 
-  const allImages = useMemo(() => [...shuffledInitial, ...extraImages], [shuffledInitial, extraImages]);
+  const allImages = shuffledAll;
+
 
 
 
@@ -82,6 +88,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     
     setIsFiltering(true);
     setSelectedCategory(slug);
+    setCurrentPage(1); // Reset to first page when category changes
     
     setTimeout(() => {
       setIsFiltering(false);
@@ -96,30 +103,25 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     router.push(`/gallery?${params.toString()}`, { scroll: false });
   };
 
-  const handleLoadMore = async () => {
-    if (loadingMore || !hasMore) return;
-    
-    setLoadingMore(true);
-    const start = allImages.length;
-    const end = start + 12; // Load in smaller, faster chunks of 12
-
-    const res = await getMoreGalleryImages(start, end);
-    if (res.success && res.images.length > 0) {
-      // Shuffle the new batch before appending to keep the "mixed" feel
-      const shuffledNewImages = shuffleArray(res.images);
-      setExtraImages(prev => [...prev, ...shuffledNewImages]);
-      if (res.images.length < 12) {
-        setHasMore(false);
-      }
-    } else {
-      setHasMore(false);
-    }
-    setLoadingMore(false);
-  };
-
   const filteredImages = selectedCategory
     ? allImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
     : allImages;
+
+  const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
+  const paginatedImages = filteredImages.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page: number) => {
+    setIsFiltering(true);
+    setCurrentPage(page);
+    window.scrollTo({ top: 300, behavior: "smooth" });
+    
+    setTimeout(() => {
+      setIsFiltering(false);
+    }, 400); // Quick page-turn skeleton
+  };
 
   const isEmpty = filteredImages.length === 0;
   const activeCategoryLabel = selectedCategory
@@ -154,51 +156,64 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     },
   };
 
+  const skeletonContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const skeletonItem = {
+    hidden: { opacity: 0, scale: 0.98 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.3 }
+    },
+  };
+
   return (
     <div className="w-full max-w-full overflow-x-hidden">
-      {/* Refined Minimalist Category Filters - Scrollable on Mobile */}
-      <div className="relative mb-12">
-        <div className="flex overflow-x-auto no-scrollbar border-b border-zinc-200/50 pb-px scroll-smooth">
-          <div className="flex flex-nowrap gap-6 sm:gap-10 w-max justify-start sm:justify-center px-4 sm:px-0">
+      {/* Category Filters - Wrapped (single scroll area) */}
+      <div className="mb-12 border-b border-zinc-200/50 pb-px">
+        <div className="flex flex-wrap gap-x-6 gap-y-3 sm:gap-x-10 justify-start sm:justify-center px-4 sm:px-0">
+          <button
+            onClick={() => handleCategoryChange(null)}
+            className={[
+              "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
+              "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+              selectedCategory === null
+                ? "text-zinc-900"
+                : "text-zinc-500 hover:text-zinc-900",
+            ].join(" ")}
+          >
+            All
+            {selectedCategory === null && (
+              <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+            )}
+          </button>
+          {categories.map((category) => (
             <button
-              onClick={() => handleCategoryChange(null)}
+              key={category._id}
+              onClick={() => handleCategoryChange(category.slug)}
               className={[
                 "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
                 "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
-                selectedCategory === null
+                selectedCategory === category.slug
                   ? "text-zinc-900"
                   : "text-zinc-500 hover:text-zinc-900",
               ].join(" ")}
             >
-              All
-              {selectedCategory === null && (
+              {category.title}
+              {selectedCategory === category.slug && (
                 <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
               )}
             </button>
-            {categories.map((category) => (
-              <button
-                key={category._id}
-                onClick={() => handleCategoryChange(category.slug)}
-                className={[
-                  "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
-                  "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
-                  selectedCategory === category.slug
-                    ? "text-zinc-900"
-                    : "text-zinc-500 hover:text-zinc-900",
-                ].join(" ")}
-              >
-                {category.title}
-                {selectedCategory === category.slug && (
-                  <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
-                )}
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
-        
-        {/* Subtle Fade Indicators for scrolling */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-zinc-50 to-transparent sm:hidden opacity-0" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent sm:hidden" />
       </div>
 
       {/* Clean Uniform Grid with Layout Animations */}
@@ -233,18 +248,24 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               </div>
             </motion.div>
           ) : isFiltering ? (
-            Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={`skeleton-${i}`}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.15 } }}
-                transition={{ duration: 0.3 }}
-                className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-200/60 animate-pulse"
-              />
-            ))
+            <motion.div
+              key="filtering-skeletons"
+              variants={skeletonContainer}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="contents"
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <motion.div
+                  key={`skeleton-${i}`}
+                  variants={skeletonItem}
+                  className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-100/80 animate-pulse"
+                />
+              ))}
+            </motion.div>
           ) : (
-            filteredImages.map((image: GalleryImage) => (
+            paginatedImages.map((image: GalleryImage) => (
               <motion.div
                 key={`${selectedCategory || 'all'}-${image._id}`}
                 variants={itemVariants}
@@ -280,40 +301,22 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* "Load More" Integrated with high-end glassmorphism */}
-      {!isEmpty && hasMore && (
-        <div className="mt-16 flex justify-center">
-          <button
-            onClick={handleLoadMore}
-            disabled={loadingMore}
-            className="group relative flex h-14 items-center justify-center gap-4 overflow-hidden rounded-full bg-black px-10 text-ui font-bold uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-          >
-            {loadingMore ? (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-            ) : (
-              <>
-                <span>Load More</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="transition-transform group-hover:translate-y-1"
-                >
-                  <path d="m7 7 5 5 5-5" />
-                  <path d="m7 13 5 5 5-5" />
-                </svg>
-              </>
-            )}
-            
-            {/* Subtle glow effect */}
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
-          </button>
+      {/* Pagination Controls - Touch Optimized */}
+      {!isEmpty && totalPages > 1 && (
+        <div className="mt-16 flex flex-wrap justify-center gap-3">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`rounded-full h-11 w-11 text-sm font-semibold transition-all active:scale-95 ${
+                currentPage === i + 1
+                  ? "bg-black text-white shadow-md scale-105"
+                  : "border border-zinc-200 bg-white text-zinc-600 hover:border-black hover:text-black"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
       )}
     </div>

@@ -4,6 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { JustifiedGallery } from "@/components/gallery/JustifiedGallery";
 import { getAllGalleryImages } from "@/lib/gallery";
+import { ScrollbarHider } from "@/components/ui/ScrollbarHider";
 
 export const metadata: Metadata = {
   title: "Gallery | Rabin Son Photography",
@@ -15,6 +16,7 @@ export default async function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <ScrollbarHider />
       <main className="mx-auto max-w-[1440px] px-2 pb-20 pt-8 sm:px-10 lg:px-16">
         <Reveal>
           <div className="mb-8">
