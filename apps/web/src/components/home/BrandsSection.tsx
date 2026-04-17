@@ -1,34 +1,80 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { demoBrands } from "@/lib/demo/content";
+import { urlFor } from "@/lib/sanity/image";
+import { brandPartners } from "@/lib/portfolio/data";
 
-export function BrandsSection() {
-  // Duplicate the brands array to create a seamless loop
-  const duplicatedBrands = [...demoBrands, ...demoBrands];
+interface Partner {
+  _id: string;
+  name: string;
+  logo?: {
+    asset?: {
+      _id: string;
+      url: string;
+    };
+  } | null;
+}
+
+export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
+  // Map Sanity partners for easy access and normalization
+  const sanityPartners = (partners && partners.length > 0)
+    ? partners.map(p => {
+      let logoUrl = "";
+      const logo = p.logo;
+      if (logo?.asset?._id) {
+        const builder = urlFor(logo);
+        logoUrl = builder ? builder.url() : (logo.asset.url || "");
+      } else {
+        logoUrl = logo?.asset?.url || "";
+      }
+      return { name: p.name, logo: logoUrl };
+    })
+    : [];
+
+  // Merge Sanity partners with local brandPartners
+  // We prioritize Sanity data but ensure every brand from data.ts is represented
+  const mergedPartners = [...brandPartners];
+
+  sanityPartners.forEach(sp => {
+    const localIndex = mergedPartners.findIndex(lp => lp.name.toLowerCase() === sp.name.toLowerCase());
+    if (localIndex !== -1) {
+      // Update existing local entry with Sanity data if available
+      if (sp.logo) mergedPartners[localIndex] = sp;
+    } else {
+      // Add new partner from Sanity that isn't in local data
+      mergedPartners.push(sp);
+    }
+  });
+
+  const activePartners = mergedPartners;
+  const duplicatedBrands = [...activePartners, ...activePartners];
+
+  // Scale animation speed based on number of partners for consistent feel
+  const scrollDuration = Math.max(20, activePartners.length * 4);
 
   return (
-    <section className="relative w-full py-12 md:py-20 overflow-hidden bg-zinc-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-12">
-        <SectionHeading 
-          title="Industry Partners" 
+    <section className="relative w-full py-16 sm:py-24 lg:py-32 overflow-hidden bg-white">
+
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-10 md:mb-14">
+        <SectionHeading
+          title="Industry Partners"
           align="center"
         />
       </div>
 
-      <div className="relative flex overflow-hidden">
-        {/* Gradients for smooth fade in/out - merging with bg-zinc-50 */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-60 bg-gradient-to-l from-zinc-50 via-zinc-50/80 to-transparent z-10 pointer-events-none" />
+      <div className="relative flex overflow-hidden py-4">
+        {/* Edge fades */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
         <motion.div
-          className="flex whitespace-nowrap gap-6 md:gap-12 items-center"
-          animate={{
-            x: [0, "-50%"],
-          }}
+          className="flex items-center w-max"
+          animate={{ x: [0, "-50%"] }}
           transition={{
-            duration: 25,
+            duration: scrollDuration,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -36,16 +82,22 @@ export function BrandsSection() {
           {duplicatedBrands.map((brand, i) => (
             <div
               key={i}
-              className="flex items-center justify-center min-w-[100px] md:min-w-[160px] h-12 md:h-20 px-2"
+              className="group flex flex-col items-center justify-center shrink-0 pr-6 sm:pr-12 md:pr-16"
             >
               {brand.logo ? (
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-full w-auto max-w-[140px] md:max-w-[200px] object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
-                />
+                <div className="relative h-10 sm:h-14 md:h-16 w-[80px] sm:w-[130px] md:w-[160px]">
+                  <Image
+                    src={brand.logo}
+                    alt={brand.name}
+                    fill
+                    draggable={false}
+                    sizes="(max-width: 640px) 80px, (max-width: 768px) 130px, 160px"
+                    className="object-contain opacity-50 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 pointer-events-none select-none"
+                    unoptimized={!brand.logo.startsWith("http")}
+                  />
+                </div>
               ) : (
-                <span className="font-heading text-lg md:text-2xl font-bold tracking-[0.02em] uppercase text-zinc-400 hover:text-zinc-900 transition-colors duration-300 cursor-default">
+                <span className="font-heading text-sm sm:text-base md:text-lg font-semibold uppercase tracking-widest text-zinc-300 transition-colors duration-300 group-hover:text-zinc-800">
                   {brand.name}
                 </span>
               )}
@@ -53,6 +105,7 @@ export function BrandsSection() {
           ))}
         </motion.div>
       </div>
+
     </section>
   );
 }

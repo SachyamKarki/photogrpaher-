@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node -e \"const fs = require('fs'); try { const rootEnv = fs.readFileSync('../../.env', 'utf8'); const webEnv = rootEnv.split('\\n').filter(line => line.startsWith('NEXT_PUBLIC_SANITY_') || line.startsWith('SANITY_API_')).join('\\n'); fs.writeFileSync('.env', webEnv); } catch (e) { console.error('Root .env not found'); }\"",
+    "predev": "node -e \"const fs = require('fs'); try { const rootEnv = fs.readFileSync('../../.env', 'utf8'); const webEnv = rootEnv.split('\\n').filter(line => line.startsWith('NEXT_PUBLIC_') || line.startsWith('SANITY_API_') || line.startsWith('SMTP_') || line.startsWith('CONTACT_')).join('\\n'); fs.writeFileSync('.env', webEnv); } catch (e) { console.error('Root .env not found'); }\"",
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
@@ -14,13 +14,16 @@
     "@fontsource/lato": "^5.2.7",
     "@sanity/client": "^7.0.0",
     "@sanity/image-url": "^1.1.0",
+    "@types/nodemailer": "^8.0.0",
     "framer-motion": "^12.38.0",
     "groq": "^3.0.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.2",
+    "nodemailer": "^8.0.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-zoom-pan-pinch": "^3.7.0"
+    "react-zoom-pan-pinch": "^3.7.0",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

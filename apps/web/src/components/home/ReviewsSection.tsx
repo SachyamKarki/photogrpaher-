@@ -18,7 +18,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   if (!reviews || reviews.length === 0) return null;
 
   return (
-    <section id="reviews" className="scroll-mt-24 py-16 sm:py-32 bg-white">
+    <section id="reviews" className="scroll-mt-24 py-16 sm:py-24 lg:py-32 bg-white">
       <Reveal>
         <SectionHeading
           title="Testimonials"

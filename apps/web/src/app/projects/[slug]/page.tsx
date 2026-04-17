@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
-import { demoProjects } from "@/lib/demo/content";
+import { portfolioProjects } from "@/lib/portfolio/data";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { PROJECT_BY_SLUG_QUERY } from "@/lib/sanity/queries";
@@ -38,15 +38,15 @@ export default async function ProjectPage({
       notFound();
     }
   } else {
-    const demo = demoProjects.find((p) => p.slug === slug);
-    if (!demo) notFound();
+    const selection = portfolioProjects.find((p) => p.slug === slug);
+    if (!selection) notFound();
     project = {
-      _id: `demo:${demo.slug}`,
-      title: demo.title,
-      slug: demo.slug,
-      excerpt: demo.excerpt,
-      coverImage: demo.coverImage,
-      gallery: demo.gallery,
+      _id: `portfolio:${selection.slug}`,
+      title: selection.title,
+      slug: selection.slug,
+      excerpt: selection.excerpt,
+      coverImage: selection.coverImage,
+      gallery: selection.gallery,
     };
   }
 

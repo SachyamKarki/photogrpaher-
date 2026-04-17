@@ -79,7 +79,7 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
 `);
 export const GALLERY_PROJECTS_QUERY = defineQuery(`
   *[_type == "project" && defined(slug.current)]
-  | order(publishedAt desc)[0...100]{
+  | order(publishedAt desc)[$start...$end]{
     _id,
     title,
     "slug": slug.current,
@@ -97,11 +97,37 @@ export const GALLERY_PROJECTS_QUERY = defineQuery(`
   }
 `);
 
+export const FEATURED_IMAGES_QUERY = defineQuery(`
+  *[_type == "project" && defined(slug.current) && (coverImage.isFeatured == true || defined(coverImage.featuredOrder) || count(gallery[isFeatured == true || defined(featuredOrder)]) > 0)]
+  | order(publishedAt desc)[0...50]{
+    _id,
+    title,
+    "category": category->{title, "slug": slug.current},
+    coverImage,
+    gallery
+  }
+`);
+
 export const REVIEWS_QUERY = defineQuery(`
   *[_type == "review" && featured == true] | order(_createdAt desc) {
     _id,
     author,
     role,
     quote
+  }
+`);
+
+export const PARTNERS_QUERY = defineQuery(`
+  *[_type == "partner"] | order(order asc, _createdAt desc) {
+    _id,
+    name,
+    logo {
+      asset->{
+        _id,
+        url
+      }
+    },
+    website,
+    order
   }
 `);

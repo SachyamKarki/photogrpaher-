@@ -1,21 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { CategoriesShowcase } from "@/components/home/CategoriesShowcase";
+import { Lightbox } from "@/components/gallery/Lightbox";
 
-type Category = {
-  _id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  imageUrl?: string | null;
-};
 
 type Project = {
   _id: string;
@@ -23,35 +15,68 @@ type Project = {
   slug: string;
   excerpt?: string;
   imageUrl?: string | null;
+  featuredOrder?: number | null;
+  metadata?: {
+    camera?: string;
+    lens?: string;
+    settings?: string;
+    description?: string;
+  };
   category?: { title: string; slug: string };
 };
 
 type Props = {
-  initialCategories: Category[];
   initialProjects: Project[];
 };
 
 export function GallerySection({
-  initialCategories,
   initialProjects,
 }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
-  const filteredProjects = activeCategory
-    ? initialProjects.filter((p) => p.category?.slug === activeCategory)
-    : initialProjects;
+  // Build a deterministic 10-slot bento order:
+  // - `featuredOrder` (1..10) pins an image into that exact bento position.
+  // - Remaining slots fill in the incoming order (no shuffle) for a professional, stable layout.
+  const projects = useMemo(() => {
+    if (!initialProjects || initialProjects.length === 0) return [];
 
-  const router = useRouter();
+    const newOrder: Array<Project | null> = Array(10).fill(null);
+    const unpinnedImages: Project[] = [];
 
-  const handleCategoryClick = (slug: string) => {
-    router.push(`/gallery?category=${slug}`);
-  };
+    // 1. Lock explicitly pinned images to their assigned slots (1 to 10)
+    initialProjects.forEach(project => {
+      if (typeof project.featuredOrder === 'number' && project.featuredOrder >= 1 && project.featuredOrder <= 10) {
+        const idx = project.featuredOrder - 1;
+        // If slot is empty, map it. Otherwise it falls back to random list
+        if (!newOrder[idx]) {
+          newOrder[idx] = project;
+        } else {
+          unpinnedImages.push(project);
+        }
+      } else {
+        unpinnedImages.push(project);
+      }
+    });
+
+    // 2. Fill any gaps with the remaining (unshuffled) images
+    let shufflePtr = 0;
+    for (let i = 0; i < 10; i++) {
+      if (!newOrder[i] && shufflePtr < unpinnedImages.length) {
+        newOrder[i] = unpinnedImages[shufflePtr];
+        shufflePtr++;
+      }
+    }
+
+    return newOrder.filter(Boolean) as Project[];
+  }, [initialProjects]);
+
+  if (!initialProjects || initialProjects.length === 0) return null;
 
   return (
     <div ref={galleryRef} className="scroll-mt-32">
       {/* Gallery Section */}
-      <section id="work" className="py-16 sm:py-32">
+      <section id="work" className="py-16 sm:py-24 lg:py-32">
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
             <SectionHeading
@@ -62,22 +87,31 @@ export function GallerySection({
         </Reveal>
 
         <div className="mt-12 sm:mt-16">
-          <motion.div 
+          <motion.div
             layout
-            className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[220px] xl:auto-rows-[240px]"
+            className="grid grid-cols-2 gap-2 auto-rows-[120px] sm:auto-rows-[140px] md:grid-cols-3 md:auto-rows-[150px] lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
           >
             <AnimatePresence mode="popLayout">
-              {filteredProjects.slice(0, 6).map((project, idx) => {
-                const isBento = !activeCategory;
-                const cardClass = isBento
-                  ? idx === 0 
-                    ? "lg:col-span-7 lg:row-span-3"
-                    : idx === 1 
-                    ? "lg:col-span-5 lg:row-span-2"
-                    : idx === 2 
-                    ? "lg:col-span-5 lg:row-span-1"
-                    : "lg:col-span-4 lg:row-span-1"
-                  : "lg:col-span-4 lg:row-span-1";
+              {projects.map((project, idx) => {
+                const getCardClass = (index: number) => {
+                  switch (index) {
+                    // Desktop (lg): 12 columns | Tablet (md): 3 columns
+                    case 0: return "lg:col-span-7 lg:row-span-3 md:col-span-2 md:row-span-2";
+                    case 1: return "lg:col-span-5 lg:row-span-2 md:col-span-1 md:row-span-2";
+                    case 2: return "lg:col-span-5 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 3: return "lg:col-span-4 lg:row-span-2 md:col-span-2 md:row-span-1";
+                    case 4: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 5: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 6: return "lg:col-span-6 lg:row-span-2 md:col-span-2 md:row-span-2";
+                    case 7: return "lg:col-span-6 lg:row-span-2 md:col-span-1 md:row-span-1";
+                    case 8: return "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-1";
+                    case 9: return "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1";
+                    default: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
+                  }
+                };
+                const cardClass = getCardClass(idx);
+                // On mobile (below md), we span 2 columns every few items to keep the bento feel
+                const mobileClass = idx % 5 === 0 ? "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto" : "col-span-1 row-span-1 aspect-square md:aspect-auto";
 
                 return (
                   <motion.div
@@ -87,11 +121,10 @@ export function GallerySection({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className={`${cardClass} group relative flex aspect-[4/5] sm:aspect-square lg:aspect-auto overflow-hidden rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
+                    className={`${cardClass} ${mobileClass} group relative md:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
+                    onClick={() => setSelectedIdx(idx)}
                   >
-                    <Link href={`/gallery`} className="absolute inset-0 block z-20">
-                      <span className="sr-only">View {project.title}</span>
-                    </Link>
+                    <button type="button" className="absolute inset-0 block z-20 w-full h-full text-left" aria-label={`View ${project.title}`} />
 
                     <div className="absolute inset-0 bg-zinc-900 z-0">
                       {project.imageUrl ? (
@@ -108,28 +141,37 @@ export function GallerySection({
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40" />
                     </div>
 
-                    <div className="relative z-10 flex h-full w-full flex-col justify-between p-6 pointer-events-none">
-                      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-2xs font-bold uppercase tracking-[0.15em] text-white/90 backdrop-blur-md">
+                    <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-10 p-1.5 pointer-events-none">
+                      <div className="inline-flex w-fit items-center gap-1 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 text-[0.45rem] sm:text-[0.5rem] font-bold uppercase tracking-[0.08em] text-white/90 backdrop-blur-md shadow-sm">
                         {project.category?.title || "Project"}
-                      </div>
-
-                      <div>
-                        <div className="text-white">
-                          <div className="text-base font-semibold tracking-tight sm:text-lg uppercase drop-shadow-md">
-                            {project.title}
-                          </div>
-                        </div>
-                        <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-                          View in gallery <span className="transition-transform group-hover:translate-x-0.5">→</span>
-                        </div>
                       </div>
                     </div>
                   </motion.div>
                 );
               })}
             </AnimatePresence>
+
+            <Lightbox
+              isOpen={selectedIdx !== null}
+              onClose={() => setSelectedIdx(null)}
+              image={selectedIdx !== null ? projects[selectedIdx]?.imageUrl || null : null}
+              title={selectedIdx !== null ? projects[selectedIdx]?.title || "Gallery Image" : ""}
+              metadata={selectedIdx !== null ? projects[selectedIdx]?.metadata : undefined}
+            />
           </motion.div>
         </div>
+
+        <Reveal delayMs={200}>
+          <div className="mt-12 sm:mt-16 flex justify-center">
+            <Link
+              href="/gallery"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-black/20 bg-black/5 px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-zinc-900 backdrop-blur transition hover:bg-black/10 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-black/20 group"
+            >
+              <span className="translate-y-[1px]">View Full Gallery</span>
+            </Link>
+          </div>
+        </Reveal>
+
       </section>
     </div>
   );

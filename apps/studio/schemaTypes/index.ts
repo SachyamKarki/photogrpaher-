@@ -3,6 +3,7 @@ import { contactSubmissionType } from "./contactSubmissionType";
 import { projectType } from "./projectType";
 import { siteSettingsType } from "./siteSettingsType";
 import { reviewType } from "./reviewType";
+import { partnerType } from "./partnerType";
 
 export const schemaTypes = [
   siteSettingsType,
@@ -10,4 +11,5 @@ export const schemaTypes = [
   projectType,
   contactSubmissionType,
   reviewType,
+  partnerType,
 ];

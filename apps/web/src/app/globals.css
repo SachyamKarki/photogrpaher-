@@ -122,3 +122,15 @@ body {
   opacity: 0;
   animation: skeleton-fade-in 0.3s ease-out 0.4s forwards;
 }
+
+/* Hide scrollbar cross-browser (keeps scrolling enabled). */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none;
+}

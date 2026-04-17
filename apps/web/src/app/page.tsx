@@ -13,23 +13,22 @@ import { BrandsSection } from "@/components/home/BrandsSection";
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
 import {
-  demoAbout,
-  demoCategories,
-  demoHero,
-  demoProjects,
-  demoServices,
-  demoReviews,
-  demoFooter,
-} from "@/lib/demo/content";
+  aboutContent,
+  portfolioCategories,
+  siteHero,
+  siteServices,
+  clientReviews,
+  footerContent,
+} from "@/lib/portfolio/data";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { getAllGalleryImages } from "@/lib/gallery";
 import {
   HOME_CATEGORIES_QUERY,
-  PROJECTS_QUERY,
   SITE_SETTINGS_QUERY,
   REVIEWS_QUERY,
+  PARTNERS_QUERY,
 } from "@/lib/sanity/queries";
 
 type SiteSettings = {
@@ -57,15 +56,12 @@ type Category = {
   coverImage?: SanityImageSource | string;
 };
 
-type ProjectListItem = {
+type Partner = {
   _id: string;
-  title: string;
-  slug: string;
-  excerpt?: string;
-  coverImage?: SanityImageSource | string;
-  category?: { title: string; slug: string };
-  publishedAt?: string;
+  name: string;
+  logo?: { asset?: { _id: string; url: string } } | null;
 };
+
 
 function getServiceSummary(title?: string) {
   const normalized = title?.toLowerCase() ?? "";
@@ -130,32 +126,32 @@ export default async function Home() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
 
   let settings: SiteSettings | null = null;
-  let projects: ProjectListItem[] | null = null;
   let categories: Category[] | null = null;
   let reviews: Review[] | null = null;
+  let partners: Partner[] | null = null;
 
   if (sanityEnabled) {
     try {
-      [settings, projects, categories, reviews] = await Promise.all([
+      [settings, categories, reviews, partners] = await Promise.all([
         sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY),
-        sanityServerClient!.fetch<ProjectListItem[]>(PROJECTS_QUERY),
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
         sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
+        sanityServerClient!.fetch<Partner[]>(PARTNERS_QUERY),
       ]);
     } catch {
       settings = null;
-      projects = null;
       categories = null;
       reviews = null;
+      partners = null;
     }
   }
 
-  const serviceTitle = settings?.servicesTitle ?? demoServices.title;
-  const serviceIntro = settings?.servicesIntro ?? demoServices.intro;
+  const serviceTitle = settings?.servicesTitle ?? siteServices.title;
+  const serviceIntro = settings?.servicesIntro ?? siteServices.intro;
   const serviceItems =
     settings?.services?.length && settings.services.some((s) => s?.title)
       ? settings.services
-      : demoServices.items;
+      : siteServices.items;
   const servicePanels = serviceItems.map((service) => ({
     title: service.title ?? "Service",
     description:
@@ -163,137 +159,167 @@ export default async function Home() {
     details: service.details ?? getServiceDetails(service.title),
   }));
 
-  const allProjects = (projects?.length ? projects : null)
-    ? (projects as ProjectListItem[]).map(p => ({
-        ...p,
-        imageUrl: (p.coverImage && sanityEnabled)
-          ? (typeof p.coverImage === "string" ? p.coverImage : urlFor(p.coverImage)?.width(1600).height(1200).url() ?? null)
-          : (typeof p.coverImage === "string" ? p.coverImage : null)
-      }))
-    : demoProjects.map((p) => ({
-        _id: `demo:${p.slug}`,
-        title: p.title,
-        slug: p.slug,
-        excerpt: p.excerpt,
-        imageUrl: p.coverImage,
-        category: p.categorySlug ? { title: p.categorySlug, slug: p.categorySlug } : undefined,
-      }));
-
   const homeCategories = (((categories?.length ?? 0) > 0 ? categories : null)
     ? (categories as Category[]).map(c => ({
-        ...c,
-        imageUrl: (c.coverImage && sanityEnabled)
-          ? (typeof c.coverImage === "string" ? c.coverImage : urlFor(c.coverImage)?.width(1600).height(1000).url() ?? null)
-          : (typeof c.coverImage === "string" ? c.coverImage : null)
-      }))
-    : demoCategories.map((c) => ({
-        _id: `demo:${c.slug}`,
-        title: c.title,
-        slug: c.slug,
-        description: c.description,
-        imageUrl: c.image,
-      }))).slice(0, 3);
+      ...c,
+      imageUrl: (c.coverImage && sanityEnabled)
+        ? (typeof c.coverImage === "string" ? c.coverImage : urlFor(c.coverImage)?.width(1600).height(1000).url() ?? null)
+        : (typeof c.coverImage === "string" ? c.coverImage : null)
+    }))
+    : portfolioCategories.map((c) => ({
+      _id: `portfolio:${c.slug}`,
+      title: c.title,
+      slug: c.slug,
+      description: c.description,
+      imageUrl: c.image,
+    }))).slice(0, 3);
 
   const contactCategories = homeCategories.map((c) => ({
     title: c.title,
     slug: c.slug,
   }));
 
-  const safeReviews = (reviews?.length ? reviews : null) ?? demoReviews;
+  const safeReviews = (reviews?.length ? reviews : null) ?? clientReviews;
 
-  const siteTitle = settings?.title ?? "Rabinson Photography";
-  const heroTitle = settings?.heroTitle ?? demoHero.title;
-  const heroSubtitle = settings?.heroSubtitle ?? demoHero.subtitle;
+  const siteTitle = settings?.title ?? "Rabin Son Photography";
+  const heroTitle = settings?.heroTitle ?? siteHero.title;
+  const heroSubtitle = settings?.heroSubtitle ?? siteHero.subtitle;
   const socialLinks = {
-    email: settings?.email ?? demoFooter.email,
-    instagram: settings?.instagram ?? demoFooter.instagram,
-    facebook: settings?.facebook ?? demoFooter.facebook,
-    whatsapp: settings?.whatsapp ?? demoFooter.whatsapp,
+    email: settings?.email ?? footerContent.email,
+    whatsapp: settings?.whatsapp ?? footerContent.whatsapp,
   };
-  
-  const heroSlides = allProjects
-    .map((project) => {
-      const image = project.imageUrl;
-
-      return image
-        ? {
-            src: image,
-            alt: project.title,
-          }
-        : null;
-    })
-    .filter((slide): slide is { src: string; alt: string } => Boolean(slide))
-    .slice(0, 5);
-
-  const fallbackHeroSlides = [
-    { src: demoHero.image, alt: siteTitle },
-    ...demoProjects.slice(0, 4).map((project) => ({
-      src: project.coverImage,
-      alt: project.title,
-    })),
-  ];
-
-  const baseSlides = heroSlides.length ? heroSlides : fallbackHeroSlides;
-
-  const slides = [
-    { src: "/demo/wedding.jpg", alt: "Editorial Wedding" },
-    { src: "/demo/himalaya.jpg", alt: "Himalayas Landscape" },
-    ...baseSlides.slice(0, 2),
-  ];
 
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
-  
-  // Pick a beautifully curated variety of images across all domains (Studio, Himalayas, Automobile)
-  const mixIndices = [12, 35, 6, 45, 60, 28]; 
-  const mixedSelection = mixIndices
-    .map(i => validGalleryImages[i])
-    .filter(Boolean);
 
-  const finalBentoImages = mixedSelection.length === 6 
-    ? mixedSelection 
-    : validGalleryImages.slice(0, 6);
+  // Explicitly curate the hero content as requested by the user
+  const curatedHeroIds = ["mountain-3", "mountain-15", "mountain-17"];
+  const slides = curatedHeroIds
+    .map((id) => {
+      const img = validGalleryImages.find((i) => i._id === id);
+      return img ? { src: img.imageUrl, alt: img.category?.title || "Himalayas" } : null;
+    })
+    .filter((s): s is { src: string; alt: string } => s !== null);
 
-  const bentoGridImages = finalBentoImages.map((img) => ({
-      _id: img._id,
-      title: img.category?.title || "Featured",
-      slug: "gallery",
-      imageUrl: img.imageUrl,
-      category: { title: "Project", slug: "project" }
+  // If we couldn't find the curated images, fall back to a safe list of high-quality defaults
+  if (slides.length === 0) {
+    slides.push(
+      { src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format", alt: "Himalayas" },
+      { src: "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format", alt: "Vehicles" },
+      { src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format", alt: "Portraits" }
+    );
+  }
+
+  // Dynamically select Featured Work prioritizing those marked as isFeatured in Sanity
+  const explicitlyFeatured = validGalleryImages.filter((img) => img.isFeatured);
+  const usedFeaturedIds = new Set<string>();
+  const pinnedFeatured = explicitlyFeatured
+    .filter((img) => typeof img.featuredOrder === "number" && img.featuredOrder >= 1 && img.featuredOrder <= 10)
+    .sort((a, b) => (a.featuredOrder ?? 999) - (b.featuredOrder ?? 999));
+
+  const unpinnedFeatured = explicitlyFeatured.filter(
+    (img) => !(typeof img.featuredOrder === "number" && img.featuredOrder >= 1 && img.featuredOrder <= 10)
+  );
+
+  const bentoSelection: typeof explicitlyFeatured = [];
+  for (const img of pinnedFeatured) {
+    if (bentoSelection.length >= 10) break;
+    if (usedFeaturedIds.has(img._id)) continue;
+    usedFeaturedIds.add(img._id);
+    bentoSelection.push(img);
+  }
+
+  for (const img of unpinnedFeatured) {
+    if (bentoSelection.length >= 10) break;
+    if (usedFeaturedIds.has(img._id)) continue;
+    usedFeaturedIds.add(img._id);
+    bentoSelection.push(img);
+  }
+
+  // If there are fewer than 10 featured images, systematically backfill exactly up to 10
+  // by round-robin sampling across categories to guarantee a diverse, populated bento grid.
+  if (bentoSelection.length < 10) {
+    const missing = 10 - bentoSelection.length;
+    const remainingImages = validGalleryImages.filter((img) => !usedFeaturedIds.has(img._id));
+
+    // Group remaining strictly by category to pull diversely
+    const groupedByCategory = remainingImages.reduce((acc, img) => {
+      const slug = img.category?.slug || "generic";
+      if (!acc[slug]) acc[slug] = [];
+      acc[slug].push(img);
+      return acc;
+    }, {} as Record<string, typeof remainingImages>);
+
+    const diverseSelection: typeof remainingImages = [];
+    const keys = Object.keys(groupedByCategory);
+    let i = 0;
+
+    // Round-robin selection: pull sequentially from categories until the bento deficit is paid
+    while (diverseSelection.length < missing && keys.length > 0) {
+      const key = keys[i % keys.length];
+      const arr = groupedByCategory[key];
+
+      if (arr && arr.length > 0) {
+        diverseSelection.push(arr.shift()!);
+        i++;
+      } else {
+        keys.splice(i % keys.length, 1);
+      }
+    }
+
+    bentoSelection.push(...diverseSelection);
+  }
+
+  const bentoGridImages = bentoSelection.map((img) => ({
+    _id: img._id,
+    title: img.category?.title || "Featured",
+    slug: img.category?.slug || "gallery",
+    imageUrl: img.imageUrl,
+    featuredOrder: img.featuredOrder || null,
+    metadata: img.metadata,
+    category: {
+      title: img.category?.title || "Editorial",
+      slug: img.category?.slug || "editorial"
+    }
   }));
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <HomeHeader siteTitle={siteTitle} />
+    <div className="min-h-screen bg-white text-zinc-900">
+      <HomeHeader
+        siteTitle={siteTitle}
+        email={footerContent.email}
+        phoneNumber={footerContent.phoneNumber}
+        instagramLinks={footerContent.instagramLinks}
+      />
 
       <main className="w-full">
-        <section className="relative min-h-[100svh] overflow-hidden bg-zinc-900 md:min-h-screen">
+        <section className="relative min-h-[75svh] sm:min-h-[85svh] overflow-hidden bg-zinc-900 md:min-h-screen">
           <div className="absolute inset-0">
             <HeroCarousel slides={slides} siteTitle={siteTitle} />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-zinc-950/35" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-20 pt-24 sm:px-8 sm:pb-16 sm:pt-28 md:min-h-screen lg:px-12 xl:px-16">
-            <Reveal className="max-w-3xl">
-              <h1 className="font-heading text-xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+          <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
+            <Reveal className="max-w-2xl">
+              <h1 className="font-heading text-2xl font-semibold leading-[1.02] tracking-tighter text-white sm:text-5xl lg:text-6xl xl:text-7xl lg:tracking-[-0.04em] text-balance">
                 {heroTitle}
               </h1>
-              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base md:text-lg lg:text-xl max-w-2xl">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-lg lg:text-xl sm:mt-6">
                 {heroSubtitle}
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
+              <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">
                 <a
                   href="#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-12 md:px-8 md:text-base"
+                  className="inline-flex h-9 items-center justify-center rounded-full bg-white px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Book a shoot
                 </a>
                 <a
-                  href="#work"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15 md:h-12 md:px-8 md:text-base"
+                  href="/gallery"
+                  className="inline-flex h-9 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-white backdrop-blur transition hover:bg-white/15 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
-                  Explore work
+                  View More
                 </a>
               </div>
             </Reveal>
@@ -301,19 +327,13 @@ export default async function Home() {
         </section>
 
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
-          {/* Integrated Gallery Section - now receives pre-processed image URLs */}
-          {/* Integrated Gallery Section - uniquely curated mixed bento ignoring category covers */}
-          <GallerySection 
-            initialProjects={bentoGridImages}
-            initialCategories={homeCategories}
-          />
-
-          <section id="about" className="scroll-mt-24 pt-16 sm:pt-32 xl:pt-40 pb-8 sm:pb-12">
+          {/* About Me */}
+          <section id="about" className="scroll-mt-24 pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pt-48 lg:pb-32">
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
-                  title={demoAbout.title}
-                  subtitle={demoAbout.body}
+                  title={aboutContent.title}
+                  subtitle={aboutContent.body}
                   containerClassName="max-w-4xl"
                   action={
                     <Link
@@ -328,11 +348,23 @@ export default async function Home() {
             </Reveal>
           </section>
 
-          <HomeCategories categories={homeCategories} />
+          {/* Category */}
+          <section>
+            <HomeCategories categories={homeCategories} />
+          </section>
 
-          <BrandsSection />
+          {/* Partners */}
+          <section>
+            <BrandsSection partners={partners} />
+          </section>
 
-          <section id="services" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
+          {/* Featured Works */}
+          <GallerySection
+            initialProjects={bentoGridImages}
+          />
+
+          {/* What We Do */}
+          <section id="services" className="scroll-mt-24 py-16 sm:py-24 lg:py-32">
             <Reveal>
               <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
                 <SectionHeading
@@ -349,16 +381,19 @@ export default async function Home() {
 
           <ReviewsSection reviews={safeReviews} />
 
-          <section id="contact" className="scroll-mt-24 py-16 sm:py-32 xl:py-40">
+          <section id="contact" className="scroll-mt-24 py-16 sm:py-24 lg:py-32">
             <Reveal>
               <div>
                 <SectionHeading
-                  title="Contact us"
+                  title="Contact"
                   subtitle="Share your date, location, and what you need. You’ll receive availability and a tailored quote within 24 to 48 hours."
                 />
 
                 <div className="mx-auto mt-10 w-full max-w-7xl sm:mt-16">
-                  <ContactForm categories={contactCategories} />
+                  <ContactForm
+                    categories={contactCategories}
+                    whatsappNumber={socialLinks.whatsapp?.replace("https://wa.me/", "") || "9779800000000"}
+                  />
                 </div>
               </div>
             </Reveal>

@@ -29,10 +29,10 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               aria-expanded={isOpen}
             >
               <div className="flex items-baseline gap-2 sm:gap-4">
-                <span className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl w-6 sm:w-8 shrink-0">
+                <span className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl lg:text-2xl w-6 sm:w-8 shrink-0">
                   {index + 1}.
                 </span>
-                <h3 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
+                <h3 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl lg:text-2xl">
                   {item.title}
                 </h3>
               </div>
@@ -68,9 +68,9 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
               className={`grid transition-all duration-500 ease-out ${isOpen ? "mt-8 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
             >
               <div className="overflow-hidden">
-                <div className="pl-8 sm:pl-12 sm:max-w-2xl">
+                <div className="pl-8 sm:pl-12">
                   {/* Service Description in Expanded View */}
-                  <p className="text-sm leading-7 text-zinc-600 mb-8">
+                  <p className="text-sm leading-7 text-zinc-600 sm:text-base lg:text-lg lg:leading-8 mb-8">
                     {item.description}
                   </p>
 
@@ -80,18 +80,8 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
                         key={detail}
                         className="flex items-start gap-4 text-sm leading-7 text-zinc-600"
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mt-[6px] h-3.5 w-3.5 shrink-0 text-zinc-900"
-                        >
-                          <path d="M5 12h14m-7-7 7 7-7 7" />
-                        </svg>
-                        <span>{detail}</span>
+                        <div className="mt-[11px] h-1.5 w-1.5 rounded-full bg-zinc-900 shrink-0" aria-hidden="true" />
+                        <span className="text-sm leading-7 text-zinc-600 sm:text-base lg:text-lg lg:leading-8">{detail}</span>
                       </li>
                     ))}
                   </ul>
