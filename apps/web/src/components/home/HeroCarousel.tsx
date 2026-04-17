@@ -42,6 +42,7 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
             alt={slide.alt || siteTitle}
             fill
             priority={index === 0}
+            quality={100}
             className="object-cover"
             sizes="100vw"
           />

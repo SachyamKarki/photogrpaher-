@@ -60,7 +60,7 @@ export async function getAllGalleryImages() {
       imageUrl = source;
     } else if (sanityEnabled && source) {
       try {
-        imageUrl = urlFor(source)?.width(1600).url() ?? null;
+        imageUrl = urlFor(source)?.width(2800).url() ?? null;
       } catch (e) {
         console.error("Gallery Resource: Image Processing Error", e);
       }

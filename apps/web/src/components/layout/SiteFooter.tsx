@@ -223,9 +223,6 @@ export function SiteFooter({
               <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 transition-all hover:text-white">
                 Terms of Service
               </Link>
-              <Link href="/cookie-policy" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30 transition-all hover:text-white">
-                Cookie Policy
-              </Link>
             </div>
           </div>
         </div>

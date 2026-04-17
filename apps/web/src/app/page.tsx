@@ -260,25 +260,25 @@ export default async function Home() {
       />
 
       <main className="w-full">
-        <section className="relative min-h-[100svh] overflow-hidden bg-zinc-900 md:min-h-screen">
+        <section className="relative min-h-[75svh] sm:min-h-[85svh] overflow-hidden bg-zinc-900 md:min-h-screen">
           <div className="absolute inset-0">
             <HeroCarousel slides={slides} siteTitle={siteTitle} />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-zinc-950/35" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
+          <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
             <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
+              <h1 className="font-heading text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl md:text-4xl">
                 {heroTitle}
               </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg line-clamp-3">
+              <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/70 sm:text-sm md:text-lg sm:mt-4 line-clamp-3">
                 {heroSubtitle}
               </p>
-              <div className="mt-3 flex flex-wrap items-center gap-3 sm:mt-7">
+              <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">
                 <a
                   href="#contact"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-7 text-xs font-bold uppercase tracking-[0.05em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-9 items-center justify-center rounded-full bg-white px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-zinc-900 shadow-sm transition hover:bg-zinc-100 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Book a shoot
                 </a>
@@ -286,7 +286,7 @@ export default async function Home() {
                   href={`https://wa.me/${footerContent.whatsapp.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-7 text-xs font-bold uppercase tracking-[0.05em] text-white backdrop-blur transition hover:bg-white/15 md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="inline-flex h-9 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-white backdrop-blur transition hover:bg-white/15 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   WhatsApp Us
                 </a>
