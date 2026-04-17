@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense, useMemo } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getMoreGalleryImages } from "@/app/gallery/actions";
 import Image from "next/image";
@@ -130,11 +130,11 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-full overflow-x-hidden">
       {/* Refined Minimalist Category Filters - Scrollable on Mobile */}
       <div className="relative mb-12">
         <div className="flex overflow-x-auto no-scrollbar border-b border-zinc-200/50 pb-px scroll-smooth">
-          <div className="flex flex-nowrap gap-6 sm:gap-10 min-w-full justify-start sm:justify-center px-4 sm:px-0">
+          <div className="flex flex-nowrap gap-6 sm:gap-10 w-max justify-start sm:justify-center px-4 sm:px-0">
             <button
               onClick={() => handleCategoryChange(null)}
               className={[
@@ -147,7 +147,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             >
               All
               {selectedCategory === null && (
-                <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
               )}
             </button>
             {categories.map((category) => (
@@ -164,7 +164,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               >
                 {category.title}
                 {selectedCategory === category.slug && (
-                  <motion.div layoutId="activeGalleryFilter" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                  <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
                 )}
               </button>
             ))}
@@ -178,7 +178,6 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
       {/* Clean Uniform Grid with Layout Animations */}
       <motion.div 
-        layout
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -223,7 +222,6 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             filteredImages.map((image: GalleryImage) => (
               <motion.div
                 key={`${selectedCategory || 'all'}-${image._id}`}
-                layout
                 variants={itemVariants}
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-md sm:rounded-lg bg-zinc-100 group cursor-pointer"
               >

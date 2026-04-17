@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,10 +34,15 @@ export function GallerySection({
 }: Props) {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // Shuffle images on client mount securely, but rigorously respect explicitly pinned array positions
   const projects = useMemo(() => {
-    if (!initialProjects || initialProjects.length === 0) return [];
+    if (!hasMounted || !initialProjects || initialProjects.length === 0) return [];
 
     const newOrder = Array(10).fill(null);
     const unpinnedImages: Project[] = [];
@@ -71,7 +76,7 @@ export function GallerySection({
     }
 
     return newOrder.filter(Boolean) as Project[];
-  }, [initialProjects]);
+  }, [initialProjects, hasMounted]);
 
   if (!initialProjects || initialProjects.length === 0) return null;
 
@@ -91,26 +96,29 @@ export function GallerySection({
         <div className="mt-12 sm:mt-16">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
+            className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {
                 const getCardClass = (index: number) => {
                   switch (index) {
-                    case 0: return "lg:col-span-7 lg:row-span-3";
-                    case 1: return "lg:col-span-5 lg:row-span-2";
-                    case 2: return "lg:col-span-5 lg:row-span-1";
-                    case 3: return "lg:col-span-4 lg:row-span-1";
-                    case 4: return "lg:col-span-4 lg:row-span-1";
-                    case 5: return "lg:col-span-4 lg:row-span-1";
-                    case 6: return "lg:col-span-6 lg:row-span-2";
-                    case 7: return "lg:col-span-6 lg:row-span-2";
-                    case 8: return "lg:col-span-8 lg:row-span-2";
-                    case 9: return "lg:col-span-4 lg:row-span-2";
-                    default: return "lg:col-span-4 lg:row-span-1";
+                    // Desktop (lg): 12 columns | Tablet (md): 3 columns
+                    case 0: return "lg:col-span-7 lg:row-span-3 md:col-span-2 md:row-span-2";
+                    case 1: return "lg:col-span-5 lg:row-span-2 md:col-span-1 md:row-span-2";
+                    case 2: return "lg:col-span-5 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 3: return "lg:col-span-4 lg:row-span-2 md:col-span-2 md:row-span-1";
+                    case 4: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 5: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
+                    case 6: return "lg:col-span-6 lg:row-span-2 md:col-span-2 md:row-span-2";
+                    case 7: return "lg:col-span-6 lg:row-span-2 md:col-span-1 md:row-span-1";
+                    case 8: return "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-1";
+                    case 9: return "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1";
+                    default: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
                   }
                 };
                 const cardClass = getCardClass(idx);
+                // On mobile (below md), we span 2 columns every few items to keep the bento feel
+                const mobileClass = idx % 5 === 0 ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-square";
 
                 return (
                   <motion.div
@@ -120,7 +128,7 @@ export function GallerySection({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className={`${cardClass} group relative flex aspect-square lg:aspect-auto overflow-hidden rounded-xl sm:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
+                    className={`${cardClass} ${mobileClass} group relative md:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
                     onClick={() => setSelectedIdx(idx)}
                   >
                     <button type="button" className="absolute inset-0 block z-20 w-full h-full text-left" aria-label={`View ${project.title}`} />
