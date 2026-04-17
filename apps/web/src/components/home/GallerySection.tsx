@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +16,7 @@ type Project = {
   excerpt?: string;
   imageUrl?: string | null;
   featuredOrder?: number | null;
+  aspectRatio?: number | null;
   metadata?: {
     camera?: string;
     lens?: string;
@@ -29,47 +30,107 @@ type Props = {
   initialProjects: Project[];
 };
 
+const BENTO_SLOTS = [
+  {
+    cardClass: "lg:col-span-7 lg:row-span-3 md:col-span-2 md:row-span-2",
+    mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
+    targetRatio: 1.7,
+  },
+  {
+    cardClass: "lg:col-span-5 lg:row-span-2 md:col-span-1 md:row-span-2",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 0.8,
+  },
+  {
+    cardClass: "lg:col-span-5 lg:row-span-1 md:col-span-1 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 1.8,
+  },
+  {
+    cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-2 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 1.25,
+  },
+  {
+    cardClass: "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 1.4,
+  },
+  {
+    cardClass: "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1",
+    mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
+    targetRatio: 1.3,
+  },
+  {
+    cardClass: "lg:col-span-6 lg:row-span-2 md:col-span-2 md:row-span-2",
+    mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
+    targetRatio: 1.55,
+  },
+  {
+    cardClass: "lg:col-span-6 lg:row-span-2 md:col-span-1 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 1.2,
+  },
+  {
+    cardClass: "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 1.8,
+  },
+  {
+    cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1",
+    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
+    targetRatio: 0.85,
+  },
+] as const;
+
+function getAspectRatio(project: Project) {
+  return project.aspectRatio && project.aspectRatio > 0 ? project.aspectRatio : 1;
+}
+
+function buildBentoProjects(initialProjects: Project[]) {
+  const slots: Array<Project | null> = Array(BENTO_SLOTS.length).fill(null);
+  const remaining: Project[] = [];
+
+  for (const project of initialProjects) {
+    const order = project.featuredOrder;
+    if (typeof order === "number" && order >= 1 && order <= BENTO_SLOTS.length) {
+      const slotIndex = order - 1;
+      if (!slots[slotIndex]) {
+        slots[slotIndex] = project;
+        continue;
+      }
+    }
+    remaining.push(project);
+  }
+
+  for (let slotIndex = 0; slotIndex < BENTO_SLOTS.length; slotIndex += 1) {
+    if (slots[slotIndex] || remaining.length === 0) continue;
+
+    const targetRatio = BENTO_SLOTS[slotIndex].targetRatio;
+    let bestIndex = 0;
+    let bestScore = Number.POSITIVE_INFINITY;
+
+    for (let candidateIndex = 0; candidateIndex < remaining.length; candidateIndex += 1) {
+      const candidate = remaining[candidateIndex];
+      const score = Math.abs(getAspectRatio(candidate) - targetRatio);
+      if (score < bestScore) {
+        bestScore = score;
+        bestIndex = candidateIndex;
+      }
+    }
+
+    slots[slotIndex] = remaining.splice(bestIndex, 1)[0];
+  }
+
+  return slots.filter((project): project is Project => Boolean(project));
+}
+
 export function GallerySection({
   initialProjects,
 }: Props) {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-
-  // Build a deterministic 10-slot bento order:
-  // - `featuredOrder` (1..10) pins an image into that exact bento position.
-  // - Remaining slots fill in the incoming order (no shuffle) for a professional, stable layout.
-  const projects = useMemo(() => {
-    if (!initialProjects || initialProjects.length === 0) return [];
-
-    const newOrder: Array<Project | null> = Array(10).fill(null);
-    const unpinnedImages: Project[] = [];
-
-    // 1. Lock explicitly pinned images to their assigned slots (1 to 10)
-    initialProjects.forEach(project => {
-      if (typeof project.featuredOrder === 'number' && project.featuredOrder >= 1 && project.featuredOrder <= 10) {
-        const idx = project.featuredOrder - 1;
-        // If slot is empty, map it. Otherwise it falls back to random list
-        if (!newOrder[idx]) {
-          newOrder[idx] = project;
-        } else {
-          unpinnedImages.push(project);
-        }
-      } else {
-        unpinnedImages.push(project);
-      }
-    });
-
-    // 2. Fill any gaps with the remaining (unshuffled) images
-    let shufflePtr = 0;
-    for (let i = 0; i < 10; i++) {
-      if (!newOrder[i] && shufflePtr < unpinnedImages.length) {
-        newOrder[i] = unpinnedImages[shufflePtr];
-        shufflePtr++;
-      }
-    }
-
-    return newOrder.filter(Boolean) as Project[];
-  }, [initialProjects]);
+  const projects = buildBentoProjects(initialProjects);
 
   if (!initialProjects || initialProjects.length === 0) return null;
 
@@ -93,25 +154,7 @@ export function GallerySection({
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {
-                const getCardClass = (index: number) => {
-                  switch (index) {
-                    // Desktop (lg): 12 columns | Tablet (md): 3 columns
-                    case 0: return "lg:col-span-7 lg:row-span-3 md:col-span-2 md:row-span-2";
-                    case 1: return "lg:col-span-5 lg:row-span-2 md:col-span-1 md:row-span-2";
-                    case 2: return "lg:col-span-5 lg:row-span-1 md:col-span-1 md:row-span-1";
-                    case 3: return "lg:col-span-4 lg:row-span-2 md:col-span-2 md:row-span-1";
-                    case 4: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
-                    case 5: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
-                    case 6: return "lg:col-span-6 lg:row-span-2 md:col-span-2 md:row-span-2";
-                    case 7: return "lg:col-span-6 lg:row-span-2 md:col-span-1 md:row-span-1";
-                    case 8: return "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-1";
-                    case 9: return "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1";
-                    default: return "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1";
-                  }
-                };
-                const cardClass = getCardClass(idx);
-                // On mobile (below md), we span 2 columns every few items to keep the bento feel
-                const mobileClass = idx % 5 === 0 ? "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto" : "col-span-1 row-span-1 aspect-square md:aspect-auto";
+                const slot = BENTO_SLOTS[idx] ?? BENTO_SLOTS[BENTO_SLOTS.length - 1];
 
                 return (
                   <motion.div
@@ -121,7 +164,7 @@ export function GallerySection({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className={`${cardClass} ${mobileClass} group relative md:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
+                    className={`${slot.cardClass} ${slot.mobileClass} group relative md:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
                     onClick={() => setSelectedIdx(idx)}
                   >
                     <button type="button" className="absolute inset-0 block z-20 w-full h-full text-left" aria-label={`View ${project.title}`} />

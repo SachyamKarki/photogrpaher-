@@ -59,6 +59,7 @@ export default async function AboutPage() {
       description: c.description,
       imageUrl: c.image,
     }))).slice(0, 3);
+
   const sectionTitleClassName =
     "font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl";
   const sectionTextClassName =
@@ -138,18 +139,6 @@ export default async function AboutPage() {
               </section>
             </div>
 
-            <section aria-labelledby="about-categories" className="border-t border-zinc-100 py-8">
-              <div id="about-categories">
-                <HomeCategories
-                  categories={aboutCategories}
-                  title="Explore by category"
-                  subtitle="A curated selection of work across distinct photographic styles."
-                  sectionClassName="scroll-mt-24 py-0"
-                  headingContainerClassName="mb-4 sm:mb-6"
-                />
-              </div>
-            </section>
-
             <div className="w-full">
               <section aria-labelledby="about-contact" className="border-t border-zinc-100 py-8">
                 <h2 id="about-contact" className={sectionTitleClassName}>
@@ -213,46 +202,53 @@ export default async function AboutPage() {
                 </ul>
               </section>
 
-              <section aria-label="Primary actions" className="border-t border-zinc-200 py-8">
-                <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/#contact"
-                    className="inline-flex h-11 items-center justify-center rounded-full bg-zinc-900 px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-zinc-800 md:h-12 md:px-8"
-                  >
-                    Contact Form
-                  </Link>
-                  <Link
-                    href="/gallery"
-                    className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
-                  >
-                    view gallery
-                  </Link>
-                </div>
-                <div className="mt-24 flex justify-center sm:mt-64">
-                  <Link
-                    href="/"
-                    className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform group-hover:-translate-x-0.5"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 19l-7-7 7-7" />
-                      <path d="M19 12H5" />
-                    </svg>
-                    BACK TO HOME
-                  </Link>
-                </div>
+              <section aria-label="About actions" className="border-t border-zinc-100 py-8">
+                <Link
+                  href="/gallery"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
+                >
+                  View gallery
+                </Link>
               </section>
             </div>
+
+            <section aria-labelledby="about-categories" className="border-t border-zinc-100 py-8">
+              <div id="about-categories">
+                <HomeCategories
+                  categories={aboutCategories}
+                  title="Explore by category"
+                  subtitle="A curated selection of work across distinct photographic styles."
+                  sectionClassName="scroll-mt-24 py-0"
+                  headingContainerClassName="mb-4 sm:mb-6"
+                />
+              </div>
+            </section>
+
+            <section aria-label="Primary actions" className="border-t border-zinc-200 py-8">
+              <div className="mt-16 flex justify-center sm:mt-40">
+                <Link
+                  href="/"
+                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform group-hover:-translate-x-0.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 19l-7-7 7-7" />
+                    <path d="M19 12H5" />
+                  </svg>
+                  Back to home
+                </Link>
+              </div>
+            </section>
           </div>
         </div>
       </section>
