@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getMoreGalleryImages } from "@/app/gallery/actions";
 import Image from "next/image";
@@ -33,18 +33,41 @@ type JustifiedGalleryProps = {
   categories: Category[];
 };
 
+// Robust Fisher-Yates Shuffle algorithm for a truly random grid
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get("category");
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam || null);
-
-  const [allRetrievedImages, setAllRetrievedImages] = useState<GalleryImage[]>(images);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [extraImages, setExtraImages] = useState<GalleryImage[]>([]);
   const [hasMore, setHasMore] = useState(images.length >= 20); // Sync with initial fetch limit
-
   const [isFiltering, setIsFiltering] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    const handle = requestAnimationFrame(() => setHasMounted(true));
+    return () => cancelAnimationFrame(handle);
+  }, []);
+
+  // Client-side shuffle to ensure a fresh experience on every visit without hydration errors
+  const shuffledInitial = useMemo(() => {
+    if (!hasMounted) return images;
+    return shuffleArray(images);
+  }, [images, hasMounted]);
+
+  const allImages = useMemo(() => [...shuffledInitial, ...extraImages], [shuffledInitial, extraImages]);
+
 
 
 
@@ -77,12 +100,14 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     if (loadingMore || !hasMore) return;
     
     setLoadingMore(true);
-    const start = allRetrievedImages.length;
+    const start = allImages.length;
     const end = start + 12; // Load in smaller, faster chunks of 12
-    
+
     const res = await getMoreGalleryImages(start, end);
     if (res.success && res.images.length > 0) {
-      setAllRetrievedImages(prev => [...prev, ...res.images]);
+      // Shuffle the new batch before appending to keep the "mixed" feel
+      const shuffledNewImages = shuffleArray(res.images);
+      setExtraImages(prev => [...prev, ...shuffledNewImages]);
       if (res.images.length < 12) {
         setHasMore(false);
       }
@@ -93,8 +118,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   const filteredImages = selectedCategory
-    ? allRetrievedImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
-    : allRetrievedImages;
+    ? allImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
+    : allImages;
 
   const isEmpty = filteredImages.length === 0;
   const activeCategoryLabel = selectedCategory
