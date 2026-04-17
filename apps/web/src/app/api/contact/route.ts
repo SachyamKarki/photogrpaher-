@@ -87,6 +87,14 @@ export async function POST(req: Request) {
   const email = sanitizeInput(getStringField(data, "email"));
   const message = sanitizeInput(getStringField(data, "message"));
   const category = sanitizeInput(getStringField(data, "category"));
+  const website = getStringField(data, "website");
+
+  // Deep Security Layer: Honeypot Trap
+  // If a bot fills out the hidden "website" field, we silently drop the request.
+  if (website && website.length > 0) {
+    console.warn(`[Security] Honeypot triggered by IP: ${ip}`);
+    return NextResponse.json({ ok: true }); // Silent success
+  }
 
   if (!name || name.length > 120) {
     return NextResponse.json(

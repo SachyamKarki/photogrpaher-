@@ -45,6 +45,7 @@ export function ContactForm({ categories }: Props) {
   const [phone, setPhone] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // Honeypot field for security
 
   const isValid = useMemo(() => {
     if (!name.trim()) return false;
@@ -90,6 +91,7 @@ export function ContactForm({ categories }: Props) {
         setPhone("");
         setCategory("");
         setMessage("");
+        setWebsite("");
       } catch {
         toast.error("Could not open WhatsApp. Please try again.");
         setState("error");
@@ -106,6 +108,7 @@ export function ContactForm({ categories }: Props) {
         email,
         category: category || undefined,
         message,
+        website, // Pass honeypot for verification
       }),
     }).then(async (res) => {
       const json: unknown = await res.json().catch(() => null);
@@ -130,6 +133,7 @@ export function ContactForm({ categories }: Props) {
       setPhone("");
       setCategory("");
       setMessage("");
+      setWebsite("");
       return json;
     });
 
@@ -188,6 +192,20 @@ export function ContactForm({ categories }: Props) {
         <p className="text-sm text-zinc-600">
           Share the essentials and we&apos;ll reply with availability and next steps.
         </p>
+      </div>
+
+      {/* Security Layer: Honeypot (Visually Hidden) */}
+      <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          autoComplete="off"
+          tabIndex={-1}
+        />
       </div>
 
       {/* Contact Method — Segmented Control */}

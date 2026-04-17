@@ -164,16 +164,6 @@ export function GallerySection({
               image={selectedIdx !== null ? projects[selectedIdx]?.imageUrl || null : null}
               title={selectedIdx !== null ? projects[selectedIdx]?.title || "Gallery Image" : ""}
               metadata={selectedIdx !== null ? projects[selectedIdx]?.metadata : undefined}
-              onNext={() =>
-                setSelectedIdx((prev) =>
-                  prev !== null ? (prev + 1) % projects.length : null
-                )
-              }
-              onPrev={() =>
-                setSelectedIdx((prev) =>
-                  prev !== null ? (prev - 1 + projects.length) % projects.length : null
-                )
-              }
             />
           </motion.div>
         </div>
