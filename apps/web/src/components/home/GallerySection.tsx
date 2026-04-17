@@ -34,47 +34,32 @@ const BENTO_SLOTS = [
   {
     cardClass: "lg:col-span-7 lg:row-span-3 md:col-span-2 md:row-span-2",
     mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
-    targetRatio: 1.7,
+    targetRatio: 1.75,
   },
   {
-    cardClass: "lg:col-span-5 lg:row-span-2 md:col-span-1 md:row-span-2",
+    cardClass: "lg:col-span-5 lg:row-span-3 md:col-span-1 md:row-span-2",
     mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
     targetRatio: 0.8,
   },
   {
-    cardClass: "lg:col-span-5 lg:row-span-1 md:col-span-1 md:row-span-1",
-    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
-    targetRatio: 1.8,
-  },
-  {
     cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-2 md:row-span-1",
-    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
-    targetRatio: 1.25,
-  },
-  {
-    cardClass: "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1",
-    mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
-    targetRatio: 1.4,
-  },
-  {
-    cardClass: "lg:col-span-4 lg:row-span-1 md:col-span-1 md:row-span-1",
     mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
-    targetRatio: 1.3,
+    targetRatio: 1.35,
   },
   {
-    cardClass: "lg:col-span-6 lg:row-span-2 md:col-span-2 md:row-span-2",
-    mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
-    targetRatio: 1.55,
-  },
-  {
-    cardClass: "lg:col-span-6 lg:row-span-2 md:col-span-1 md:row-span-1",
+    cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1",
     mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
     targetRatio: 1.2,
   },
   {
-    cardClass: "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-1",
+    cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1",
     mobileClass: "col-span-1 row-span-1 aspect-square md:aspect-auto",
-    targetRatio: 1.8,
+    targetRatio: 1.2,
+  },
+  {
+    cardClass: "lg:col-span-8 lg:row-span-2 md:col-span-2 md:row-span-2",
+    mobileClass: "col-span-2 row-span-2 aspect-[4/3] md:aspect-auto",
+    targetRatio: 1.6,
   },
   {
     cardClass: "lg:col-span-4 lg:row-span-2 md:col-span-1 md:row-span-1",
@@ -150,7 +135,7 @@ export function GallerySection({
         <div className="mt-12 sm:mt-16">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-2 auto-rows-[120px] sm:auto-rows-[140px] md:grid-cols-3 md:auto-rows-[150px] lg:grid-cols-12 lg:auto-rows-[140px] xl:auto-rows-[160px]"
+            className="grid grid-cols-2 gap-2.5 auto-rows-[120px] sm:gap-3 sm:auto-rows-[150px] md:grid-cols-3 md:auto-rows-[170px] lg:grid-cols-12 lg:gap-4 lg:auto-rows-[145px] xl:auto-rows-[165px]"
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {
@@ -164,29 +149,40 @@ export function GallerySection({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className={`${slot.cardClass} ${slot.mobileClass} group relative md:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] border border-zinc-200 bg-zinc-900 shadow-sm transition hover:shadow-md cursor-pointer`}
+                    className={`${slot.cardClass} ${slot.mobileClass} group relative md:aspect-auto overflow-hidden rounded-[1.25rem] sm:rounded-[1.75rem] md:rounded-[2rem] bg-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition duration-500 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(0,0,0,0.14)] cursor-pointer`}
                     onClick={() => setSelectedIdx(idx)}
                   >
                     <button type="button" className="absolute inset-0 block z-20 w-full h-full text-left" aria-label={`View ${project.title}`} />
 
-                    <div className="absolute inset-0 bg-zinc-900 z-0">
+                    <div className="absolute inset-0 z-0 bg-zinc-900">
                       {project.imageUrl ? (
                         <Image
                           src={project.imageUrl}
                           alt={project.title}
                           fill
-                          className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.02]"
-                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
                     </div>
 
-                    <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-10 p-1.5 pointer-events-none">
-                      <div className="inline-flex w-fit items-center gap-1 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 text-[0.45rem] sm:text-[0.5rem] font-bold uppercase tracking-[0.08em] text-white/90 backdrop-blur-md shadow-sm">
+                    <div className="pointer-events-none absolute left-3 top-3 z-10 p-1.5 sm:left-5 sm:top-5">
+                      <div className="inline-flex w-fit items-center gap-1 rounded-full bg-white/12 px-2 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-md">
                         {project.category?.title || "Project"}
+                      </div>
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5">
+                      <div className="max-w-[85%]">
+                        <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/60">
+                          Featured
+                        </p>
+                        <h3 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
+                          {project.title}
+                        </h3>
                       </div>
                     </div>
                   </motion.div>
