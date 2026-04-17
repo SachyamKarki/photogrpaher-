@@ -283,12 +283,10 @@ export default async function Home() {
                   Book a shoot
                 </a>
                 <a
-                  href={`https://wa.me/${footerContent.whatsapp.replace(/[^0-9]/g, '')}`}
-                  target="_blank"
-                  rel="noreferrer"
+                  href="/gallery"
                   className="inline-flex h-9 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 text-[10px] font-bold uppercase tracking-[0.05em] text-white backdrop-blur transition hover:bg-white/15 sm:h-11 sm:px-7 sm:text-xs md:h-13 md:px-10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
-                  WhatsApp Us
+                  View More
                 </a>
               </div>
             </Reveal>

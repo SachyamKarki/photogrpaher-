@@ -1,8 +1,8 @@
 import { PortfolioCategory, PortfolioProject } from "@/types";
 
 export const siteHero = {
-  title: "High altitude, adventure and automobile photographer",
-  subtitle: "Honest Light. Timeless Detail.",
+  title: "Honest Light. Timeless Detail.",
+  subtitle: "High altitude, Adventure and Automobile photographer",
   mediaType: "image" as const,
   image: "/content/hero.jpg",
 };
