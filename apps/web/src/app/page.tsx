@@ -280,10 +280,10 @@ export default async function Home() {
 
           <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
             <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl md:text-4xl">
+              <h1 className="font-heading text-3xl font-semibold leading-[0.95] tracking-tighter text-white sm:text-6xl lg:text-7xl xl:text-8xl lg:tracking-[-0.04em] text-balance">
                 {heroTitle}
               </h1>
-              <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/70 sm:text-sm md:text-lg sm:mt-4 line-clamp-3">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-lg lg:text-xl sm:mt-6">
                 {heroSubtitle}
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">
