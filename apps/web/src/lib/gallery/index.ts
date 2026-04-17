@@ -51,7 +51,7 @@ export async function getAllGalleryImages() {
   const allImages: GalleryImage[] = [];
   const handledImageUrls = new Set<string>();
 
-  const addImage = (id: string, title: string, source: SanityImageSourcePlus, project: SanityProject) => {
+  const addImage = (id: string, title: string, source: SanityImageSourcePlus, project: SanityProject, forceFeatured = false) => {
     let imageUrl: string | null = null;
     let aspectRatio = 1.0; 
 
@@ -105,7 +105,8 @@ export async function getAllGalleryImages() {
         title: project?.categorySlug || "Photography", 
         slug: project?.categorySlug || "photography" 
       },
-      isFeatured: (source as any)?.isFeatured === true || false,
+      isFeatured: forceFeatured || (source as any)?.isFeatured === true || typeof (source as any)?.featuredOrder === "number",
+      featuredOrder: typeof (source as any)?.featuredOrder === "number" ? (source as any).featuredOrder : null,
     });
   };
 
@@ -125,14 +126,50 @@ export async function getAllGalleryImages() {
   }
 
   if (allImages.length === 0) {
-    portfolioProjects.forEach((p) => {
-      addImage(`portfolio-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject);
+    portfolioProjects.forEach((p, pIdx) => {
+      // Force feature the first few mock images so the bento grid isn't empty locally
+      const isFeaturedProj = pIdx < 4;
+      addImage(`portfolio-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject, isFeaturedProj);
       if (Array.isArray(p.gallery)) {
         p.gallery.forEach((img, idx) => {
-          addImage(`portfolio-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject);
+          addImage(`portfolio-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject, isFeaturedProj && idx < 2);
         });
       }
     });
+  }
+
+  // --- AUTO-CURATOR ---
+  // If the admin hasn't explicitly ticked any "Featured" checkboxes in Sanity yet,
+  // we will artificially select 10 images automatically so the Homepage Bento Grid isn't blank.
+  const hasFeatures = allImages.some((img: any) => img.isFeatured);
+  if (!hasFeatures && allImages.length > 0) {
+    // Group explicitly to ensure category diversity
+    const groupedByCategory = allImages.reduce((acc, img) => {
+        const slug = img.category?.slug || 'generic';
+        if (!acc[slug]) acc[slug] = [];
+        acc[slug].push(img);
+        return acc;
+    }, {} as Record<string, typeof allImages>);
+
+    const keys = Object.keys(groupedByCategory);
+    let i = 0;
+    let count = 0;
+    
+    // Round-robin selection: pull exactly one image from each category in a loop until 10 slots are populated
+    while (count < 10 && keys.length > 0) {
+        const key = keys[i % keys.length];
+        const arr = groupedByCategory[key];
+        
+        if (arr && arr.length > 0) {
+            const img = arr.shift()!;
+            (img as any).isFeatured = true; // Auto-feature the image
+            count++;
+            i++;
+        } else {
+            // Remove depleted categories from the rotation entirely
+            keys.splice(i % keys.length, 1);
+        }
+    }
   }
 
   return { allImages, processedCategories };

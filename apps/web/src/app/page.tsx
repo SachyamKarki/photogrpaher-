@@ -216,16 +216,42 @@ export default async function Home() {
     );
   }
 
-  // Dynamically select Featured Work (up to 10 images) prioritizing those marked as isFeatured in Sanity
+  // Dynamically select Featured Work prioritizing those marked as isFeatured in Sanity
   const explicitlyFeatured = validGalleryImages.filter((img) => (img as any).isFeatured);
-  let bentoSelection = explicitlyFeatured;
+  let bentoSelection = explicitlyFeatured.slice(0, 10);
 
+  // If there are fewer than 10 explicitly featured images, systematically backfill exactly up to 10 
+  // by round-robin sampling across all unpinned categories to guarantee a heavily populated, diverse bento grid
   if (bentoSelection.length < 10) {
     const missing = 10 - bentoSelection.length;
     const remainingImages = validGalleryImages.filter((img) => !(img as any).isFeatured);
-    bentoSelection = [...bentoSelection, ...remainingImages.slice(0, missing)];
-  } else {
-    bentoSelection = bentoSelection.slice(0, 10);
+    
+    // Group remaining strictly by category to pull diversely
+    const groupedByCategory = remainingImages.reduce((acc, img) => {
+        const slug = img.category?.slug || 'generic';
+        if (!acc[slug]) acc[slug] = [];
+        acc[slug].push(img);
+        return acc;
+    }, {} as Record<string, typeof remainingImages>);
+
+    const diverseSelection: typeof remainingImages = [];
+    const keys = Object.keys(groupedByCategory);
+    let i = 0;
+    
+    // Round-robin selection: pull sequentially from categories until the bento deficit is paid
+    while (diverseSelection.length < missing && keys.length > 0) {
+        const key = keys[i % keys.length];
+        const arr = groupedByCategory[key];
+        
+        if (arr && arr.length > 0) {
+            diverseSelection.push(arr.shift()!);
+            i++;
+        } else {
+            keys.splice(i % keys.length, 1);
+        }
+    }
+
+    bentoSelection = [...bentoSelection, ...diverseSelection];
   }
 
   const bentoGridImages = bentoSelection.map((img) => ({
@@ -233,6 +259,8 @@ export default async function Home() {
     title: img.category?.title || "Featured",
     slug: img.category?.slug || "gallery",
     imageUrl: img.imageUrl,
+    featuredOrder: (img as any).featuredOrder || null,
+    metadata: img.metadata,
     category: {
       title: img.category?.title || "Editorial",
       slug: img.category?.slug || "editorial"

@@ -36,8 +36,14 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
     return false;
   }
 
-  const categoryLine = category
-    ? `<tr><td style="padding:10px 16px;color:#71717a;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;">Category</td><td style="padding:10px 16px;font-size:14px;color:#18181b;">${category}</td></tr>`
+  const safeName = sanitizeHeader(name);
+  const safeEmail = sanitizeHeader(email);
+  const safeCategory = category ? sanitizeHeader(category) : "";
+
+  const mailtoSubject = encodeURIComponent(`Response to your inquiry at RabinSon${safeCategory ? ` — ${safeCategory}` : ""}`);
+
+  const categoryLine = safeCategory
+    ? `<tr><td style="padding:10px 16px;color:#71717a;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;">Category</td><td style="padding:10px 16px;font-size:14px;color:#18181b;">${safeCategory}</td></tr>`
     : "";
 
   const html = `
@@ -47,7 +53,7 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
 <body style="margin:0;padding:0;background:#fafafa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="max-width:600px;margin:40px auto;background:#ffffff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;">
     <div style="background:#000000;padding:32px;text-align:center;">
-      <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">RabinSon</h1>
+      <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">RABINSON PHOTOGRAPHY</h1>
     </div>
     <div style="padding:40px 48px;">
       <p style="margin:0 0 24px;color:#52525b;font-size:14px;line-height:1.6;">You have received a new inquiry from the portfolio contact form:</p>
@@ -55,12 +61,12 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
       <table style="width:100%;border-collapse:separate;border-spacing:0;background:#f8fafc;border-radius:8px;overflow:hidden;">
         <tr>
           <td style="padding:16px;color:#71717a;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;width:100px;">Sender</td>
-          <td style="padding:16px;font-size:14px;color:#18181b;font-weight:600;">${name}</td>
+          <td style="padding:16px;font-size:14px;color:#18181b;font-weight:600;">${safeName}</td>
         </tr>
         <tr>
           <td style="padding:10px 16px;color:#71717a;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;">Email</td>
           <td style="padding:10px 16px;font-size:14px;">
-            <a href="mailto:${email}" style="color:#000000;text-decoration:none;border-bottom:1px solid #e5e5e5;">${email}</a>
+            <a href="mailto:${safeEmail}" style="color:#000000;text-decoration:none;border-bottom:1px solid #e5e5e5;">${safeEmail}</a>
           </td>
         </tr>
         ${categoryLine}
@@ -71,7 +77,7 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
       </table>
 
       <div style="margin-top:40px;">
-        <a href="mailto:${email}?subject=Response to your inquiry at RabinSon" 
+        <a href="mailto:${safeEmail}?subject=${mailtoSubject}" 
            style="display:inline-block;background:#000000;color:#ffffff;padding:14px 32px;border-radius:99px;font-size:13px;font-weight:600;text-decoration:none;letter-spacing:0.05em;">
           Reply to Inquiry
         </a>
@@ -85,10 +91,6 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
 </html>`;
 
   try {
-    const safeName = sanitizeHeader(name);
-    const safeEmail = sanitizeHeader(email);
-    const safeCategory = category ? sanitizeHeader(category) : "";
-
     const info = await transporter.sendMail({
       from: `"RabinSon Notifications" <${process.env.SMTP_USER}>`,
       to: toEmail,
@@ -118,7 +120,7 @@ export async function sendClientConfirmation(payload: ContactEmailPayload) {
 <body style="margin:0;padding:0;background:#fafafa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="max-width:600px;margin:40px auto;background:#ffffff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;">
     <div style="background:#000000;padding:32px;text-align:center;">
-      <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">RabinSon</h1>
+      <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">RABINSON PHOTOGRAPHY</h1>
     </div>
     <div style="padding:40px 48px;">
       <h2 style="margin:0 0 16px;color:#18181b;font-size:22px;font-weight:700;">A quick note of appreciation.</h2>
@@ -132,7 +134,7 @@ export async function sendClientConfirmation(payload: ContactEmailPayload) {
       <p style="margin:4px 0 0;color:#71717a;font-size:14px;">RabinSon Photography</p>
     </div>
     <div style="padding:24px 48px;background:#f8fafc;border-top:1px solid #e5e5e5;text-align:center;">
-      <p style="margin:0;color:#94a3b8;font-size:11px;letter-spacing:0.02em;">Honest Light. Timeless Detail. Available Worldwide.</p>
+      <p style="margin:0;color:#94a3b8;font-size:11px;letter-spacing:0.02em;">High altitude, Adventure and Automobile photographer</p>
     </div>
   </div>
 </body>

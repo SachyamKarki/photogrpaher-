@@ -44,6 +44,13 @@ export const projectType = defineType({
           description: "Checking this will display the image in the Bento Grid on the homepage.",
           initialValue: false,
         }),
+        defineField({
+          name: "featuredOrder",
+          title: "Bento Grid Position",
+          type: "number",
+          description: "Optional (1-10). Explicitly lock this image to a specific slot in the Homepage Bento grid. Other featured images will shuffle around it.",
+          validation: (Rule) => Rule.min(1).max(10).integer(),
+        }),
       ],
     }),
     defineField({
@@ -65,6 +72,13 @@ export const projectType = defineType({
               type: "boolean",
               description: "Checking this will display the image in the Bento Grid on the homepage.",
               initialValue: false,
+            }),
+            defineField({
+              name: "featuredOrder",
+              title: "Bento Grid Position",
+              type: "number",
+              description: "Optional (1-10). Explicitly lock this image to a specific slot in the Homepage Bento grid. Other featured images will shuffle around it.",
+              validation: (Rule) => Rule.min(1).max(10).integer(),
             }),
           ],
         },

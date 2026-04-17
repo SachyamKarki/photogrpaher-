@@ -98,7 +98,7 @@ export const GALLERY_PROJECTS_QUERY = defineQuery(`
 `);
 
 export const FEATURED_IMAGES_QUERY = defineQuery(`
-  *[_type == "project" && defined(slug.current) && (coverImage.isFeatured == true || count(gallery[isFeatured == true]) > 0)]
+  *[_type == "project" && defined(slug.current) && (coverImage.isFeatured == true || defined(coverImage.featuredOrder) || count(gallery[isFeatured == true || defined(featuredOrder)]) > 0)]
   | order(publishedAt desc)[0...50]{
     _id,
     title,
