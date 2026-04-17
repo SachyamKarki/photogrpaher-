@@ -192,12 +192,6 @@ export default async function Home() {
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
 
-  const getImagesForCategory = (slugs: string[]) =>
-    validGalleryImages.filter((img) => {
-      const imgSlug = img.category?.slug;
-      return Boolean(imgSlug && slugs.includes(imgSlug));
-    });
-
   // Explicitly curate the hero content as requested by the user
   const curatedHeroIds = ["mountain-3", "mountain-15", "mountain-17"];
   const slides = curatedHeroIds
@@ -217,14 +211,14 @@ export default async function Home() {
   }
 
   // Dynamically select Featured Work prioritizing those marked as isFeatured in Sanity
-  const explicitlyFeatured = validGalleryImages.filter((img) => (img as any).isFeatured);
+  const explicitlyFeatured = validGalleryImages.filter((img) => img.isFeatured);
   let bentoSelection = explicitlyFeatured.slice(0, 10);
 
   // If there are fewer than 10 explicitly featured images, systematically backfill exactly up to 10 
   // by round-robin sampling across all unpinned categories to guarantee a heavily populated, diverse bento grid
   if (bentoSelection.length < 10) {
     const missing = 10 - bentoSelection.length;
-    const remainingImages = validGalleryImages.filter((img) => !(img as any).isFeatured);
+    const remainingImages = validGalleryImages.filter((img) => !img.isFeatured);
     
     // Group remaining strictly by category to pull diversely
     const groupedByCategory = remainingImages.reduce((acc, img) => {
@@ -259,7 +253,7 @@ export default async function Home() {
     title: img.category?.title || "Featured",
     slug: img.category?.slug || "gallery",
     imageUrl: img.imageUrl,
-    featuredOrder: (img as any).featuredOrder || null,
+    featuredOrder: img.featuredOrder || null,
     metadata: img.metadata,
     category: {
       title: img.category?.title || "Editorial",

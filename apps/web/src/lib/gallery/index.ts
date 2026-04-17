@@ -105,8 +105,8 @@ export async function getAllGalleryImages() {
         title: project?.categorySlug || "Photography", 
         slug: project?.categorySlug || "photography" 
       },
-      isFeatured: forceFeatured || (source as any)?.isFeatured === true || typeof (source as any)?.featuredOrder === "number",
-      featuredOrder: typeof (source as any)?.featuredOrder === "number" ? (source as any).featuredOrder : null,
+      isFeatured: forceFeatured || (source as SanityImage)?.isFeatured === true || typeof (source as SanityImage)?.featuredOrder === "number",
+      featuredOrder: typeof (source as SanityImage)?.featuredOrder === "number" ? (source as SanityImage).featuredOrder : null,
     });
   };
 
@@ -141,7 +141,7 @@ export async function getAllGalleryImages() {
   // --- AUTO-CURATOR ---
   // If the admin hasn't explicitly ticked any "Featured" checkboxes in Sanity yet,
   // we will artificially select 10 images automatically so the Homepage Bento Grid isn't blank.
-  const hasFeatures = allImages.some((img: any) => img.isFeatured);
+  const hasFeatures = allImages.some((img: GalleryImage) => img.isFeatured);
   if (!hasFeatures && allImages.length > 0) {
     // Group explicitly to ensure category diversity
     const groupedByCategory = allImages.reduce((acc, img) => {
@@ -162,7 +162,7 @@ export async function getAllGalleryImages() {
         
         if (arr && arr.length > 0) {
             const img = arr.shift()!;
-            (img as any).isFeatured = true; // Auto-feature the image
+            img.isFeatured = true; // Auto-feature the image
             count++;
             i++;
         } else {

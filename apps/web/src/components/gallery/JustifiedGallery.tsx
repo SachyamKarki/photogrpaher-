@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,11 +44,9 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const [isFiltering, setIsFiltering] = useState(false);
 
   // Track a stably randomized core pool of images
-  const [shuffledImages, setShuffledImages] = useState(images);
-
-  // Shuffle images on client mount securely
-  useEffect(() => {
-    setShuffledImages([...images].sort(() => Math.random() - 0.5));
+  const shuffledImages = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
+    return [...images].sort(() => Math.random() - 0.5);
   }, [images]);
 
   // Sync internal state when URL changes (e.g., back button)
@@ -79,7 +77,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   const filteredImages = selectedCategory
-    ? shuffledImages.filter((img) => img.category?.slug === selectedCategory)
+    ? shuffledImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
     : shuffledImages;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
@@ -208,7 +206,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               />
             ))
           ) : (
-            paginatedImages.map((image) => (
+            paginatedImages.map((image: GalleryImage) => (
               <motion.div
                 key={`${selectedCategory || 'all'}-${image._id}`}
                 layout

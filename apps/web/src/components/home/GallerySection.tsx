@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,14 +32,13 @@ type Props = {
 export function GallerySection({
   initialProjects,
 }: Props) {
-  if (!initialProjects || initialProjects.length === 0) return null;
-
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [projects, setProjects] = useState(initialProjects);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   // Shuffle images on client mount securely, but rigorously respect explicitly pinned array positions
-  useEffect(() => {
+  const projects = useMemo(() => {
+    if (!initialProjects || initialProjects.length === 0) return [];
+
     const newOrder = Array(10).fill(null);
     const unpinnedImages: Project[] = [];
 
@@ -59,17 +58,22 @@ export function GallerySection({
     });
 
     // 2. Randomly shuffle all remaining unpinned images
+    // eslint-disable-next-line react-hooks/purity
     const shuffledUnpinned = [...unpinnedImages].sort(() => Math.random() - 0.5);
 
     // 3. Smoothly fill any gaps with the random shuffled images
+    let shufflePtr = 0;
     for (let i = 0; i < 10; i++) {
-        if (!newOrder[i] && shuffledUnpinned.length > 0) {
-            newOrder[i] = shuffledUnpinned.shift();
+        if (!newOrder[i] && shufflePtr < shuffledUnpinned.length) {
+            newOrder[i] = shuffledUnpinned[shufflePtr];
+            shufflePtr++;
         }
     }
 
-    setProjects(newOrder.filter(Boolean));
+    return newOrder.filter(Boolean) as Project[];
   }, [initialProjects]);
+
+  if (!initialProjects || initialProjects.length === 0) return null;
 
   return (
     <div ref={galleryRef} className="scroll-mt-32">

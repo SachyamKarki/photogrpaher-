@@ -41,6 +41,8 @@ export interface SanityImage {
   lens?: string;
   settings?: string;
   description?: string;
+  isFeatured?: boolean;
+  featuredOrder?: number | null;
 }
 
 export type SanityImageSourcePlus = import("@sanity/image-url/lib/types/types").SanityImageSource & SanityImage;
@@ -68,6 +70,8 @@ export interface GalleryImage {
   title: string;
   imageUrl: string;
   aspectRatio: number;
+  isFeatured?: boolean;
+  featuredOrder?: number | null;
   category?: { title: string; slug: string };
   metadata: {
     camera: string;

@@ -35,7 +35,7 @@ const countryCodes = [
   { code: "+55", country: "Brazil", flag: "🇧🇷" },
 ];
 
-export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Props) {
+export function ContactForm({ categories }: Props) {
   const [state, setState] = useState<FormState>("idle");
   const [contactMethod, setContactMethod] = useState<ContactMethod>("email");
 
@@ -55,7 +55,6 @@ export function ContactForm({ categories, whatsappNumber = "9779800000000" }: Pr
   }, [name, email, phone, message, contactMethod]);
 
   function openWhatsApp() {
-    const cleanNumber = whatsappNumber.replace(/[^0-9]/g, "");
     const senderNumber = `${countryCode} ${phone.replace(/[^0-9]/g, "")}`;
     const lines = [
       `--- New Inquiry ---`,
