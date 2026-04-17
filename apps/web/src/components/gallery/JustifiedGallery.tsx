@@ -2,6 +2,7 @@
 
 import { useState, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { getMoreGalleryImages } from "@/app/gallery/actions";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
@@ -39,21 +40,18 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam || null);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 20;
+  const [allRetrievedImages, setAllRetrievedImages] = useState<GalleryImage[]>(images);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(images.length >= 20); // Sync with initial fetch limit
+
   const [isFiltering, setIsFiltering] = useState(false);
 
-  // Track a stably randomized core pool of images
-  const shuffledImages = useMemo(() => {
-    // eslint-disable-next-line react-hooks/purity
-    return [...images].sort(() => Math.random() - 0.5);
-  }, [images]);
+
 
   // Sync internal state when URL changes (e.g., back button)
   // This pattern is recommended by React for syncing props to state
   if (categoryParam !== selectedCategory) {
     setSelectedCategory(categoryParam);
-    setCurrentPage(1);
   }
 
   const handleCategoryChange = (slug: string | null) => {
@@ -61,7 +59,6 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     
     setIsFiltering(true);
     setSelectedCategory(slug);
-    setCurrentPage(1);
     
     setTimeout(() => {
       setIsFiltering(false);
@@ -76,12 +73,29 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     router.push(`/gallery?${params.toString()}`, { scroll: false });
   };
 
-  const filteredImages = selectedCategory
-    ? shuffledImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
-    : shuffledImages;
+  const handleLoadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    const start = allRetrievedImages.length;
+    const end = start + 12; // Load in smaller, faster chunks of 12
+    
+    const res = await getMoreGalleryImages(start, end);
+    if (res.success && res.images.length > 0) {
+      setAllRetrievedImages(prev => [...prev, ...res.images]);
+      if (res.images.length < 12) {
+        setHasMore(false);
+      }
+    } else {
+      setHasMore(false);
+    }
+    setLoadingMore(false);
+  };
 
-  const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
-  const paginatedImages = filteredImages.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const filteredImages = selectedCategory
+    ? allRetrievedImages.filter((img: GalleryImage) => img.category?.slug === selectedCategory)
+    : allRetrievedImages;
+
   const isEmpty = filteredImages.length === 0;
   const activeCategoryLabel = selectedCategory
     ? (categories.find((c) => c.slug === selectedCategory)?.title ?? selectedCategory)
@@ -206,7 +220,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               />
             ))
           ) : (
-            paginatedImages.map((image: GalleryImage) => (
+            filteredImages.map((image: GalleryImage) => (
               <motion.div
                 key={`${selectedCategory || 'all'}-${image._id}`}
                 layout
@@ -227,7 +241,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     fill
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    priority={false}
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-sm font-medium text-zinc-400">
@@ -243,25 +257,40 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* Pagination Controls - Touch Optimized */}
-      {!isEmpty && totalPages > 1 && (
-        <div className="mt-12 flex flex-wrap justify-center gap-3">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setCurrentPage(i + 1);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`rounded-full h-11 w-11 text-sm font-semibold transition-all active:scale-95 ${
-                currentPage === i + 1
-                  ? "bg-black text-white shadow-md scale-105"
-                  : "border border-zinc-200 bg-white text-zinc-600 hover:border-black hover:text-black"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+      {/* "Load More" Integrated with high-end glassmorphism */}
+      {!isEmpty && hasMore && (
+        <div className="mt-16 flex justify-center">
+          <button
+            onClick={handleLoadMore}
+            disabled={loadingMore}
+            className="group relative flex h-14 items-center justify-center gap-4 overflow-hidden rounded-full bg-black px-10 text-ui font-bold uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+          >
+            {loadingMore ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+            ) : (
+              <>
+                <span>Load More</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform group-hover:translate-y-1"
+                >
+                  <path d="m7 7 5 5 5-5" />
+                  <path d="m7 13 5 5 5-5" />
+                </svg>
+              </>
+            )}
+            
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+          </button>
         </div>
       )}
     </div>

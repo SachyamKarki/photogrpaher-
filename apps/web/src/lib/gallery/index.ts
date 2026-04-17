@@ -1,4 +1,3 @@
-
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
@@ -15,7 +14,7 @@ import {
   SanityImage 
 } from "@/types";
 
-export async function getAllGalleryImages() {
+export async function getAllGalleryImages(start = 0, end = 20) {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
 
   let rawProjects: SanityProject[] = [];
@@ -24,7 +23,7 @@ export async function getAllGalleryImages() {
   if (sanityEnabled) {
     try {
       const [projectsData, categoriesData] = await Promise.all([
-        sanityServerClient!.fetch(GALLERY_PROJECTS_QUERY),
+        sanityServerClient!.fetch(GALLERY_PROJECTS_QUERY, { start, end }),
         sanityServerClient!.fetch(HOME_CATEGORIES_QUERY),
       ]);
       rawProjects = Array.isArray(projectsData) ? projectsData : [];
@@ -60,7 +59,7 @@ export async function getAllGalleryImages() {
       imageUrl = source;
     } else if (sanityEnabled && source) {
       try {
-        imageUrl = urlFor(source)?.width(2800).url() ?? null;
+        imageUrl = urlFor(source)?.width(1200).url() ?? null;
       } catch (e) {
         console.error("Gallery Resource: Image Processing Error", e);
       }

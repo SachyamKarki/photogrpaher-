@@ -79,7 +79,7 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
 `);
 export const GALLERY_PROJECTS_QUERY = defineQuery(`
   *[_type == "project" && defined(slug.current)]
-  | order(publishedAt desc)[0...100]{
+  | order(publishedAt desc)[$start...$end]{
     _id,
     title,
     "slug": slug.current,
