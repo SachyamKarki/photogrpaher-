@@ -135,6 +135,29 @@ export function ContactForm({ categories }: Props) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    
+    // Explicit Validation
+    if (name.trim().length < 2) {
+      toast.error("Please enter your full name.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (contactMethod === "email" && !emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (contactMethod === "whatsapp" && phone.trim().length < 7) {
+      toast.error("Please enter a valid phone number for WhatsApp.");
+      return;
+    }
+
+    if (message.trim().length < 5) {
+      toast.error("Your message is too short. Please provide more details.");
+      return;
+    }
+
     if (!isValid) return;
 
     setState("submitting");
