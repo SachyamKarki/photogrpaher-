@@ -25,20 +25,20 @@ export function ServicesAccordion({ items }: ServicesAccordionProps) {
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? -1 : index)}
-              className="group flex w-full items-baseline justify-between text-left"
+              className="group flex w-full items-start md:items-center justify-between text-left gap-4"
               aria-expanded={isOpen}
             >
-              <div className="flex items-baseline gap-2 sm:gap-4">
-                <span className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl lg:text-2xl w-6 sm:w-8 shrink-0">
+              <div className="flex items-start gap-2 sm:gap-4">
+                <span className="font-heading text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl lg:text-3xl w-6 sm:w-8 shrink-0 mt-0.5 md:mt-0">
                   {index + 1}.
                 </span>
-                <h3 className="font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl lg:text-2xl">
+                <h3 className="font-heading text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl lg:text-3xl text-balance pr-4">
                   {item.title}
                 </h3>
               </div>
 
-              <span className="flex items-center h-full self-center">
-                <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-zinc-900 shadow-sm shadow-black/5 transition duration-300 group-hover:bg-zinc-50">
+              <span className="flex items-center self-start md:self-center shrink-0 mt-1 md:mt-0">
+                <span className="relative inline-flex h-9 w-9 md:h-11 md:w-11 items-center justify-center rounded-full bg-white text-zinc-900 shadow-sm shadow-black/5 transition duration-300 group-hover:bg-zinc-50">
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 20 20"

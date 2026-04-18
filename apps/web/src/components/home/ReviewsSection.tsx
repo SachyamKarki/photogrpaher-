@@ -35,7 +35,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
                   <span className="font-heading absolute -mt-4 -ml-2 text-4xl leading-none text-zinc-300">
                     &quot;
                   </span>
-                  <p className="relative z-10 text-sm leading-relaxed italic text-zinc-600 md:text-base">
+                  <p className="relative z-10 font-heading text-[15px] leading-relaxed italic text-zinc-700 md:text-[17px]">
                     {review.quote}
                   </p>
                 </blockquote>
@@ -45,9 +45,9 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
                     {review.author}
                   </span>
                   {review.role && (
-                    <span className="text-xs text-zinc-500 mt-1 uppercase tracking-widest font-medium">
-                      {review.role}
-                    </span>
+                  <span className="text-xs text-zinc-500 mt-1 uppercase tracking-[0.05em] font-medium">
+                    {review.role}
+                  </span>
                   )}
                 </div>
               </div>

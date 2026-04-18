@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
@@ -28,6 +29,47 @@ type ProjectListItem = {
   excerpt?: string;
   coverImage?: SanityImageSource | string;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const sanityEnabled = Boolean(sanityServerClient);
+
+  let category: Category | null = null;
+  if (sanityEnabled) {
+    category = await sanityServerClient!.fetch<Category>(CATEGORY_BY_SLUG_QUERY, { slug });
+  } else {
+    const selection = portfolioCategories.find((c) => c.slug === slug);
+    if (selection) {
+      category = {
+        _id: `portfolio:${selection.slug}`,
+        title: selection.title,
+        slug: selection.slug,
+        description: selection.description,
+      };
+    }
+  }
+
+  if (!category) {
+    return { title: "Category Not Found" };
+  }
+
+  return {
+    title: `${category.title} Photography`,
+    description:
+      category.description ||
+      `Explore ${category.title} photography by Rabin Son — professional photographer based in Nepal.`,
+    openGraph: {
+      title: `${category.title} Photography | Rabin Son`,
+      description:
+        category.description ||
+        `Browse ${category.title} photography from Rabin Son's professional portfolio.`,
+    },
+  };
+}
 
 export default async function CategoryPage({
   params,

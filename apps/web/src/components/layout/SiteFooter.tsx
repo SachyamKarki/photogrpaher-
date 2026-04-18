@@ -91,7 +91,7 @@ export function SiteFooter({
 
 
               <div className="flex flex-col gap-4">
-                <p className="text-2xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                <p className="text-2xs font-semibold uppercase tracking-[0.05em] text-white/70">
                   FOLLOW ON SOCIAL MEDIA
                 </p>
                 <div className="flex flex-col items-start gap-4">
@@ -153,7 +153,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#work"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Featured Work
                   </Link>
@@ -161,7 +161,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/gallery"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Gallery
                   </Link>
@@ -169,7 +169,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#categories"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Categories
                   </Link>
@@ -177,7 +177,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/about"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     About
                   </Link>
@@ -185,7 +185,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#services"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     What WE DO
                   </Link>
@@ -193,7 +193,7 @@ export function SiteFooter({
                 <li>
                   <Link
                     href="/#contact"
-                    className="block text-2xs font-semibold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white lg:text-xs"
+                    className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Contact
                   </Link>
@@ -217,10 +217,10 @@ export function SiteFooter({
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-end">
-              <Link href="/privacy-policy" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 transition-all hover:text-white">
+              <Link href="/privacy-policy" className="text-[10px] font-bold uppercase tracking-[0.05em] text-white/50 transition-all hover:text-white">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/50 transition-all hover:text-white">
+              <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.05em] text-white/50 transition-all hover:text-white">
                 Terms of Service
               </Link>
             </div>

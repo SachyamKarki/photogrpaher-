@@ -102,7 +102,7 @@ export function CategoriesShowcase({
                           {c.description}
                         </p>
                       )}
-                      <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white opacity-0 group-[.is-hovered]/card:opacity-100 transition-opacity duration-700 delay-300">
+                      <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.08em] text-white opacity-0 group-[.is-hovered]/card:opacity-100 transition-opacity duration-700 delay-300">
                         Explore Gallery
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M5 12h14m-7-7 7 7-7 7" />
@@ -142,18 +142,18 @@ export function CategoriesShowcase({
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/5 opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
 
               <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                <h3 className="font-heading text-2xl sm:text-3xl font-semibold uppercase tracking-tight text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-1">
+                <h3 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold uppercase tracking-tight text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-1">
                   {c.title}
                 </h3>
                 {c.description && (
-                  <p className="text-sm leading-relaxed text-zinc-300 line-clamp-2 transform transition-transform duration-500 group-hover:-translate-y-1">
+                  <p className="text-xs sm:text-sm leading-relaxed text-zinc-300 line-clamp-2 transform transition-transform duration-500 group-hover:-translate-y-1">
                     {c.description}
                   </p>
                 )}
 
                 <div className="mt-6 flex items-center gap-4 overflow-hidden">
                   <div className="h-px w-12 bg-white/30 transform origin-left transition-all duration-500 group-hover:w-16 group-hover:bg-white/60" />
-                  <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-500 group-hover:text-white transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-white/80 transition-colors duration-500 group-hover:text-white transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
                     Explore Gallery
                   </span>
                 </div>

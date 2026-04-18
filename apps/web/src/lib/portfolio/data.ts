@@ -9,7 +9,7 @@ export const siteHero = {
 
 export const portfolioCategories: PortfolioCategory[] = [
   {
-    title: "Studio Portraits",
+    title: "Studio",
     slug: "studio-portraits",
     description: "Candid storytelling, timeless moments, and cultural traditions.",
     image: "/content/category-portraits.jpg",
@@ -57,7 +57,7 @@ export const siteServices = {
       ],
     },
     {
-      title: "Studio Portraits",
+      title: "Studio",
       description:
         "Intentional, character-driven portraiture that prioritizes simplicity and genuine expression. We focus on capturing quiet, enduring moments that reflect the soul of the subject against any backdrop.",
       details: [

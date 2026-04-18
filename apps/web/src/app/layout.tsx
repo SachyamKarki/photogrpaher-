@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Outfit, Lato, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -14,15 +14,86 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const inter = Inter({
+const lato = Lato({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-lato",
   display: "swap",
+  weight: ["100", "300", "400", "700", "900"],
 });
 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rabinson.com";
+
 export const metadata: Metadata = {
-  title: "RabinSon Photography",
-  description: "A professional photography portfolio powered by Next.js and Sanity.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Rabin Son Photography | High Altitude, Adventure & Automobile Photographer",
+    template: "%s | Rabin Son Photography",
+  },
+  description:
+    "Rabin Son is a Nepal-based professional photographer specializing in high altitude, Himalayan adventure, automobile, studio portrait, and wedding photography. Book a shoot today.",
+  keywords: [
+    "Rabin Son Photography",
+    "Nepal photographer",
+    "Himalayan photography",
+    "high altitude photographer",
+    "adventure photography Nepal",
+    "automobile photographer Nepal",
+    "studio portrait Nepal",
+    "wedding photographer Nepal",
+    "editorial photographer",
+    "mountain photography",
+    "professional photographer Kathmandu",
+    "landscape photography Nepal",
+  ],
+  authors: [{ name: "Rabin Son", url: SITE_URL }],
+  creator: "Rabin Son",
+  publisher: "Rabin Son Photography",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: "Rabin Son Photography",
+    title: "Rabin Son Photography | High Altitude, Adventure & Automobile Photographer",
+    description:
+      "Nepal-based professional photographer specializing in Himalayan adventure, automobile, portrait, and wedding photography. Honest light. Timeless detail.",
+    images: [
+      {
+        url: "/content/hero.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Rabin Son Photography — Himalayan Adventure & Automobile Photographer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rabin Son Photography | High Altitude & Adventure Photographer",
+    description:
+      "Nepal-based photographer specializing in Himalayan adventure, automobile, and editorial photography.",
+    images: ["/content/hero.jpg"],
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  category: "Photography",
 };
 
 const siteTitle = "RabinSon Photography";
@@ -35,7 +106,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${outfit.variable} ${inter.variable} bg-white text-zinc-950 antialiased font-body`}
+        className={`${outfit.variable} ${lato.variable} ${playfair.variable} bg-white text-zinc-950 antialiased font-body`}
       >
         <Script
           id="global-error-handler"

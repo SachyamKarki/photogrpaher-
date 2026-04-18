@@ -12,6 +12,7 @@ import { GallerySection } from "@/components/home/GallerySection";
 import { BrandsSection } from "@/components/home/BrandsSection";
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
+import { PhotographerJsonLd, WebsiteJsonLd } from "@/components/seo/JsonLd";
 import {
   aboutContent,
   portfolioCategories,
@@ -286,6 +287,8 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900">
+      <PhotographerJsonLd />
+      <WebsiteJsonLd />
       <HomeHeader
         siteTitle={siteTitle}
         email={footerContent.email}
@@ -303,10 +306,10 @@ export default async function Home() {
 
           <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
             <Reveal className="max-w-2xl">
-              <h1 className="font-heading text-xl font-semibold leading-[1.05] tracking-tight text-white sm:text-3xl lg:text-4xl xl:text-5xl lg:tracking-[-0.03em] text-balance">
+              <h1 className="font-heading text-2xl font-semibold leading-[1.05] tracking-tight text-white sm:text-3xl lg:text-4xl lg:tracking-[-0.03em] text-balance">
                 {heroTitle}
               </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-lg lg:text-xl sm:mt-6">
+              <p className="mt-1.5 max-w-xl text-xs leading-relaxed text-white/70 sm:text-sm lg:text-base sm:mt-2">
                 {heroSubtitle}
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">

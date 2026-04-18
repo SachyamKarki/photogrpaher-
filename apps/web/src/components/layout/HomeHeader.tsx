@@ -100,7 +100,7 @@ export function HomeHeader({
             </div>
           </Link>
 
-          <nav className="relative z-10 hidden items-center gap-6 text-sm font-medium text-white/90 sm:text-base lg:text-sm lg:flex">
+          <nav className="relative z-10 hidden items-center gap-6 text-sm font-medium text-white/90 sm:text-base lg:text-sm lg:flex font-heading">
             {navLinks.map((link) => (
               <Link
                 key={link.title}
@@ -167,7 +167,7 @@ export function HomeHeader({
                       setIsMenuOpen(false);
                     }
                   }}
-                  className="text-sm font-body tracking-wide text-zinc-300 transition-colors hover:text-white"
+                  className="font-heading text-sm tracking-wide text-zinc-300 transition-colors hover:text-white"
                 >
                   {link.title}
                 </Link>

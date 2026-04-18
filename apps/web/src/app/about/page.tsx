@@ -14,9 +14,15 @@ import { HOME_CATEGORIES_QUERY } from "@/lib/sanity/queries";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 
 export const metadata: Metadata = {
-  title: "About | Rabin Son Photography",
+  title: "About",
   description:
-    "About Rabin Son — Nepal-based photographer for editorial, adventure, automotive, and studio portrait work.",
+    "Meet Rabin Son — a Nepal-based professional photographer specializing in honest light, calm direction, and clean composition. From Himalayan passes to studio sets, creating timeless editorial photography.",
+  openGraph: {
+    title: "About Rabin Son | Nepal-Based Professional Photographer",
+    description:
+      "Nepal-based photographer for editorial, high altitude adventure, automotive, and studio portrait work. Book your session today.",
+    images: [{ url: "/content/hero.jpg", width: 1200, height: 630 }],
+  },
 };
 
 type Category = {
@@ -73,7 +79,7 @@ export default async function AboutPage() {
             <h1 className="font-heading mt-4 text-3xl font-semibold leading-[1.08] tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
               {aboutContent.title}
             </h1>
-            <div className="mt-6 space-y-4 text-base leading-8 text-zinc-600 sm:text-[17px]">
+            <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-[17px] lg:leading-8">
               <p>{aboutContent.body}</p>
               {"longBody" in aboutContent && Array.isArray(aboutContent.longBody)
                 ? aboutContent.longBody.map((paragraph) => (
@@ -205,7 +211,7 @@ export default async function AboutPage() {
               <section aria-label="About actions" className="border-t border-zinc-100 py-8">
                 <Link
                   href="/gallery"
-                  className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
                 >
                   View gallery
                 </Link>
@@ -224,11 +230,11 @@ export default async function AboutPage() {
               </div>
             </section>
 
-            <section aria-label="Primary actions" className="border-t border-zinc-200 py-8">
-              <div className="mt-16 flex justify-center sm:mt-40">
+            <section aria-label="Primary actions">
+              <div className="mt-24 flex justify-center sm:mt-40">
                 <Link
                   href="/"
-                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-900 transition hover:bg-zinc-50 md:h-12 md:px-8"
+                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-6 text-[10px] font-bold uppercase tracking-[0.08em] text-zinc-900 transition hover:border-zinc-300 hover:bg-zinc-100 md:h-12 md:px-8"
                 >
                   <svg
                     width="16"
@@ -245,7 +251,7 @@ export default async function AboutPage() {
                     <path d="M12 19l-7-7 7-7" />
                     <path d="M19 12H5" />
                   </svg>
-                  Back to home
+                  BACK TO HOME
                 </Link>
               </div>
             </section>

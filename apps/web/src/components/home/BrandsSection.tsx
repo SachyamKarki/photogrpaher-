@@ -97,7 +97,7 @@ export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
                   />
                 </div>
               ) : (
-                <span className="font-heading text-sm sm:text-base md:text-lg font-semibold uppercase tracking-widest text-zinc-300 transition-colors duration-300 group-hover:text-zinc-800">
+                <span className="font-heading text-sm sm:text-base md:text-lg font-semibold uppercase tracking-[0.08em] text-zinc-300 transition-colors duration-300 group-hover:text-zinc-800">
                   {brand.name}
                 </span>
               )}
