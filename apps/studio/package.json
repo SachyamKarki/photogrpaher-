@@ -12,17 +12,18 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@sanity/orderable-document-list": "^1.5.1",
     "@sanity/vision": "^3.0.0",
     "dotenv": "^16.6.0",
     "sanity": "^3.0.0",
     "styled-components": "^6.3.12"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "eslint": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.32.0",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.0.0"
   }
 }
