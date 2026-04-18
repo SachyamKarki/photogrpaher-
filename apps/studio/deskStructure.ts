@@ -15,6 +15,8 @@ export function deskStructure(S: StructureBuilder) {
       S.divider(),
       S.documentTypeListItem("category").title("Categories"),
       S.documentTypeListItem("project").title("Projects"),
+      S.documentTypeListItem("partner").title("Industry Partners"),
+      S.documentTypeListItem("review").title("Testimonials"),
       S.divider(),
       S.documentTypeListItem("contactSubmission").title("Contact Submissions"),
     ]);

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -53,6 +55,15 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
               </div>
             </Reveal>
           ))}
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <Link
+            href="/testimonials"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-zinc-900 px-6 text-sm font-medium tracking-[0.02em] text-zinc-900 transition hover:bg-zinc-900 hover:text-white"
+          >
+            View all testimonials
+          </Link>
         </div>
       </div>
     </section>
