@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
@@ -17,6 +18,41 @@ type Project = {
   coverImage?: SanityImageSource | string;
   gallery?: (SanityImageSource | string)[];
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const sanityEnabled = Boolean(sanityServerClient);
+
+  let project: Project | null = null;
+  if (sanityEnabled) {
+    project = await sanityServerClient!.fetch<Project>(PROJECT_BY_SLUG_QUERY, { slug });
+  } else {
+    const selection = portfolioProjects.find((p) => p.slug === slug);
+    if (selection) {
+      project = {
+        _id: `portfolio:${selection.slug}`,
+        title: selection.title,
+        slug: selection.slug,
+        excerpt: selection.excerpt,
+      };
+    }
+  }
+
+  if (!project) return { title: "Project" };
+
+  return {
+    title: `${project.title}`,
+    description: project.excerpt || `Professional photography project: ${project.title} by Rabin Son.`,
+    openGraph: {
+      title: `${project.title} | Rabin Son Photography`,
+      description: project.excerpt || `Explore the ${project.title} photography project by Rabin Son.`,
+    },
+  };
+}
 
 export default async function ProjectPage({
   params,

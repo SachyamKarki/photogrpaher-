@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllGalleryImages } from "@/lib/gallery";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rabinson.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

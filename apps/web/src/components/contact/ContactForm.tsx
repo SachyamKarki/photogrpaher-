@@ -117,14 +117,16 @@ export function ContactForm({ categories }: Props) {
     const lines = [
       `*NEW PHOTOGRAPHY INQUIRY*`,
       `━━━━━━━━━━━━━━━━━━━━`,
+      ``,
       `*Name:* ${name.trim()}`,
       `*Phone:* ${senderNumber}`,
       category ? `*Category:* ${category}` : null,
-      `━━━━━━━━━━━━━━━━━━━━`,
-      `Message:`,
+      `*Message:*`,
       `${message.trim()}`,
-      `--------------------`,
-      `Sent via rabinson.com`,
+      ``,
+      ``,
+      `━━━━━━━━━━━━━━━━━━━━`,
+      `Sent via rabinson.info`,
     ].filter(line => line !== null);
 
     const text = encodeURIComponent(lines.join("\n"));

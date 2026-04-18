@@ -28,29 +28,29 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rabinson.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Rabin Son Photography | High Altitude, Adventure & Automobile Photographer",
+    default: "Rabin Son Photography | Himalayan Adventure & Automobile Photographer",
     template: "%s | Rabin Son Photography",
   },
   description:
-    "Rabin Son is a Nepal-based professional photographer specializing in high altitude, Himalayan adventure, automobile, studio portrait, and wedding photography. Book a shoot today.",
+    "Rabin Son is an elite Nepal-based photographer specializing in high-altitude Himalayan adventure, cinematic automobile storytelling, and editorial portraiture. Delivering timeless visuals with absolute technical precision.",
   keywords: [
     "Rabin Son Photography",
-    "Nepal photographer",
-    "Himalayan photography",
-    "high altitude photographer",
-    "adventure photography Nepal",
-    "automobile photographer Nepal",
-    "studio portrait Nepal",
-    "wedding photographer Nepal",
-    "editorial photographer",
-    "mountain photography",
-    "professional photographer Kathmandu",
-    "landscape photography Nepal",
+    "Nepal high altitude photographer",
+    "Himalayan adventure photography",
+    "Mount Everest photographer",
+    "Automobile photographer Nepal",
+    "Kathmandu editorial photographer",
+    "Luxury wedding photographer Nepal",
+    "Mustang adventure photography",
+    "Commercial automotive photography",
+    "Professional portraits Kathmandu",
+    "Landscape photography Himalayas",
+    "Outdoor adventure storyteller",
   ],
   authors: [{ name: "Rabin Son", url: SITE_URL }],
   creator: "Rabin Son",
@@ -71,9 +71,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: "Rabin Son Photography",
-    title: "Rabin Son Photography | High Altitude, Adventure & Automobile Photographer",
+    title: "Rabin Son Photography | Himalayan Adventure & Automobile Photographer",
     description:
-      "Nepal-based professional photographer specializing in Himalayan adventure, automobile, portrait, and wedding photography. Honest light. Timeless detail.",
+      "Capturing honest light and timeless detail across the Himalayas. Specializing in high-altitude adventure, automotive, and refined editorial photography.",
     images: [
       {
         url: "/content/hero.jpg",
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rabin Son Photography | High Altitude & Adventure Photographer",
     description:
-      "Nepal-based photographer specializing in Himalayan adventure, automobile, and editorial photography.",
+      "Nepal-based professional photographer specializing in Himalayan adventure, automobile, and editorial storytelling.",
     images: ["/content/hero.jpg"],
   },
   alternates: {

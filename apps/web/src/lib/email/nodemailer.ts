@@ -29,7 +29,7 @@ type ContactEmailPayload = {
 
 export async function sendContactEmail(payload: ContactEmailPayload) {
   const { name, email, category, message } = payload;
-  const toEmail = process.env.CONTACT_TO_EMAIL || process.env.SMTP_USER;
+  const toEmail = process.env.CONTACT_TO_EMAIL;
 
   if (!toEmail || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
     console.warn("[Email] SMTP not configured — skipping email delivery.");

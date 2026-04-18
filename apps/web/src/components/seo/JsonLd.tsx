@@ -7,7 +7,7 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rabinson.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export function PhotographerJsonLd() {
   const data = {
@@ -61,7 +61,7 @@ export function PhotographerJsonLd() {
             "@type": "Service",
             name: "High Altitude & Mountain Photography",
             description:
-              "Raw, immersive storytelling across the Himalayas and world's most challenging terrains.",
+              "Raw, immersive storytelling across the Himalayas and world's most challenging terrains. Expert in logistics and capture in extreme environments.",
           },
         },
         {
@@ -70,28 +70,43 @@ export function PhotographerJsonLd() {
             "@type": "Service",
             name: "Automobile Photography",
             description:
-              "High-performance visuals emphasizing form, engineering, and presence in cinematic compositions.",
+              "High-performance visuals emphasizing form, engineering, and presence in cinematic compositions. Specializing in lifestyle and action automotive shoots.",
           },
         },
         {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: "Studio Portraits",
+            name: "Editorial & Studio Portraits",
             description:
-              "Intentional, character-driven portraiture with genuine expression and clean composition.",
+              "Intentional, character-driven portraiture with genuine expression and clean composition for brands and individuals.",
           },
         },
         {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: "Wedding Photography",
+            name: "Adventure Wedding Photography",
             description:
-              "Editorial wedding photography merging landscape grandeur with intimate connection.",
+              "Editorial wedding photography merging landscape grandeur with intimate connection in remote locations.",
           },
         },
       ],
+    },
+    knowsAbout: [
+      "High Altitude Photography",
+      "Cinematic Automotive Photography",
+      "Editorial Storytelling",
+      "Documentary Portraiture",
+      "Himalayan Logistics",
+      "Natural Light Shaping",
+      "Drone Photography",
+      "Commercial Brand Strategy",
+    ],
+    brand: {
+      "@type": "Brand",
+      name: "Rabin Son",
+      logo: `${SITE_URL}/icon.png`,
     },
   };
 
