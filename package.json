@@ -11,5 +11,8 @@
     "build:studio": "npm run build -w @photographer/studio",
     "lint": "npm run lint -w @photographer/web && npm run lint -w @photographer/studio",
     "type-check": "npm run type-check -w @photographer/web && npm run type-check -w @photographer/studio"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
