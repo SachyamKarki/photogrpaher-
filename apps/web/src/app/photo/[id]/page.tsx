@@ -6,7 +6,7 @@ import type { GalleryImage } from "@/types";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ZoomableImage } from "@/components/gallery/ZoomableImage";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 function buildAmbientImageUrl(src: string | null | undefined) {
   if (!src) return null;

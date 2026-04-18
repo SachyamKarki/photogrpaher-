@@ -32,6 +32,8 @@ import {
   PARTNERS_QUERY,
 } from "@/lib/sanity/queries";
 
+export const dynamic = "force-dynamic";
+
 type SiteSettings = {
   title?: string;
   description?: string;
