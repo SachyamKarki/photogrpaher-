@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,7 +42,10 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
 
-  const allImages = images;
+  // Randomize images whenever the category changes to make the gallery feel fresh
+  const shuffledImages = useMemo(() => {
+    return [...images].sort(() => Math.random() - 0.5);
+  }, [images, categoryParam]);
 
   const handleCategoryChange = (slug: string | null) => {
     if (slug === categoryParam) return;
@@ -64,8 +67,8 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   };
 
   const filteredImages = categoryParam
-    ? allImages.filter((img: GalleryImage) => img.category?.slug === categoryParam)
-    : allImages;
+    ? shuffledImages.filter((img: GalleryImage) => img.category?.slug === categoryParam)
+    : shuffledImages;
 
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
   const paginatedImages = filteredImages.slice(
