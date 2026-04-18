@@ -54,21 +54,34 @@ export function HomeHeader({
     };
   }, [isMenuOpen]);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const isHomePage = window.location.pathname === "/";
     if (isHomePage) {
       e.preventDefault();
-      const element = document.getElementById(id.replace("#", ""));
-      if (element) {
-        const headerOffset = 100;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      // Extract just the ID: "/#categories" → "categories", "#contact" → "contact"
+      const sectionId = href.replace(/^\/?#/, "");
+      const doScroll = () => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const headerOffset = 100;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
+      };
+
+      if (isMenuOpen) {
+        // Close menu first, then scroll after the body unlocks
         setIsMenuOpen(false);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(doScroll);
+        });
+      } else {
+        doScroll();
       }
     }
   };
