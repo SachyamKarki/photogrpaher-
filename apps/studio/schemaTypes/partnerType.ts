@@ -27,16 +27,26 @@ export const partnerType = defineType({
     }),
     defineField({
       name: "order",
-      title: "Display Order",
+      title: "Brand Position",
       type: "number",
-      description: "Lower numbers appear first in the brand carousel.",
+      description: "Lower numbers appear first in the homepage brand carousel.",
       initialValue: 100,
+      validation: (Rule) =>
+        Rule.required().integer().min(1).warning("Use 1, 2, 3... to control the order clearly."),
     }),
   ],
   preview: {
     select: {
       title: "name",
       media: "logo",
+      order: "order",
+    },
+    prepare({ title, media, order }) {
+      return {
+        title,
+        media,
+        subtitle: typeof order === "number" ? `Position ${order}` : "No position set",
+      };
     },
   },
 });
