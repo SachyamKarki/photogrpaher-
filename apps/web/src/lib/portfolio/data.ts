@@ -100,14 +100,14 @@ export const aboutContent = {
 };
 
 export const footerContent = {
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Rabinson2055@gmail.com",
+  email: "Rabinson2055@gmail.com",
   instagramLinks: [
     { label: "Art of Rabin Son", url: "https://www.instagram.com/art_of_rabinson?igsh=bTh1Y2xpb3Zid2pz" },
     { label: "AutoVibes Nepal", url: "https://www.instagram.com/autovibes_nepal?igsh=NGhveXMzanZrZzIw" },
     { label: "Personal", url: "https://www.instagram.com/rabinson01?igsh=MXh5YTZkcm42ZHZvbA==" },
   ],
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/9779803612055",
-  phoneNumber: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+977 980-3612055",
+  whatsapp: "https://wa.me/9779803612055",
+  phoneNumber: "+977 980-3612055",
   locationLine: null,
 };
 

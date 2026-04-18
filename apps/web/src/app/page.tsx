@@ -396,7 +396,7 @@ export default async function Home() {
                 <div className="mx-auto mt-10 w-full max-w-7xl sm:mt-16">
                   <ContactForm
                     categories={contactCategories}
-                    whatsappNumber={socialLinks.whatsapp?.replace("https://wa.me/", "") || "9779800000000"}
+                    whatsappNumber={socialLinks.whatsapp.replace("https://wa.me/", "")}
                   />
                 </div>
               </div>
