@@ -210,17 +210,17 @@ export function SiteFooter({
           </h2>
         </div>
 
-        <div className="mt-8 w-full border-t border-white/5 pb-4 pt-8 md:mt-12">
-          <div className="flex flex-col gap-8 sm:gap-10">
-            <p className="font-body text-center text-sm font-medium tracking-normal text-white/80">
+        <div className="mt-12 w-full border-t border-white/5 pb-4 pt-8 md:mt-16">
+          <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:gap-0">
+            <p className="font-body text-center text-[13px] font-medium tracking-normal text-white/50 md:text-left">
               © 2026 {siteTitle}. All rights reserved.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-end">
-              <Link href="/privacy-policy" className="text-[10px] font-bold uppercase tracking-[0.05em] text-white/50 transition-all hover:text-white">
+            <div className="flex items-center justify-center gap-8">
+              <Link href="/privacy-policy" className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/40 transition-all hover:text-white">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.05em] text-white/50 transition-all hover:text-white">
+              <Link href="/terms-of-service" className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/40 transition-all hover:text-white">
                 Terms of Service
               </Link>
             </div>
