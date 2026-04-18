@@ -115,12 +115,12 @@ export function ContactForm({ categories }: Props) {
   function openWhatsApp() {
     const senderNumber = `${countryCode} ${phone.replace(/[^0-9]/g, "")}`;
     const lines = [
-      `NEW PHOTOGRAPHY INQUIRY`,
-      `--------------------`,
-      `Name: ${name.trim()}`,
-      `Phone: ${senderNumber}`,
-      category ? `Category: ${category}` : null,
-      `--------------------`,
+      `*NEW PHOTOGRAPHY INQUIRY*`,
+      `━━━━━━━━━━━━━━━━━━━━`,
+      `*Name:* ${name.trim()}`,
+      `*Phone:* ${senderNumber}`,
+      category ? `*Category:* ${category}` : null,
+      `━━━━━━━━━━━━━━━━━━━━`,
       `Message:`,
       `${message.trim()}`,
       `--------------------`,
@@ -171,9 +171,9 @@ export function ContactForm({ categories }: Props) {
       const json: unknown = await res.json().catch(() => null);
       const ok = Boolean(
         json &&
-          typeof json === "object" &&
-          "ok" in json &&
-          (json as { ok?: unknown }).ok === true,
+        typeof json === "object" &&
+        "ok" in json &&
+        (json as { ok?: unknown }).ok === true,
       );
 
       if (!res.ok || !ok) {
@@ -183,7 +183,7 @@ export function ContactForm({ categories }: Props) {
             : "Could not send your message. Please try again.";
         throw new Error(errorMsg);
       }
-      
+
       setState("success");
       setName("");
       setEmail("");
