@@ -63,6 +63,8 @@ type Partner = {
   logo?: { asset?: { _id: string; url: string } } | null;
 };
 
+export const revalidate = 60;
+
 
 function getServiceSummary(title?: string) {
   const normalized = title?.toLowerCase() ?? "";

@@ -17,7 +17,7 @@ export const sanityServerClient = isSanityConfigured
       dataset: sanityDataset,
       apiVersion: sanityApiVersion,
       token,
-      useCdn: !token && process.env.NODE_ENV === "production",
+      // Favor fresh published content over CDN latency so Studio edits show up promptly.
+      useCdn: false,
     })
   : null;
-
