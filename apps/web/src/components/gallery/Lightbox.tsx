@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -101,7 +101,8 @@ export function Lightbox({
     alt={title}
     fill
     className="object-contain"
-    sizes="100vw"
+    quality={82}
+    sizes="(max-width: 768px) 100vw, 90vw"
     priority
   />
 </motion.div>

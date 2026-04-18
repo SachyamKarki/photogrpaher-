@@ -17,15 +17,14 @@ export default function sanityImageLoader({
     try {
       const url = new URL(src);
       url.searchParams.set("auto", "format");
-      url.searchParams.set("fm", "webp");
       url.searchParams.set("fit", "max");
 
-      // For hero/full-width images (width >= 1200), serve at high resolution
-      const finalWidth = width >= 1200 ? Math.min(width, 3840) : width;
+      // Keep large visuals crisp without over-downloading on weak connections.
+      const finalWidth = width >= 1200 ? Math.min(width, 2400) : width;
       url.searchParams.set("w", finalWidth.toString());
 
-      // Photography portfolio: default quality to 90 for crisp images
-      url.searchParams.set("q", (quality || 90).toString());
+      const finalQuality = Math.min(Math.max(quality || 72, 55), 82);
+      url.searchParams.set("q", finalQuality.toString());
 
       return url.toString();
     } catch {
@@ -38,8 +37,7 @@ export default function sanityImageLoader({
     try {
       const url = new URL(src);
       url.searchParams.set("auto", "format");
-      url.searchParams.set("fm", "webp");
-      url.searchParams.set("q", (quality || 90).toString());
+      url.searchParams.set("q", Math.min(Math.max(quality || 72, 55), 82).toString());
       url.searchParams.set("w", width.toString());
       url.searchParams.set("fit", "max");
       return url.toString();

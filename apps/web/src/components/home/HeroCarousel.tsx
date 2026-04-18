@@ -6,11 +6,23 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Props = {
   slides: { src: string; alt: string }[];
-  siteTitle: string;
 };
 
-export function HeroCarousel({ slides, siteTitle }: Props) {
+type NetworkInformationLike = {
+  effectiveType?: string;
+  saveData?: boolean;
+  addEventListener?: (type: "change", listener: () => void) => void;
+  removeEventListener?: (type: "change", listener: () => void) => void;
+};
+
+function isSlowConnection(connection?: NetworkInformationLike | null) {
+  if (!connection) return false;
+  return connection.saveData === true || connection.effectiveType === "slow-2g" || connection.effectiveType === "2g";
+}
+
+export function HeroCarousel({ slides }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [reducedDataMode, setReducedDataMode] = useState(false);
 
   const nextSlide = useCallback(() => {
     setActiveIndex((current) => (current + 1) % slides.length);
@@ -21,33 +33,44 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
   }, [slides.length]);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
+    const connection = (navigator as Navigator & { connection?: NetworkInformationLike }).connection;
+    const updateMode = () => setReducedDataMode(isSlowConnection(connection));
+
+    updateMode();
+    connection?.addEventListener?.("change", updateMode);
+
+    return () => connection?.removeEventListener?.("change", updateMode);
+  }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1 || reducedDataMode) return;
 
     const timer = window.setInterval(nextSlide, 5000);
     return () => window.clearInterval(timer);
-  }, [slides.length, nextSlide]);
+  }, [slides.length, nextSlide, reducedDataMode]);
+
+  const activeSlide = slides[activeIndex];
+
+  if (!activeSlide) return null;
 
   return (
     <div className="group/hero absolute inset-0">
-      {slides.map((slide, index) => (
-        <div
-          key={`${slide.src}:${index}`}
-          className={[
-            "absolute inset-0 transition-opacity duration-1000",
-            index === activeIndex ? "opacity-100" : "opacity-0",
-          ].join(" ")}
-        >
-          <Image
-            src={slide.src}
-            alt={`High Altitude & Adventure Photography by RabinSon - ${slide.alt}`}
-            fill
-            priority={index === 0}
-            quality={100}
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-      ))}
+      <div
+        key={`${activeSlide.src}:${activeIndex}`}
+        className="absolute inset-0 transition-opacity duration-700"
+      >
+        <Image
+          src={activeSlide.src}
+          alt={`High Altitude & Adventure Photography by RabinSon - ${activeSlide.alt}`}
+          fill
+          priority={activeIndex === 0}
+          fetchPriority={activeIndex === 0 ? "high" : "auto"}
+          loading={activeIndex === 0 ? "eager" : "lazy"}
+          quality={reducedDataMode ? 60 : 82}
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
 
       {/* Navigation Arrows - Visible on Hover */}
       <div className="absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-between px-4 sm:px-8 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -66,6 +89,12 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
           <ChevronRight className="h-6 w-6 stroke-[1.5]" />
         </button>
       </div>
+
+      {reducedDataMode && (
+        <div className="absolute left-4 top-4 z-20 rounded-full bg-black/25 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-white backdrop-blur-sm sm:left-8 sm:top-8">
+          Data saver mode
+        </div>
+      )}
 
       <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 sm:bottom-10 z-20">
         {slides.map((slide, index) => (
@@ -86,4 +115,3 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
     </div>
   );
 }
-

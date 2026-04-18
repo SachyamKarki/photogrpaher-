@@ -6,6 +6,21 @@ import type { GalleryImage } from "@/types";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { ZoomableImage } from "@/components/gallery/ZoomableImage";
 
+function buildAmbientImageUrl(src: string | null | undefined) {
+  if (!src) return null;
+
+  try {
+    const url = new URL(src);
+    url.searchParams.set("w", "640");
+    url.searchParams.set("q", "35");
+    url.searchParams.set("fit", "max");
+    url.searchParams.set("auto", "format");
+    return url.toString();
+  } catch {
+    return src;
+  }
+}
+
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { allImages } = await getAllGalleryImages();
   const params = await props.params;
@@ -68,20 +83,23 @@ export default async function PhotoPage(props: {
   }
 
   const catReturnQuery = categoryFilter ? `?category=${categoryFilter}` : "";
+  const ambientImageUrl = buildAmbientImageUrl(image.imageUrl);
 
   return (
     <div className="relative flex h-[100dvh] w-screen flex-col overflow-hidden bg-black font-body text-white selection:bg-white/30">
       
       {/* Cinematic Ambient Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {image.imageUrl && (
+        {ambientImageUrl && (
           <Image
-            src={image.imageUrl}
+            src={ambientImageUrl}
             alt="ambient background"
             fill
+            quality={35}
+            fetchPriority="low"
+            loading="eager"
             className="object-cover opacity-50 blur-[100px] scale-110"
-            sizes="100vw"
-            priority
+            sizes="50vw"
           />
         )}
         <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl" />

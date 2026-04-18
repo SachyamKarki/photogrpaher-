@@ -42,9 +42,18 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
 
-  // Randomize images whenever the category changes to make the gallery feel fresh
+  // Deterministic shuffle based on image ID and category to satisfy purity rules
   const shuffledImages = useMemo(() => {
-    return [...images].sort(() => Math.random() - 0.5);
+    const seed = categoryParam || "all";
+    return [...images].sort((a, b) => {
+      // Simple stable hash-based sort to make it feel "fresh" but remain pure
+      const sA = a._id + seed;
+      const sB = b._id + seed;
+      let hA = 0, hB = 0;
+      for (let i = 0; i < sA.length; i++) hA = (hA << 5) - hA + sA.charCodeAt(i);
+      for (let i = 0; i < sB.length; i++) hB = (hB << 5) - hB + sB.charCodeAt(i);
+      return hA - hB;
+    });
   }, [images, categoryParam]);
 
   const handleCategoryChange = (slug: string | null) => {
@@ -280,6 +289,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     src={image.imageUrl}
                     alt={image.title}
                     fill
+                    quality={72}
                     className="object-cover transition-opacity duration-300 group-hover:opacity-95"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     loading="lazy"

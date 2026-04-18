@@ -29,8 +29,10 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
                 alt={alt}
                 fill
                 priority
+                fetchPriority="high"
+                quality={82}
                 className="object-contain pointer-events-none select-none"
-                sizes="(max-width: 1024px) 100vw, 85vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 92vw, 85vw"
                 draggable={false}
               />
             </div>
