@@ -200,6 +200,22 @@ export const siteSettingsType = defineType({
       title: "Location Line",
       type: "string",
     }),
+    defineField({
+      name: "partnerOrder",
+      title: "Brand Carousel Order",
+      description:
+        "Drag partners into the exact order you want for the homepage brand carousel.",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "partner" }],
+        },
+      ],
+      options: {
+        sortable: true,
+      },
+    }),
   ],
   preview: {
     prepare: () => ({ title: "Site Settings" }),

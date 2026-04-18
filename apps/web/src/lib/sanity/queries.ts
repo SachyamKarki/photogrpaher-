@@ -25,7 +25,19 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     facebook,
     whatsapp,
     phoneNumber,
-    locationLine
+    locationLine,
+    "partnerOrder": partnerOrder[]->{
+      _id,
+      name,
+      logo {
+        asset->{
+          _id,
+          url
+        }
+      },
+      website,
+      order
+    }
   }
 `);
 

@@ -35,6 +35,13 @@ export type SiteSettings = {
   whatsapp?: string;
   phoneNumber?: string;
   locationLine?: string;
+  partnerOrder?: {
+    _id: string;
+    name: string;
+    logo?: { asset?: { _id: string; url: string } } | null;
+    website?: string;
+    order?: number;
+  }[];
 };
 
 export async function getSiteSettings() {

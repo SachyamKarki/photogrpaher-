@@ -21,7 +21,6 @@ import { getAllGalleryImages } from "@/lib/gallery";
 import {
   HOME_CATEGORIES_QUERY,
   REVIEWS_QUERY,
-  PARTNERS_QUERY,
 } from "@/lib/sanity/queries";
 
 export const dynamic = "force-dynamic";
@@ -32,12 +31,6 @@ type Category = {
   slug: string;
   description?: string;
   coverImage?: SanityImageSource | string;
-};
-
-type Partner = {
-  _id: string;
-  name: string;
-  logo?: { asset?: { _id: string; url: string } } | null;
 };
 
 function getServiceSummary(title?: string) {
@@ -103,20 +96,17 @@ export default async function Home() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
   let categories: Category[] | null = null;
   let reviews: Review[] | null = null;
-  let partners: Partner[] | null = null;
   const settings = await getRequiredSiteSettings();
 
   if (sanityEnabled) {
     try {
-      [categories, reviews, partners] = await Promise.all([
+      [categories, reviews] = await Promise.all([
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
         sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
-        sanityServerClient!.fetch<Partner[]>(PARTNERS_QUERY),
       ]);
     } catch {
       categories = null;
       reviews = null;
-      partners = null;
     }
   }
 
@@ -157,6 +147,7 @@ export default async function Home() {
   const aboutTitle = settings.aboutTitle ?? "";
   const aboutBody = settings.aboutBody ?? "";
   const logoUrl = settings.logo ? urlFor(settings.logo)?.width(1200).url() ?? undefined : undefined;
+  const partners = settings.partnerOrder ?? [];
 
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
