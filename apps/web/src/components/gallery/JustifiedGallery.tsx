@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type GalleryImage = {
   _id: string;
@@ -81,6 +82,22 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     setTimeout(() => {
       setIsFiltering(false);
     }, 400); // Quick page-turn skeleton
+  };
+
+  const getPageNumbers = () => {
+    const maxVisiblePages = 4;
+    let startPage = Math.max(1, currentPage - Math.floor((maxVisiblePages - 1) / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   };
 
   const isEmpty = filteredImages.length === 0;
@@ -259,24 +276,50 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* Pagination Controls - Touch Optimized */}
+      {/* Pagination Controls - Enhanced Sliding Window */}
       {!isEmpty && totalPages > 1 && (
-        <div className="mt-16 flex flex-wrap justify-center gap-3">
-          {Array.from({ length: totalPages }).map((_, i) => (
+        <div className="mt-16 flex items-center justify-center gap-2 sm:gap-4">
+          {/* Previous Button - Only shown when not on first page */}
+          {currentPage > 1 && (
             <button
-              key={i}
-              onClick={() => handlePageChange(i + 1)}
-              className={[
-                "h-10 w-10 rounded-full text-sm font-medium transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
-                currentPage === i + 1
-                  ? "bg-zinc-900 text-white"
-                  : "bg-white text-zinc-700 hover:bg-zinc-100",
-              ].join(" ")}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-all hover:border-zinc-900 hover:text-zinc-900"
+              aria-label="Previous page"
             >
-              {i + 1}
+              <ChevronLeft size={18} className="transition-transform group-hover:-translate-x-0.5" />
             </button>
-          ))}
+          )}
+
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {getPageNumbers().map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={[
+                  "h-10 w-10 rounded-full text-sm font-medium transition-all duration-300",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
+                  currentPage === pageNum
+                    ? "bg-zinc-900 text-white scale-105 shadow-md"
+                    : "bg-white text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900",
+                ].join(" ")}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
+
+          {/* Next Button - Prominent as requested */}
+          {currentPage < totalPages ? (
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="group flex h-10 items-center justify-center rounded-full bg-zinc-900 px-5 text-sm font-medium text-white transition-all hover:bg-zinc-800 hover:shadow-lg active:scale-95 sm:px-6"
+            >
+              <span className="mr-1.5">Next</span>
+              <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          ) : (
+            <div className="w-10 sm:w-[92px]" /> /* Spacer to keep layout stable */
+          )}
         </div>
       )}
     </div>
