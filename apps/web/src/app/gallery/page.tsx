@@ -45,7 +45,7 @@ export default async function GalleryPage() {
           <div className="mt-20 flex justify-center">
             <Link
               href="/"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-8 text-ui font-semibold uppercase tracking-[0.08em] text-zinc-900 shadow-sm transition hover:border-black hover:bg-black hover:text-white group"
+              className="inline-flex h-11 sm:h-12 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 sm:px-8 text-[11px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.08em] text-zinc-900 shadow-sm transition hover:border-black hover:bg-black hover:text-white group"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:-translate-x-1"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
               Back to Home

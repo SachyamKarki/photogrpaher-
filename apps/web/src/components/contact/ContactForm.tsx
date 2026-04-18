@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Mail, MessageCircle } from "lucide-react";
+import { useMemo, useState, useRef, useEffect } from "react";
+import { Mail, MessageCircle, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
 type Props = {
@@ -44,6 +44,18 @@ export function ContactForm({ categories }: Props) {
   const [countryCode, setCountryCode] = useState("+977");
   const [phone, setPhone] = useState("");
   const [category, setCategory] = useState("");
+  const [isCategoryOpen, setCategoryOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setCategoryOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState(""); // Honeypot field for security
 
@@ -283,20 +295,20 @@ export function ContactForm({ categories }: Props) {
         {contactMethod === "whatsapp" && (
           <label className="flex flex-col gap-2 text-sm">
             <span className="font-medium text-zinc-800">Your Phone Number</span>
-            <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-row gap-2">
               <select
-                className="h-11 w-full sm:w-[130px] shrink-0 rounded-xl border border-zinc-200 bg-white px-2 text-sm outline-none transition focus:border-zinc-200 focus:ring-0"
+                className="h-11 w-[110px] sm:w-[130px] shrink-0 rounded-xl border border-zinc-200 bg-white px-2 text-sm outline-none transition focus:border-zinc-200 focus:ring-0"
                 value={countryCode}
                 onChange={(e) => setCountryCode(e.target.value)}
               >
                 {countryCodes.map((c) => (
                   <option key={c.code} value={c.code}>
-                    {c.flag} {c.code} {c.country}
+                    {c.flag} {c.code}
                   </option>
                 ))}
               </select>
               <input
-                className="h-11 flex-1 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
+                className="h-11 flex-1 min-w-0 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 autoComplete="tel"
@@ -308,22 +320,36 @@ export function ContactForm({ categories }: Props) {
           </label>
         )}
 
-        <label className="flex flex-col gap-2 text-sm">
+        <div className="flex flex-col gap-2 text-sm lg:col-span-2">
           <span className="font-medium text-zinc-800">Category</span>
-          <select
-            className="h-11 rounded-xl border border-zinc-200 bg-white px-4 outline-none transition focus:border-zinc-200 focus:ring-0"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-          >
-            <option value="">Select a category…</option>
-            {categories.map((c) => (
-              <option key={c.slug} value={c.title}>
-                {c.title}
-              </option>
-            ))}
-          </select>
-        </label>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setCategoryOpen(!isCategoryOpen)}
+              className="flex h-11 w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 text-sm outline-none transition focus:border-zinc-300 focus:ring-0 text-left"
+            >
+              <span className={category ? "text-zinc-900 truncate" : "text-zinc-500 truncate"}>
+                {category || "Select a category…"}
+              </span>
+              <ChevronDown className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
+            </button>
+            <input type="hidden" name="category" value={category} />
+            {isCategoryOpen && (
+              <div className="absolute top-full left-0 mt-2 w-full rounded-xl border border-zinc-100 bg-white shadow-[0_4px_30px_rgba(0,0,0,0.1)] z-50 overflow-hidden text-sm">
+                {categories.map((c, i) => (
+                  <button
+                    key={c.slug}
+                    type="button"
+                    onClick={() => { setCategory(c.title); setCategoryOpen(false); }}
+                    className={`w-full text-left px-4 py-3 hover:bg-zinc-50 text-zinc-900 transition-colors ${i > 0 ? "border-t border-zinc-50" : ""}`}
+                  >
+                    {c.title}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         <label className="flex flex-col gap-2 text-sm lg:col-span-2">
           <span className="font-medium text-zinc-800">Message</span>

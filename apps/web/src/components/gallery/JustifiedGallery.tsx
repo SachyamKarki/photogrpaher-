@@ -137,14 +137,14 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
 
   return (
     <div className="w-full max-w-full overflow-x-hidden">
-      {/* Category Filters - Wrapped (single scroll area) */}
-      <div className="mb-12 border-b border-zinc-200/50 pb-px">
-        <div className="flex flex-wrap gap-x-6 gap-y-3 sm:gap-x-10 justify-start sm:justify-center px-4 sm:px-0">
+      {/* Category Filters - Horizontal Scroll on Mobile */}
+      <div className="mb-12 border-b border-zinc-200/50 pb-px overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap gap-x-6 sm:gap-x-10 justify-start md:justify-center px-4 sm:px-0 min-w-max md:min-w-0">
           <button
             onClick={() => handleCategoryChange(null)}
             className={[
               "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
-              "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+              "font-body text-[11px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.08em]",
               categoryParam === null
                 ? "text-zinc-900"
                 : "text-zinc-500 hover:text-zinc-900",
@@ -161,7 +161,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               onClick={() => handleCategoryChange(category.slug)}
                 className={[
                   "relative -mb-[1px] whitespace-nowrap pb-3 transition-colors",
-                  "font-body text-ui font-semibold uppercase tracking-[0.12em] sm:text-sm",
+                  "font-body text-[11px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.08em]",
                   categoryParam === category.slug
                     ? "text-zinc-900"
                     : "text-zinc-500 hover:text-zinc-900",
@@ -194,7 +194,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
               className="col-span-full flex min-h-[420px] items-center justify-center rounded-2xl border border-zinc-200 bg-white p-10 text-center shadow-sm"
             >
                 <div className="max-w-xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">
                   Gallery
                 </p>
                 <h3 className="mt-4 font-heading text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900">

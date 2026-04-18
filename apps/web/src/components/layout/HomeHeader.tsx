@@ -167,7 +167,7 @@ export function HomeHeader({
                       setIsMenuOpen(false);
                     }
                   }}
-                  className="font-heading text-sm tracking-wide text-zinc-300 transition-colors hover:text-white"
+                  className="font-heading text-2xl sm:text-3xl font-semibold tracking-tight text-white/80 transition-colors hover:text-white"
                 >
                   {link.title}
                 </Link>
@@ -176,7 +176,7 @@ export function HomeHeader({
 
             {/* Contact */}
             <div className="space-y-4 border-t border-white/5 pt-8">
-              <p className="text-xs font-body font-medium uppercase tracking-[0.12em] text-zinc-500">
+              <p className="text-xs font-body font-semibold uppercase tracking-[0.08em] text-zinc-500">
                 Contact
               </p>
               <div className="flex flex-col gap-4">
