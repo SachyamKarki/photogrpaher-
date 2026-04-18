@@ -15,6 +15,28 @@ type NetworkInformationLike = {
   removeEventListener?: (type: "change", listener: () => void) => void;
 };
 
+function heroImageLoader({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width: number;
+  quality?: number;
+}) {
+  try {
+    const url = new URL(src);
+    url.searchParams.set("auto", "format");
+    url.searchParams.set("fm", "webp");
+    url.searchParams.set("fit", "max");
+    url.searchParams.set("w", Math.min(width, 2800).toString());
+    url.searchParams.set("q", String(Math.min(Math.max(quality || 88, 72), 90)));
+    return url.toString();
+  } catch {
+    return src;
+  }
+}
+
 function isSlowConnection(connection?: NetworkInformationLike | null) {
   if (!connection) return false;
   return connection.saveData === true || connection.effectiveType === "slow-2g" || connection.effectiveType === "2g";
@@ -60,13 +82,14 @@ export function HeroCarousel({ slides }: Props) {
         className="absolute inset-0 transition-opacity duration-700"
       >
         <Image
+          loader={heroImageLoader}
           src={activeSlide.src}
           alt={`High Altitude & Adventure Photography by RabinSon - ${activeSlide.alt}`}
           fill
           priority={activeIndex === 0}
           fetchPriority={activeIndex === 0 ? "high" : "auto"}
           loading={activeIndex === 0 ? "eager" : "lazy"}
-          quality={reducedDataMode ? 60 : 82}
+          quality={reducedDataMode ? 72 : 88}
           className="object-cover"
           sizes="100vw"
         />

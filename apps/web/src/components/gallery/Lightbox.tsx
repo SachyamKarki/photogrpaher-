@@ -101,7 +101,7 @@ export function Lightbox({
     alt={title}
     fill
     className="object-contain"
-    quality={82}
+    quality={88}
     sizes="(max-width: 768px) 100vw, 90vw"
     priority
   />

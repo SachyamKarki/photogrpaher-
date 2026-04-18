@@ -168,7 +168,7 @@ export function GallerySection({
                           src={project.imageUrl}
                           alt={`${project.category?.title || "Professional"} photography by RabinSon - ${project.title}`}
                           fill
-                          quality={72}
+                          quality={82}
                           loading={idx < 2 ? "eager" : "lazy"}
                           fetchPriority={idx === 0 ? "high" : "auto"}
                           className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"

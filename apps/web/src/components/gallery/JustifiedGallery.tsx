@@ -289,7 +289,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
                     src={image.imageUrl}
                     alt={image.title}
                     fill
-                    quality={72}
+                    quality={82}
                     className="object-cover transition-opacity duration-300 group-hover:opacity-95"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     loading="lazy"
