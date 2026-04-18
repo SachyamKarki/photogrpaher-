@@ -211,16 +211,16 @@ export function SiteFooter({
         </div>
 
         <div className="mt-6 w-full border-t border-white/5 pb-4 pt-6 sm:mt-12 md:mt-16">
-          <div className="flex flex-col items-center justify-between gap-5 md:flex-row md:gap-0">
-            <p className="font-body text-center text-[9px] font-medium tracking-normal text-white/30 sm:text-[11px] md:text-left">
+          <div className="flex flex-col items-center justify-center gap-5">
+            <p className="font-body text-center text-[10px] font-medium tracking-normal text-white/50 sm:text-[12px]">
               © 2026 {siteTitle}. All rights reserved.
             </p>
 
-            <div className="flex items-center justify-center gap-6 sm:gap-8">
-              <Link href="/privacy-policy" className="text-[8px] font-bold uppercase tracking-[0.1em] text-white/20 transition-all hover:text-white sm:text-[9px]">
+            <div className="flex items-center justify-center gap-6 sm:gap-10">
+              <Link href="/privacy-policy" className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 transition-all hover:text-white sm:text-[10px]">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="text-[8px] font-bold uppercase tracking-[0.1em] text-white/20 transition-all hover:text-white sm:text-[9px]">
+              <Link href="/terms-of-service" className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 transition-all hover:text-white sm:text-[10px]">
                 Terms of Service
               </Link>
             </div>
