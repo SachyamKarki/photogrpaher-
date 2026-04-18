@@ -5,6 +5,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     _id,
     title,
     description,
+    logo,
     heroTitle,
     heroSubtitle,
     heroMediaType,

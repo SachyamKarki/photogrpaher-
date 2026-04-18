@@ -6,9 +6,7 @@ import { Toaster } from "sonner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { ScrollToTopOnNav } from "@/components/layout/ScrollToTopOnNav";
-import { footerContent } from "@/lib/portfolio/data";
-import { sanityServerClient } from "@/lib/sanity/serverClient";
-import { SITE_SETTINGS_QUERY } from "@/lib/sanity/queries";
+import { getRequiredSiteSettings, normalizeInstagramLinks } from "@/lib/sanity/siteSettings";
 
 export const dynamic = "force-dynamic";
 
@@ -34,34 +32,10 @@ const playfair = Playfair_Display({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
-type SiteSettings = {
-  title?: string;
-  description?: string;
-  email?: string;
-  instagram?: string;
-  instagramLinks?: { label?: string; url?: string }[];
-  phoneNumber?: string;
-  locationLine?: string;
-};
-
-async function getSiteSettings() {
-  if (!sanityServerClient) {
-    return null;
-  }
-
-  try {
-    return await sanityServerClient.fetch<SiteSettings>(SITE_SETTINGS_QUERY);
-  } catch {
-    return null;
-  }
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
-  const siteTitle = settings?.title?.trim() || "RabinSon Photography";
-  const siteDescription =
-    settings?.description?.trim() ||
-    "RabinSon is an elite Nepal-based photographer specializing in high-altitude Himalayan adventure, cinematic automobile storytelling, and editorial portraiture. Delivering timeless visuals with absolute technical precision.";
+  const settings = await getRequiredSiteSettings();
+  const siteTitle = settings.title?.trim() || "RabinSon Photography";
+  const siteDescription = settings.description?.trim() || "";
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -137,15 +111,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const settings = await getSiteSettings();
+  const settings = await getRequiredSiteSettings();
 
-  const siteTitle = settings?.title ?? "RabinSon Photography";
-  const instagramLinks =
-    settings?.instagramLinks?.filter((link) => link?.label && link?.url).map((link) => ({
-      label: link.label!.trim(),
-      url: link.url!.trim(),
-    })) ??
-    (settings?.instagram ? [{ label: "Instagram", url: settings.instagram }] : footerContent.instagramLinks);
+  const siteTitle = settings.title ?? "RabinSon Photography";
+  const instagramLinks = normalizeInstagramLinks(settings);
 
   return (
     <html lang="en" className="scroll-smooth">
@@ -183,10 +152,10 @@ export default async function RootLayout({
         {children}
         <SiteFooter
           siteTitle={siteTitle}
-          email={settings?.email ?? footerContent.email}
+          email={settings.email}
           instagramLinks={instagramLinks}
-          phoneNumber={settings?.phoneNumber ?? footerContent.phoneNumber}
-          locationLine={settings?.locationLine ?? footerContent.locationLine}
+          phoneNumber={settings.phoneNumber}
+          locationLine={settings.locationLine}
         />
         <ScrollToTop />
       </body>

@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 import { LogoMark } from "@/components/brand/LogoMark";
-import { portfolioCategories, portfolioProjects } from "@/lib/portfolio/data";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import {
@@ -38,22 +37,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const sanityEnabled = Boolean(sanityServerClient);
-
-  let category: Category | null = null;
-  if (sanityEnabled) {
-    category = await sanityServerClient!.fetch<Category>(CATEGORY_BY_SLUG_QUERY, { slug });
-  } else {
-    const selection = portfolioCategories.find((c) => c.slug === slug);
-    if (selection) {
-      category = {
-        _id: `portfolio:${selection.slug}`,
-        title: selection.title,
-        slug: selection.slug,
-        description: selection.description,
-      };
-    }
+  if (!sanityServerClient) {
+    return { title: "Category Not Found" };
   }
+
+  const category = await sanityServerClient.fetch<Category>(CATEGORY_BY_SLUG_QUERY, { slug });
 
   if (!category) {
     return { title: "Category Not Found" };
@@ -80,48 +68,26 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
 
-  const sanityEnabled = Boolean(sanityServerClient);
+  if (!sanityServerClient) {
+    notFound();
+  }
 
   let category: Category | null = null;
   let projects: ProjectListItem[] = [];
-
-  if (sanityEnabled) {
-    [category, projects] = await Promise.all([
-      sanityServerClient!.fetch<Category>(CATEGORY_BY_SLUG_QUERY, { slug }),
-      sanityServerClient!.fetch<ProjectListItem[]>(
-        PROJECTS_BY_CATEGORY_SLUG_QUERY,
-        { slug },
-      ),
-    ]);
-  } else {
-    const selection = portfolioCategories.find((c) => c.slug === slug);
-    if (!selection) notFound();
-    category = {
-      _id: `portfolio:${selection.slug}`,
-      title: selection.title,
-      slug: selection.slug,
-      description: selection.description,
-      coverImage: selection.image,
-    };
-    projects = portfolioProjects
-      .filter((p) => p.categorySlug === slug)
-      .map((p) => ({
-        _id: `portfolio:${p.slug}`,
-        title: p.title,
-        slug: p.slug,
-        excerpt: p.excerpt,
-        coverImage: p.coverImage,
-      }));
-  }
+  [category, projects] = await Promise.all([
+    sanityServerClient.fetch<Category>(CATEGORY_BY_SLUG_QUERY, { slug }),
+    sanityServerClient.fetch<ProjectListItem[]>(
+      PROJECTS_BY_CATEGORY_SLUG_QUERY,
+      { slug },
+    ),
+  ]);
 
   if (!category?._id) notFound();
 
   const coverUrl = category.coverImage
     ? typeof category.coverImage === "string"
       ? category.coverImage
-      : sanityEnabled
-        ? urlFor(category.coverImage)?.width(2400).height(1200).url()
-        : null
+      : urlFor(category.coverImage)?.width(2400).height(1200).url()
     : null;
 
   return (
@@ -181,9 +147,7 @@ export default async function CategoryPage({
             const imageUrl = project.coverImage
               ? typeof project.coverImage === "string"
                 ? project.coverImage
-                : sanityEnabled
-                  ? urlFor(project.coverImage)?.width(1200).height(900).url()
-                  : null
+                : urlFor(project.coverImage)?.width(1200).height(900).url()
               : null;
 
             return (

@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
-import { portfolioProjects } from "@/lib/portfolio/data";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 import { PROJECT_BY_SLUG_QUERY } from "@/lib/sanity/queries";
@@ -27,22 +26,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const sanityEnabled = Boolean(sanityServerClient);
-
-  let project: Project | null = null;
-  if (sanityEnabled) {
-    project = await sanityServerClient!.fetch<Project>(PROJECT_BY_SLUG_QUERY, { slug });
-  } else {
-    const selection = portfolioProjects.find((p) => p.slug === slug);
-    if (selection) {
-      project = {
-        _id: `portfolio:${selection.slug}`,
-        title: selection.title,
-        slug: selection.slug,
-        excerpt: selection.excerpt,
-      };
-    }
+  if (!sanityServerClient) {
+    return { title: "Project" };
   }
+
+  const project = await sanityServerClient.fetch<Project>(PROJECT_BY_SLUG_QUERY, { slug });
 
   if (!project) return { title: "Project" };
 
@@ -63,29 +51,18 @@ export default async function ProjectPage({
 }) {
   const { slug } = await params;
 
-  const sanityEnabled = Boolean(sanityServerClient);
+  if (!sanityServerClient) {
+    notFound();
+  }
 
   let project: Project | null = null;
 
-  if (sanityEnabled) {
-    try {
-      project = await sanityServerClient!.fetch<Project>(PROJECT_BY_SLUG_QUERY, {
-        slug,
-      });
-    } catch {
-      notFound();
-    }
-  } else {
-    const selection = portfolioProjects.find((p) => p.slug === slug);
-    if (!selection) notFound();
-    project = {
-      _id: `portfolio:${selection.slug}`,
-      title: selection.title,
-      slug: selection.slug,
-      excerpt: selection.excerpt,
-      coverImage: selection.coverImage,
-      gallery: selection.gallery,
-    };
+  try {
+    project = await sanityServerClient.fetch<Project>(PROJECT_BY_SLUG_QUERY, {
+      slug,
+    });
+  } catch {
+    notFound();
   }
 
   if (!project?._id) notFound();
@@ -93,9 +70,7 @@ export default async function ProjectPage({
   const coverUrl = project.coverImage
     ? typeof project.coverImage === "string"
       ? project.coverImage
-      : sanityEnabled
-        ? urlFor(project.coverImage)?.width(2000).height(1500).url()
-        : null
+      : urlFor(project.coverImage)?.width(2000).height(1500).url()
     : null;
 
   return (
@@ -134,9 +109,7 @@ export default async function ProjectPage({
               const url =
                 typeof img === "string"
                   ? img
-                  : sanityEnabled
-                    ? urlFor(img)?.width(1600).height(1200).url()
-                    : null;
+                  : urlFor(img)?.width(1600).height(1200).url();
               if (!url) return null;
 
               return (

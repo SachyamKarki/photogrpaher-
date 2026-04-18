@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { footerContent } from "@/lib/portfolio/data";
+import { getRequiredSiteSettings } from "@/lib/sanity/siteSettings";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function TermsOfServicePage() {
+export default async function TermsOfServicePage() {
+  const settings = await getRequiredSiteSettings();
+
   return (
     <article className="space-y-10 sm:space-y-16">
       <header className="space-y-4">
@@ -87,9 +89,9 @@ export default function TermsOfServicePage() {
             For questions about these Terms, contact{" "}
             <a
               className="text-zinc-900 underline underline-offset-4 transition-colors hover:text-zinc-600"
-              href={`mailto:${footerContent.email}`}
+              href={`mailto:${settings.email}`}
             >
-              {footerContent.email}
+              {settings.email}
             </a>
             .
           </p>

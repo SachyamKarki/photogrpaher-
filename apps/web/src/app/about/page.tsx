@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import {
-  aboutContent,
-  footerContent,
-  portfolioCategories,
-  siteServices,
-} from "@/lib/portfolio/data";
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
-import { HOME_CATEGORIES_QUERY, SITE_SETTINGS_QUERY } from "@/lib/sanity/queries";
+import { HOME_CATEGORIES_QUERY } from "@/lib/sanity/queries";
+import { getRequiredSiteSettings, normalizeInstagramLinks } from "@/lib/sanity/siteSettings";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
 
 type Category = {
@@ -24,38 +19,14 @@ type Category = {
 
 export const dynamic = "force-dynamic";
 
-type SiteSettings = {
-  aboutTitle?: string;
-  aboutBody?: string;
-  aboutLongBody?: string[];
-  aboutPrinciples?: string[];
-  availabilityNote?: string;
-  email?: string;
-  instagram?: string;
-  instagramLinks?: { label?: string; url?: string }[];
-  whatsapp?: string;
-  phoneNumber?: string;
-  locationLine?: string;
-};
-
 async function getAboutSettings() {
-  const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
-
-  if (!sanityEnabled) {
-    return null;
-  }
-
-  try {
-    return await sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY);
-  } catch {
-    return null;
-  }
+  return getRequiredSiteSettings();
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getAboutSettings();
-  const aboutTitle = settings?.aboutTitle?.trim() || aboutContent.title;
-  const aboutBody = settings?.aboutBody?.trim() || aboutContent.body;
+  const aboutTitle = settings.aboutTitle?.trim() || "About";
+  const aboutBody = settings.aboutBody?.trim() || "";
 
   return {
     title: aboutTitle,
@@ -71,48 +42,32 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
   let categories: Category[] | null = null;
-  let settings: SiteSettings | null = null;
+  const settings = await getAboutSettings();
 
   if (sanityEnabled) {
     try {
-      [categories, settings] = await Promise.all([
+      [categories] = await Promise.all([
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
-        getAboutSettings(),
       ]);
     } catch {
       categories = null;
-      settings = null;
     }
   }
 
-  const aboutTitle = settings?.aboutTitle ?? aboutContent.title;
-  const aboutBody = settings?.aboutBody ?? aboutContent.body;
-  const aboutLongBody =
-    settings?.aboutLongBody?.filter(Boolean)?.length
-      ? settings.aboutLongBody.filter(Boolean)
-      : "longBody" in aboutContent && Array.isArray(aboutContent.longBody)
-        ? aboutContent.longBody
-        : [];
-  const aboutPrinciples =
-    settings?.aboutPrinciples?.filter(Boolean)?.length
-      ? settings.aboutPrinciples.filter(Boolean)
-      : "principles" in aboutContent && Array.isArray(aboutContent.principles)
-        ? aboutContent.principles
-        : [];
-  const availabilityNote = settings?.availabilityNote ?? aboutContent.note;
-  const email = settings?.email ?? footerContent.email;
-  const phoneNumber = settings?.phoneNumber ?? footerContent.phoneNumber;
-  const whatsapp = settings?.whatsapp ?? footerContent.whatsapp;
-  const locationLine = settings?.locationLine ?? footerContent.locationLine;
-  const instagramLinks =
-    settings?.instagramLinks?.filter((link) => link?.label && link?.url).map((link) => ({
-      label: link.label!.trim(),
-      url: link.url!.trim(),
-    })) ??
-    (settings?.instagram ? [{ label: "Instagram", url: settings.instagram }] : footerContent.instagramLinks);
+  const aboutTitle = settings.aboutTitle ?? "";
+  const aboutBody = settings.aboutBody ?? "";
+  const aboutLongBody = settings.aboutLongBody?.filter(Boolean) ?? [];
+  const aboutPrinciples = settings.aboutPrinciples?.filter(Boolean) ?? [];
+  const availabilityNote = settings.availabilityNote ?? "";
+  const email = settings.email;
+  const phoneNumber = settings.phoneNumber;
+  const whatsapp = settings.whatsapp;
+  const locationLine = settings.locationLine;
+  const instagramLinks = normalizeInstagramLinks(settings);
+  const services = settings.services ?? [];
+  const servicesIntro = settings.servicesIntro ?? "";
 
-  const aboutCategories = (((categories?.length ?? 0) > 0 ? categories : null)
-    ? (categories as Category[]).map((c) => ({
+  const aboutCategories = (categories ?? []).map((c) => ({
       ...c,
       imageUrl:
         c.coverImage && sanityEnabled
@@ -122,14 +77,7 @@ export default async function AboutPage() {
           : typeof c.coverImage === "string"
             ? c.coverImage
             : null,
-    }))
-    : portfolioCategories.map((c) => ({
-      _id: `portfolio:${c.slug}`,
-      title: c.title,
-      slug: c.slug,
-      description: c.description,
-      imageUrl: c.image,
-    }))).slice(0, 3);
+    })).slice(0, 3);
 
   const sectionTitleClassName =
     "font-heading text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl";
@@ -178,11 +126,11 @@ export default async function AboutPage() {
                   What WE DO
                 </h2>
                 <p className={`mt-3 ${sectionTextClassName}`}>
-                  {siteServices.intro}
+                  {servicesIntro}
                 </p>
 
                 <dl className="mt-5 space-y-5">
-                  {siteServices.items.map((service) => (
+                  {services.map((service) => (
                     <div key={service.title} className="space-y-2">
                       <dt className="text-sm font-semibold tracking-tight text-zinc-900 sm:text-[15px]">
                         {service.title}

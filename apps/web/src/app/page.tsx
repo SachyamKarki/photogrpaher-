@@ -13,48 +13,18 @@ import { BrandsSection } from "@/components/home/BrandsSection";
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { ReviewsSection, type Review } from "@/components/home/ReviewsSection";
 import { PhotographerJsonLd, WebsiteJsonLd } from "@/components/seo/JsonLd";
-import {
-  aboutContent,
-  portfolioCategories,
-  siteHero,
-  siteServices,
-  clientReviews,
-  footerContent,
-} from "@/lib/portfolio/data";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
+import { getRequiredSiteSettings, normalizeInstagramLinks } from "@/lib/sanity/siteSettings";
 import { getAllGalleryImages } from "@/lib/gallery";
 import {
   HOME_CATEGORIES_QUERY,
-  SITE_SETTINGS_QUERY,
   REVIEWS_QUERY,
   PARTNERS_QUERY,
 } from "@/lib/sanity/queries";
 
 export const dynamic = "force-dynamic";
-
-type SiteSettings = {
-  title?: string;
-  description?: string;
-  heroTitle?: string;
-  heroSubtitle?: string;
-  heroMediaType?: "image" | "video" | "none";
-  heroImage?: SanityImageSource;
-  heroVideoUrl?: string;
-  servicesTitle?: string;
-  servicesIntro?: string;
-  services?: { title?: string; description?: string; details?: string[] }[];
-  aboutTitle?: string;
-  aboutBody?: string;
-  email?: string;
-  instagram?: string;
-  instagramLinks?: { label?: string; url?: string }[];
-  facebook?: string;
-  whatsapp?: string;
-  phoneNumber?: string;
-  locationLine?: string;
-};
 
 type Category = {
   _id: string;
@@ -131,34 +101,28 @@ function getServiceDetails(title?: string) {
 
 export default async function Home() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
-
-  let settings: SiteSettings | null = null;
   let categories: Category[] | null = null;
   let reviews: Review[] | null = null;
   let partners: Partner[] | null = null;
+  const settings = await getRequiredSiteSettings();
 
   if (sanityEnabled) {
     try {
-      [settings, categories, reviews, partners] = await Promise.all([
-        sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY),
+      [categories, reviews, partners] = await Promise.all([
         sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
         sanityServerClient!.fetch<Review[]>(REVIEWS_QUERY),
         sanityServerClient!.fetch<Partner[]>(PARTNERS_QUERY),
       ]);
     } catch {
-      settings = null;
       categories = null;
       reviews = null;
       partners = null;
     }
   }
 
-  const serviceTitle = settings?.servicesTitle ?? siteServices.title;
-  const serviceIntro = settings?.servicesIntro ?? siteServices.intro;
-  const serviceItems =
-    settings?.services?.length && settings.services.some((s) => s?.title)
-      ? settings.services
-      : siteServices.items;
+  const serviceTitle = settings.servicesTitle ?? "Services";
+  const serviceIntro = settings.servicesIntro ?? "";
+  const serviceItems = settings.services ?? [];
   const servicePanels = serviceItems.map((service) => ({
     title: service.title ?? "Service",
     description:
@@ -166,65 +130,51 @@ export default async function Home() {
     details: service.details ?? getServiceDetails(service.title),
   }));
 
-  const homeCategories = (((categories?.length ?? 0) > 0 ? categories : null)
-    ? (categories as Category[]).map(c => ({
+  const homeCategories = (categories ?? []).map(c => ({
       ...c,
       imageUrl: (c.coverImage && sanityEnabled)
         ? (typeof c.coverImage === "string" ? c.coverImage : urlFor(c.coverImage)?.width(1600).height(1000).url() ?? null)
         : (typeof c.coverImage === "string" ? c.coverImage : null)
-    }))
-    : portfolioCategories.map((c) => ({
-      _id: `portfolio:${c.slug}`,
-      title: c.title,
-      slug: c.slug,
-      description: c.description,
-      imageUrl: c.image,
-    }))).slice(0, 3);
+    })).slice(0, 3);
 
   const contactCategories = homeCategories.map((c) => ({
     title: c.title,
     slug: c.slug,
   }));
 
-  const safeReviews = (reviews?.length ? reviews : null) ?? clientReviews;
+  const safeReviews = reviews ?? [];
 
-  const siteTitle = settings?.title ?? "RabinSon Photography";
-  const heroTitle = settings?.heroTitle ?? siteHero.title;
-  const heroSubtitle = settings?.heroSubtitle ?? siteHero.subtitle;
-  const instagramLinks =
-    settings?.instagramLinks?.filter((link) => link?.label && link?.url).map((link) => ({
-      label: link.label!.trim(),
-      url: link.url!.trim(),
-    })) ??
-    (settings?.instagram ? [{ label: "Instagram", url: settings.instagram }] : footerContent.instagramLinks);
+  const siteTitle = settings.title ?? "RabinSon Photography";
+  const heroTitle = settings.heroTitle ?? "";
+  const heroSubtitle = settings.heroSubtitle ?? "";
+  const instagramLinks = normalizeInstagramLinks(settings);
   const socialLinks = {
-    email: settings?.email ?? footerContent.email,
-    whatsapp: settings?.whatsapp ?? footerContent.whatsapp,
+    email: settings.email,
+    whatsapp: settings.whatsapp,
   };
-  const phoneNumber = settings?.phoneNumber ?? footerContent.phoneNumber;
-  const aboutTitle = settings?.aboutTitle ?? aboutContent.title;
-  const aboutBody = settings?.aboutBody ?? aboutContent.body;
+  const whatsappNumber = socialLinks.whatsapp?.replace("https://wa.me/", "") ?? "";
+  const phoneNumber = settings.phoneNumber;
+  const aboutTitle = settings.aboutTitle ?? "";
+  const aboutBody = settings.aboutBody ?? "";
+  const logoUrl = settings.logo ? urlFor(settings.logo)?.width(1200).url() ?? undefined : undefined;
 
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
 
-  // Explicitly curate the hero content as requested by the user
   const curatedHeroIds = ["mountain-3", "mountain-15", "mountain-17"];
-  const slides = curatedHeroIds
+  const curatedSlides = curatedHeroIds
     .map((id) => {
       const img = validGalleryImages.find((i) => i._id === id);
       return img ? { src: img.imageUrl, alt: img.category?.title || "Himalayas" } : null;
     })
     .filter((s): s is { src: string; alt: string } => s !== null);
-
-  // If we couldn't find the curated images, fall back to a safe list of high-quality defaults
-  if (slides.length === 0) {
-    slides.push(
-      { src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format", alt: "Himalayas" },
-      { src: "https://images.unsplash.com/photo-1549492423-40026e5fc53a?auto=format", alt: "Vehicles" },
-      { src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format", alt: "Portraits" }
-    );
-  }
+  const slides =
+    curatedSlides.length > 0
+      ? curatedSlides
+      : validGalleryImages.slice(0, 3).map((img) => ({
+          src: img.imageUrl,
+          alt: img.category?.title || "Photography",
+        }));
 
   // Dynamically select Featured Work prioritizing those marked as isFeatured in Sanity
   const explicitlyFeatured = validGalleryImages.filter((img) => img.isFeatured);
@@ -309,6 +259,7 @@ export default async function Home() {
         email={socialLinks.email}
         phoneNumber={phoneNumber ?? undefined}
         instagramLinks={instagramLinks}
+        logoUrl={logoUrl}
       />
 
       <main className="w-full">
@@ -411,7 +362,7 @@ export default async function Home() {
                 <div className="mx-auto mt-10 w-full max-w-7xl sm:mt-16">
                   <ContactForm
                     categories={contactCategories}
-                    whatsappNumber={socialLinks.whatsapp.replace("https://wa.me/", "")}
+                    whatsappNumber={whatsappNumber}
                   />
                 </div>
               </div>

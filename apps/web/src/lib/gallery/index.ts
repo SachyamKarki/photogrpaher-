@@ -5,7 +5,6 @@ import {
   GALLERY_PROJECTS_QUERY,
   HOME_CATEGORIES_QUERY,
 } from "@/lib/sanity/queries";
-import { portfolioCategories, portfolioProjects } from "@/lib/portfolio/data";
 import { 
   SanityProject, 
   SanityCategory, 
@@ -41,11 +40,7 @@ export async function getAllGalleryImages(start = 0, end = 20) {
         title: c?.title || "Untitled",
         slug: c?.slug || "uncategorized",
       }))
-    : portfolioCategories.map((c) => ({
-        _id: `portfolio:${c.slug}`,
-        title: c.title,
-        slug: c.slug,
-      }));
+    : [];
 
   const allImages: GalleryImage[] = [];
   const handledImageUrls = new Set<string>();
@@ -119,19 +114,6 @@ export async function getAllGalleryImages(start = 0, end = 20) {
         project.gallery.forEach((img: SanityImageSourcePlus, idx: number) => {
           if (!img) return;
           addImage(`${project.slug}-${idx + 1}`, `${project.title || "Project"} - Photo ${idx + 1}`, img, project);
-        });
-      }
-    });
-  }
-
-  if (allImages.length === 0) {
-    portfolioProjects.forEach((p, pIdx) => {
-      // Force feature the first few mock images so the bento grid isn't empty locally
-      const isFeaturedProj = pIdx < 4;
-      addImage(`portfolio-${p.slug}-cover`, p.title, p.coverImage as SanityImageSourcePlus, p as unknown as SanityProject, isFeaturedProj);
-      if (Array.isArray(p.gallery)) {
-        p.gallery.forEach((img, idx) => {
-          addImage(`portfolio-${p.slug}-gal-${idx}`, `${p.title} - ${idx + 1}`, img as SanityImageSourcePlus, p as unknown as SanityProject, isFeaturedProj && idx < 2);
         });
       }
     });

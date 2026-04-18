@@ -13,12 +13,14 @@ export function HomeHeader({
   siteTitle,
   email,
   phoneNumber,
-  instagramLinks
+  instagramLinks,
+  logoUrl,
 }: {
   siteTitle: string;
   email?: string;
   phoneNumber?: string;
   instagramLinks?: SocialLink[];
+  logoUrl?: string;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -101,12 +103,12 @@ export function HomeHeader({
             <div className="relative w-48 sm:w-64 md:w-80 h-6 sm:h-8 flex items-center transition-opacity group-hover:opacity-70">
               <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-6 md:-left-8 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+4rem)] h-[60px] sm:h-[80px] md:h-[100px]">
                 <Image
-                  src="/brand/rabinson_logo-Photoroom.png"
+                  src={logoUrl || "/brand/rabinson_logo-Photoroom.png"}
                   alt={`${siteTitle} Logo`}
                   fill
                   sizes="(max-width: 768px) 250px, 400px"
                   className="object-contain object-left brightness-0 invert"
-                  unoptimized
+                  unoptimized={!logoUrl || !logoUrl.startsWith("http")}
                   priority
                 />
               </div>

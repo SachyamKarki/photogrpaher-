@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { footerContent } from "@/lib/portfolio/data";
+import { getRequiredSiteSettings } from "@/lib/sanity/siteSettings";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  const settings = await getRequiredSiteSettings();
+
   return (
     <article className="space-y-10 sm:space-y-16">
       <header className="space-y-4">
@@ -93,9 +95,9 @@ export default function PrivacyPolicyPage() {
             For privacy questions, contact{" "}
             <a
               className="text-zinc-900 underline underline-offset-4 transition-colors hover:text-zinc-600"
-              href={`mailto:${footerContent.email}`}
+              href={`mailto:${settings.email}`}
             >
-              {footerContent.email}
+              {settings.email}
             </a>
             .
           </p>
