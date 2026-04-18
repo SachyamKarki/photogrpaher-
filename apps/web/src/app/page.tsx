@@ -45,10 +45,15 @@ type SiteSettings = {
   servicesTitle?: string;
   servicesIntro?: string;
   services?: { title?: string; description?: string; details?: string[] }[];
+  aboutTitle?: string;
+  aboutBody?: string;
   email?: string;
   instagram?: string;
+  instagramLinks?: { label?: string; url?: string }[];
   facebook?: string;
   whatsapp?: string;
+  phoneNumber?: string;
+  locationLine?: string;
 };
 
 type Category = {
@@ -64,9 +69,6 @@ type Partner = {
   name: string;
   logo?: { asset?: { _id: string; url: string } } | null;
 };
-
-export const revalidate = 60;
-
 
 function getServiceSummary(title?: string) {
   const normalized = title?.toLowerCase() ?? "";
@@ -189,10 +191,19 @@ export default async function Home() {
   const siteTitle = settings?.title ?? "RabinSon Photography";
   const heroTitle = settings?.heroTitle ?? siteHero.title;
   const heroSubtitle = settings?.heroSubtitle ?? siteHero.subtitle;
+  const instagramLinks =
+    settings?.instagramLinks?.filter((link) => link?.label && link?.url).map((link) => ({
+      label: link.label!.trim(),
+      url: link.url!.trim(),
+    })) ??
+    (settings?.instagram ? [{ label: "Instagram", url: settings.instagram }] : footerContent.instagramLinks);
   const socialLinks = {
     email: settings?.email ?? footerContent.email,
     whatsapp: settings?.whatsapp ?? footerContent.whatsapp,
   };
+  const phoneNumber = settings?.phoneNumber ?? footerContent.phoneNumber;
+  const aboutTitle = settings?.aboutTitle ?? aboutContent.title;
+  const aboutBody = settings?.aboutBody ?? aboutContent.body;
 
   const { allImages: rawGalleryImages } = await getAllGalleryImages();
   const validGalleryImages = rawGalleryImages.filter(img => !img._id.endsWith("-cover"));
@@ -295,9 +306,9 @@ export default async function Home() {
       <WebsiteJsonLd />
       <HomeHeader
         siteTitle={siteTitle}
-        email={footerContent.email}
-        phoneNumber={footerContent.phoneNumber}
-        instagramLinks={footerContent.instagramLinks}
+        email={socialLinks.email}
+        phoneNumber={phoneNumber ?? undefined}
+        instagramLinks={instagramLinks}
       />
 
       <main className="w-full">
@@ -340,8 +351,8 @@ export default async function Home() {
             <Reveal>
               <div className="mx-auto max-w-5xl text-center">
                 <SectionHeading
-                  title={aboutContent.title}
-                  subtitle={aboutContent.body}
+                  title={aboutTitle}
+                  subtitle={aboutBody}
                   containerClassName="max-w-4xl"
                   action={
                     <Link

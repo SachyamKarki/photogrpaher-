@@ -118,6 +118,36 @@ export const siteSettingsType = defineType({
       ],
     }),
     defineField({
+      name: "aboutTitle",
+      title: "About Page Title",
+      type: "string",
+      initialValue: "The Vision Behind the Frames.",
+    }),
+    defineField({
+      name: "aboutBody",
+      title: "About Intro",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "aboutLongBody",
+      title: "About Long Body",
+      type: "array",
+      of: [{ type: "text", rows: 4 }],
+    }),
+    defineField({
+      name: "aboutPrinciples",
+      title: "Working Style Principles",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "availabilityNote",
+      title: "Availability Note",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
       name: "logo",
       type: "image",
       options: { hotspot: true },
@@ -138,12 +168,37 @@ export const siteSettingsType = defineType({
       type: "url",
     }),
     defineField({
+      name: "instagramLinks",
+      title: "Instagram Links",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "label", type: "string", validation: (rule) => rule.required() }),
+            defineField({ name: "url", type: "url", validation: (rule) => rule.required() }),
+          ],
+          preview: { select: { title: "label", subtitle: "url" } },
+        },
+      ],
+    }),
+    defineField({
       name: "facebook",
       type: "url",
     }),
     defineField({
       name: "whatsapp",
       type: "url",
+    }),
+    defineField({
+      name: "phoneNumber",
+      title: "Phone Number",
+      type: "string",
+    }),
+    defineField({
+      name: "locationLine",
+      title: "Location Line",
+      type: "string",
     }),
   ],
   preview: {

@@ -13,10 +13,18 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     servicesTitle,
     servicesIntro,
     services,
+    aboutTitle,
+    aboutBody,
+    aboutLongBody,
+    aboutPrinciples,
+    availabilityNote,
     email,
     instagram,
+    instagramLinks,
     facebook,
-    whatsapp
+    whatsapp,
+    phoneNumber,
+    locationLine
   }
 `);
 

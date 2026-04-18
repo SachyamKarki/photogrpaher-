@@ -10,20 +10,8 @@ import {
 import { HomeCategories } from "@/components/home/HomeCategories";
 import { isSanityConfigured } from "@/lib/sanity/config";
 import { urlFor } from "@/lib/sanity/image";
-import { HOME_CATEGORIES_QUERY } from "@/lib/sanity/queries";
+import { HOME_CATEGORIES_QUERY, SITE_SETTINGS_QUERY } from "@/lib/sanity/queries";
 import { sanityServerClient } from "@/lib/sanity/serverClient";
-
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Meet RabinSon — a Nepal-based professional photographer specializing in honest light, calm direction, and clean composition. From Himalayan passes to studio sets, creating timeless editorial photography.",
-  openGraph: {
-    title: "About RabinSon | Nepal-Based Professional Photographer",
-    description:
-      "Nepal-based photographer for editorial, high altitude adventure, automotive, and studio portrait work. Book your session today.",
-    images: [{ url: "/content/hero.jpg", width: 1200, height: 630 }],
-  },
-};
 
 type Category = {
   _id: string;
@@ -36,17 +24,92 @@ type Category = {
 
 export const dynamic = "force-dynamic";
 
+type SiteSettings = {
+  aboutTitle?: string;
+  aboutBody?: string;
+  aboutLongBody?: string[];
+  aboutPrinciples?: string[];
+  availabilityNote?: string;
+  email?: string;
+  instagram?: string;
+  instagramLinks?: { label?: string; url?: string }[];
+  whatsapp?: string;
+  phoneNumber?: string;
+  locationLine?: string;
+};
+
+async function getAboutSettings() {
+  const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
+
+  if (!sanityEnabled) {
+    return null;
+  }
+
+  try {
+    return await sanityServerClient!.fetch<SiteSettings>(SITE_SETTINGS_QUERY);
+  } catch {
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getAboutSettings();
+  const aboutTitle = settings?.aboutTitle?.trim() || aboutContent.title;
+  const aboutBody = settings?.aboutBody?.trim() || aboutContent.body;
+
+  return {
+    title: aboutTitle,
+    description: aboutBody,
+    openGraph: {
+      title: aboutTitle,
+      description: aboutBody,
+      images: [{ url: "/content/hero.jpg", width: 1200, height: 630 }],
+    },
+  };
+}
+
 export default async function AboutPage() {
   const sanityEnabled = Boolean(sanityServerClient && isSanityConfigured);
   let categories: Category[] | null = null;
+  let settings: SiteSettings | null = null;
 
   if (sanityEnabled) {
     try {
-      categories = await sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY);
+      [categories, settings] = await Promise.all([
+        sanityServerClient!.fetch<Category[]>(HOME_CATEGORIES_QUERY),
+        getAboutSettings(),
+      ]);
     } catch {
       categories = null;
+      settings = null;
     }
   }
+
+  const aboutTitle = settings?.aboutTitle ?? aboutContent.title;
+  const aboutBody = settings?.aboutBody ?? aboutContent.body;
+  const aboutLongBody =
+    settings?.aboutLongBody?.filter(Boolean)?.length
+      ? settings.aboutLongBody.filter(Boolean)
+      : "longBody" in aboutContent && Array.isArray(aboutContent.longBody)
+        ? aboutContent.longBody
+        : [];
+  const aboutPrinciples =
+    settings?.aboutPrinciples?.filter(Boolean)?.length
+      ? settings.aboutPrinciples.filter(Boolean)
+      : "principles" in aboutContent && Array.isArray(aboutContent.principles)
+        ? aboutContent.principles
+        : [];
+  const availabilityNote = settings?.availabilityNote ?? aboutContent.note;
+  const email = settings?.email ?? footerContent.email;
+  const phoneNumber = settings?.phoneNumber ?? footerContent.phoneNumber;
+  const whatsapp = settings?.whatsapp ?? footerContent.whatsapp;
+  const locationLine = settings?.locationLine ?? footerContent.locationLine;
+  const instagramLinks =
+    settings?.instagramLinks?.filter((link) => link?.label && link?.url).map((link) => ({
+      label: link.label!.trim(),
+      url: link.url!.trim(),
+    })) ??
+    (settings?.instagram ? [{ label: "Instagram", url: settings.instagram }] : footerContent.instagramLinks);
 
   const aboutCategories = (((categories?.length ?? 0) > 0 ? categories : null)
     ? (categories as Category[]).map((c) => ({
@@ -79,27 +142,25 @@ export default async function AboutPage() {
         <div className="w-full max-w-none">
           <div className="w-full">
             <h1 className="font-heading mt-4 text-3xl font-semibold leading-[1.08] tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
-              {aboutContent.title}
+              {aboutTitle}
             </h1>
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-[17px] lg:leading-8">
-              <p>{aboutContent.body}</p>
-              {"longBody" in aboutContent && Array.isArray(aboutContent.longBody)
-                ? aboutContent.longBody.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))
-                : null}
+              <p>{aboutBody}</p>
+              {aboutLongBody.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </div>
 
           <div className="mt-10 border-t border-zinc-200 pt-8 sm:mt-12 sm:pt-10">
             <div className="w-full">
-              {"principles" in aboutContent && Array.isArray(aboutContent.principles) ? (
+              {aboutPrinciples.length ? (
                 <section aria-labelledby="about-principles" className="py-2">
                   <h2 id="about-principles" className={sectionTitleClassName}>
                     Working style
                   </h2>
                   <ul className="mt-4 space-y-2.5">
-                    {aboutContent.principles.map((principle) => (
+                    {aboutPrinciples.map((principle) => (
                       <li key={principle} className={`${sectionTextClassName} flex gap-3`}>
                         <span
                           className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-zinc-400"
@@ -139,11 +200,13 @@ export default async function AboutPage() {
                   Availability
                 </h2>
                 <p className={`mt-3 ${sectionTextClassName}`}>
-                  {aboutContent.note}
+                  {availabilityNote}
                 </p>
-                <p className={`mt-2 ${sectionTextClassName}`}>
-                  {footerContent.locationLine}
-                </p>
+                {locationLine ? (
+                  <p className={`mt-2 ${sectionTextClassName}`}>
+                    {locationLine}
+                  </p>
+                ) : null}
               </section>
             </div>
 
@@ -158,28 +221,28 @@ export default async function AboutPage() {
                     <span className="font-medium text-zinc-900">Email:</span>{" "}
                     <a
                       className="underline underline-offset-4 hover:text-zinc-900"
-                      href={`mailto:${footerContent.email}`}
+                      href={`mailto:${email}`}
                     >
-                      {footerContent.email}
+                      {email}
                     </a>
                   </li>
-                  {footerContent.phoneNumber ? (
+                  {phoneNumber ? (
                     <li>
                       <span className="font-medium text-zinc-900">Phone:</span>{" "}
                       <a
                         className="underline underline-offset-4 hover:text-zinc-900"
-                        href={`tel:${footerContent.phoneNumber.replace(/\s+/g, "")}`}
+                        href={`tel:${phoneNumber.replace(/\s+/g, "")}`}
                       >
-                        {footerContent.phoneNumber}
+                        {phoneNumber}
                       </a>
                     </li>
                   ) : null}
-                  {footerContent.whatsapp ? (
+                  {whatsapp ? (
                     <li>
                       <span className="font-medium text-zinc-900">WhatsApp:</span>{" "}
                       <a
                         className="underline underline-offset-4 hover:text-zinc-900"
-                        href={footerContent.whatsapp}
+                        href={whatsapp}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -187,10 +250,10 @@ export default async function AboutPage() {
                       </a>
                     </li>
                   ) : null}
-                  {footerContent.instagramLinks?.length ? (
+                  {instagramLinks?.length ? (
                     <li>
                       <span className="font-medium text-zinc-900">Instagram:</span>{" "}
-                      {footerContent.instagramLinks.map((link, index) => (
+                      {instagramLinks.map((link, index) => (
                         <span key={link.url}>
                           <a
                             className="underline underline-offset-4 hover:text-zinc-900"
@@ -200,7 +263,7 @@ export default async function AboutPage() {
                           >
                             {link.label}
                           </a>
-                          {index < footerContent.instagramLinks.length - 1 ? (
+                          {index < instagramLinks.length - 1 ? (
                             <span className="text-zinc-400"> • </span>
                           ) : null}
                         </span>
