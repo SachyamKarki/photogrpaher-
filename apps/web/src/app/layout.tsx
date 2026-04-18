@@ -93,6 +93,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
   category: "Photography",
 };
 
