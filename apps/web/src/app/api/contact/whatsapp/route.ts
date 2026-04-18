@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   // footerContent.whatsapp is "https://wa.me/9779803612055" — strip the prefix to get the raw number
   const number = footerContent.whatsapp.replace("https://wa.me/", "").replace(/[^0-9]/g, "");
 
-  const url = `https://wa.me/${number}?text=${text}`;
+  const url = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 
   return NextResponse.redirect(url, 302);
 }

@@ -148,6 +148,27 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     },
   };
 
+  const groupSize = 4;
+  const currentGroupStart = Math.floor((currentPage - 1) / groupSize) * groupSize + 1;
+
+  const handleNextGroup = () => {
+    const nextGroupStart = currentGroupStart + groupSize;
+    if (nextGroupStart <= totalPages) {
+      handlePageChange(nextGroupStart);
+    } else if (currentPage < totalPages) {
+      handlePageChange(totalPages);
+    }
+  };
+
+  const handlePrevGroup = () => {
+    const prevGroupStart = currentGroupStart - groupSize;
+    if (prevGroupStart >= 1) {
+      handlePageChange(prevGroupStart);
+    } else if (currentPage > 1) {
+      handlePageChange(1);
+    }
+  };
+
   return (
     <div className="w-full max-w-full overflow-x-hidden">
       {/* Category Filters - Horizontal Scroll on Mobile */}
@@ -272,15 +293,15 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
         </AnimatePresence>
       </motion.div>
 
-      {/* Pagination Controls - Enhanced Sliding Window */}
+      {/* Pagination Controls - Enhanced Grouped Window */}
       {!isEmpty && totalPages > 1 && (
         <div className="mt-16 flex items-center justify-center gap-2 sm:gap-4">
-          {/* Previous Button - Only shown when not on first page */}
           {currentPage > 1 && (
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-all hover:border-zinc-900 hover:text-zinc-900"
-              aria-label="Previous page"
+              onClick={handlePrevGroup}
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-all hover:border-zinc-900 hover:text-zinc-900 disabled:opacity-30 disabled:hover:border-zinc-200 disabled:hover:text-zinc-700"
+              aria-label="Previous pages"
+              disabled={currentPage === 1}
             >
               <ChevronLeft size={18} className="transition-transform group-hover:-translate-x-0.5" />
             </button>
@@ -304,17 +325,16 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
             ))}
           </div>
 
-          {/* Next Button - Prominent as requested */}
-          {currentPage < totalPages ? (
+          {/* Next Button - Jumps to next group */}
+          {currentPage < totalPages && (
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={handleNextGroup}
               className="group flex h-10 items-center justify-center rounded-full bg-zinc-900 px-5 text-sm font-medium text-white transition-all hover:bg-zinc-800 hover:shadow-lg active:scale-95 sm:px-6"
+              aria-label="Next pages"
             >
               <span className="mr-1.5">Next</span>
               <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </button>
-          ) : (
-            <div className="w-10 sm:w-[92px]" /> /* Spacer to keep layout stable */
           )}
         </div>
       )}
