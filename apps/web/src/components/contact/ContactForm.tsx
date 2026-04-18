@@ -115,16 +115,19 @@ export function ContactForm({ categories }: Props) {
   function openWhatsApp() {
     const senderNumber = `${countryCode} ${phone.replace(/[^0-9]/g, "")}`;
     const lines = [
-      `--- New Inquiry ---`,
+      `*NEW PHOTOGRAPHY INQUIRY*`,
+      `━━━━━━━━━━━━━━━━━━━━`,
       ``,
-      `Name: ${name.trim()}`,
-      `Phone: ${senderNumber}`,
-      category ? `Category: ${category}` : "",
+      `*CLIENT DETAILS*`,
+      `• *Name:* ${name.trim()}`,
+      `• *Phone:* ${senderNumber}`,
+      category ? `• *Category:* ${category}` : "",
       ``,
-      `Message:`,
+      `*MESSAGE*`,
       message.trim(),
       ``,
-      `--- Sent from rabinson.com ---`,
+      `━━━━━━━━━━━━━━━━━━━━`,
+      `_Sent via rabinson.com_`,
     ].filter(Boolean);
 
     const text = encodeURIComponent(lines.join("\n"));
