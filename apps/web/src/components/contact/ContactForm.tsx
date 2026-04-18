@@ -118,17 +118,21 @@ export function ContactForm({ categories }: Props) {
       `*NEW PHOTOGRAPHY INQUIRY*`,
       `━━━━━━━━━━━━━━━━━━━━`,
       ``,
-      `*CLIENT DETAILS*`,
-      `• *Name:* ${name.trim()}`,
-      `• *Phone:* ${senderNumber}`,
-      category ? `• *Category:* ${category}` : "",
+      `*Name:*`,
+      `${name.trim()}`,
       ``,
-      `*MESSAGE*`,
-      message.trim(),
+      `*Phone:*`,
+      `${senderNumber}`,
+      ``,
+      category ? `*Category:*` : null,
+      category ? `${category}` : null,
+      category ? `` : null,
+      `*Message:*`,
+      `${message.trim()}`,
       ``,
       `━━━━━━━━━━━━━━━━━━━━`,
       `_Sent via rabinson.com_`,
-    ].filter(Boolean);
+    ].filter(line => line !== null);
 
     const text = encodeURIComponent(lines.join("\n"));
     window.open(`/api/contact/whatsapp?text=${text}`, "_blank");
