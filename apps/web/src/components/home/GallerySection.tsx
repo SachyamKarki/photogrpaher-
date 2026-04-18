@@ -122,7 +122,7 @@ export function GallerySection({
   return (
     <div ref={galleryRef} className="scroll-mt-32">
       {/* Gallery Section */}
-      <section id="work" className="py-16 sm:py-24 lg:py-32">
+      <section id="work" className="py-14 sm:py-20 lg:py-24">
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
             <SectionHeading
@@ -132,10 +132,10 @@ export function GallerySection({
           </div>
         </Reveal>
 
-        <div className="mt-12 sm:mt-16">
+        <div className="mt-10 sm:mt-14">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-2.5 auto-rows-[120px] sm:gap-3 sm:auto-rows-[150px] md:grid-cols-3 md:auto-rows-[170px] lg:grid-cols-12 lg:gap-4 lg:auto-rows-[145px] xl:auto-rows-[165px]"
+            className="grid grid-cols-2 gap-2 auto-rows-[100px] sm:gap-2.5 sm:auto-rows-[125px] md:grid-cols-3 md:auto-rows-[145px] lg:grid-cols-12 lg:gap-3 lg:auto-rows-[122px] xl:auto-rows-[138px]"
           >
             <AnimatePresence mode="popLayout">
               {projects.map((project, idx) => {
@@ -149,7 +149,7 @@ export function GallerySection({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className={`${slot.cardClass} ${slot.mobileClass} group relative md:aspect-auto overflow-hidden rounded-[1.25rem] sm:rounded-[1.75rem] md:rounded-[2rem] bg-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition duration-500 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(0,0,0,0.14)] cursor-pointer`}
+                    className={`${slot.cardClass} ${slot.mobileClass} group relative md:aspect-auto overflow-hidden rounded-[1rem] sm:rounded-[1.35rem] md:rounded-[1.6rem] bg-zinc-900 shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition duration-500 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(0,0,0,0.14)] cursor-pointer`}
                     onClick={() => setSelectedIdx(idx)}
                   >
                     <button type="button" className="absolute inset-0 block z-20 w-full h-full text-left" aria-label={`View ${project.title}`} />
@@ -169,18 +169,18 @@ export function GallerySection({
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
                     </div>
 
-                    <div className="pointer-events-none absolute left-3 top-3 z-10 p-1.5 sm:left-5 sm:top-5">
-                      <div className="inline-flex w-fit items-center gap-1 rounded-full bg-white/12 px-2 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-md">
+                    <div className="pointer-events-none absolute left-3 top-3 z-10 sm:left-4 sm:top-4">
+                      <div className="inline-flex w-fit items-center gap-1 rounded-full bg-white/12 px-2 py-1 text-[0.5rem] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-md">
                         {project.category?.title || "Project"}
                       </div>
                     </div>
 
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5">
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4">
                       <div className="max-w-[85%]">
-                        <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/60">
+                        <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/60">
                           Featured
                         </p>
-                        <h3 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
+                        <h3 className="mt-1 text-base font-semibold tracking-tight text-white sm:text-lg">
                           {project.title}
                         </h3>
                       </div>
