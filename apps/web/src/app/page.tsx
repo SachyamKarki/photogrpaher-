@@ -299,7 +299,7 @@ export default async function Home() {
       <main className="w-full">
         <section className="relative min-h-[75svh] sm:min-h-[85svh] overflow-hidden bg-zinc-900 md:min-h-screen">
           <div className="absolute inset-0">
-            <HeroCarousel slides={slides} siteTitle={siteTitle} />
+            <HeroCarousel slides={slides} />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-zinc-950/35" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
