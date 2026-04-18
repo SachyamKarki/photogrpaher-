@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ProgressiveImage } from "@/components/gallery/ProgressiveImage";
 
 type LightboxProps = {
   isOpen: boolean;
@@ -96,12 +96,10 @@ export function Lightbox({
   exit={{ scale: 0.9, opacity: 0 }}
   className="relative h-full w-full max-w-6xl overflow-hidden rounded-xl"
 >
-  <Image
+  <ProgressiveImage
     src={image}
     alt={title}
-    fill
     className="object-contain"
-    quality={88}
     sizes="(max-width: 768px) 100vw, 90vw"
     priority
   />

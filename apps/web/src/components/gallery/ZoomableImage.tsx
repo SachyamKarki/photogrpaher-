@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { ProgressiveImage } from "@/components/gallery/ProgressiveImage";
 
 type ZoomableImageProps = {
   src: string;
@@ -24,13 +24,11 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
         contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
       >
             <div className="relative w-full h-full cursor-zoom-in">
-              <Image
+              <ProgressiveImage
                 src={src}
                 alt={alt}
-                fill
                 priority
                 fetchPriority="high"
-                quality={88}
                 className="object-contain pointer-events-none select-none"
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 92vw, 85vw"
                 draggable={false}
