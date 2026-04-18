@@ -9,16 +9,26 @@ function sanitizeHeader(input: string): string {
   return input.replace(/[\r\n]/g, "").trim();
 }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
+type EmailResult =
+  | { success: true; messageId: string }
+  | { success: false; error: string };
+
+function getTransporter() {
+  const host = process.env.SMTP_HOST?.trim();
+  const port = Number(process.env.SMTP_PORT || 587);
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS;
+
+  if (!user || !pass) return null;
+
+  return nodemailer.createTransport({
+    ...(host ? { host, port, secure: port === 465 } : { service: "gmail" }),
+    auth: {
+      user,
+      pass,
+    },
+  });
+}
 
 type ContactEmailPayload = {
   name: string;
@@ -30,10 +40,11 @@ type ContactEmailPayload = {
 export async function sendContactEmail(payload: ContactEmailPayload) {
   const { name, email, category, message } = payload;
   const toEmail = process.env.CONTACT_TO_EMAIL;
+  const transporter = getTransporter();
 
-  if (!toEmail || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (!toEmail || !transporter || !process.env.SMTP_USER) {
     console.warn("[Email] SMTP not configured — skipping email delivery.");
-    return false;
+    return { success: false, error: "SMTP credentials not configured in environment." };
   }
 
   const safeName = sanitizeHeader(name);
@@ -105,10 +116,12 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
   }
 }
 
-export async function sendClientConfirmation(payload: ContactEmailPayload) {
+export async function sendClientConfirmation(payload: ContactEmailPayload): Promise<EmailResult> {
   const { name, email } = payload;
   const fromEmail = process.env.SMTP_USER;
+  const transporter = getTransporter();
 
+  if (!transporter) return { success: false, error: "SMTP transport is not configured" };
   if (!fromEmail) return { success: false, error: "Missing SMTP_USER in process.env" };
   if (!email) return { success: false, error: "Missing recipient email in payload" };
   if (!process.env.SMTP_PASS) return { success: false, error: "Missing SMTP_PASS in process.env" };

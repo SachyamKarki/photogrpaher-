@@ -134,22 +134,49 @@ export async function POST(req: Request) {
     );
   }
 
-  // Send email notifications (non-blocking)
-  Promise.all([
-    sendContactEmail({
-      name: name,
-      email: email,
-      category: category || undefined,
-      message: message,
-    }),
-    sendClientConfirmation({
-      name: name,
-      email: email,
-      message: message,
-    })
-  ]).catch((err) => {
-    console.error("[Contact API] Email notification process failed:", err);
-  });
+  // Send email notifications (blocking for reliability in serverless environments)
+  try {
+    const [adminResult, clientResult] = await Promise.all([
+      sendContactEmail({
+        name,
+        email,
+        category: category || undefined,
+        message,
+      }),
+      sendClientConfirmation({
+        name,
+        email,
+        message,
+      })
+    ]);
+
+    console.log("[Contact API] Admin notification:", adminResult.success ? "✅ Sent" : `❌ Failed: ${adminResult.error}`);
+    console.log("[Contact API] Client confirmation:", clientResult.success ? "✅ Sent" : `❌ Failed: ${clientResult.error}`);
+
+    if (!adminResult.success) {
+      return NextResponse.json(
+        {
+          ok: false,
+          saved: true,
+          error:
+            "Your inquiry was saved, but the notification email could not be delivered. Please try WhatsApp if you need an immediate response.",
+        },
+        { status: 502 },
+      );
+    }
+
+  } catch (err) {
+    console.error("[Contact API] Critical email notification failure:", err);
+    return NextResponse.json(
+      {
+        ok: false,
+        saved: true,
+        error:
+          "Your inquiry was saved, but the mail service failed while sending notifications. Please try WhatsApp if you need an immediate response.",
+      },
+      { status: 502 },
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }
