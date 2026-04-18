@@ -176,7 +176,7 @@ function GalleryInner({ images, categories }: JustifiedGalleryProps) {
     <div className="w-full max-w-full overflow-x-hidden">
       {/* Category Filters - Horizontal Scroll on Mobile */}
       <div className="mb-12 border-b border-zinc-200/50 pb-px overflow-x-auto no-scrollbar">
-        <div className="flex flex-nowrap gap-x-6 sm:gap-x-10 justify-start md:justify-center px-4 sm:px-0 min-w-max md:min-w-0">
+        <div className="flex flex-nowrap gap-x-6 sm:gap-x-10 justify-start md:justify-center px-6 sm:px-0 min-w-max md:min-w-0">
           <button
             onClick={() => handleCategoryChange(null)}
             className={[

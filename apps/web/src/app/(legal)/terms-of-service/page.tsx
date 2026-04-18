@@ -3,7 +3,7 @@ import { footerContent } from "@/lib/portfolio/data";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of Service governing use of the Rabin Son Photography website, bookings, and intellectual property.",
+  description: "Terms of Service governing use of the RabinSon Photography website, bookings, and intellectual property.",
   robots: { index: true, follow: true },
 };
 

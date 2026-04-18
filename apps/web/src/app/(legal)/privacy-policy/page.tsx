@@ -3,7 +3,7 @@ import { footerContent } from "@/lib/portfolio/data";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Learn how Rabin Son Photography collects, uses, and protects your personal information when you visit or contact us.",
+  description: "Learn how RabinSon Photography collects, uses, and protects your personal information when you visit or contact us.",
   robots: { index: true, follow: true },
 };
 

@@ -182,7 +182,7 @@ export default async function Home() {
 
   const safeReviews = (reviews?.length ? reviews : null) ?? clientReviews;
 
-  const siteTitle = settings?.title ?? "Rabin Son Photography";
+  const siteTitle = settings?.title ?? "RabinSon Photography";
   const heroTitle = settings?.heroTitle ?? siteHero.title;
   const heroSubtitle = settings?.heroSubtitle ?? siteHero.subtitle;
   const socialLinks = {
@@ -304,7 +304,7 @@ export default async function Home() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_28%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-4 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
+          <div className="relative mx-auto flex min-h-[75svh] sm:min-h-[85svh] max-w-[1440px] items-end px-6 pb-14 sm:px-8 sm:pb-16 md:min-h-screen md:pb-20 lg:px-12 lg:pb-24 xl:px-16">
             <Reveal className="max-w-2xl">
               <h1 className="font-heading text-2xl font-semibold leading-[1.05] tracking-tight text-white sm:text-3xl lg:text-4xl lg:tracking-[-0.03em] text-balance">
                 {heroTitle}
@@ -330,7 +330,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto w-full max-w-[1440px] px-6 sm:px-8 lg:px-12 xl:px-16">
           {/* About Me */}
           <section id="about" className="scroll-mt-24 pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pt-48 lg:pb-32">
             <Reveal>
@@ -370,7 +370,7 @@ export default async function Home() {
           {/* What We Do */}
           <section id="services" className="scroll-mt-24 py-16 sm:py-24 lg:py-32">
             <Reveal>
-              <div className="rounded-[2rem] bg-[#f7f3ee] px-4 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
+              <div className="rounded-[2rem] bg-[#f7f3ee] px-6 py-10 sm:px-8 sm:py-16 lg:px-16 lg:py-20 xl:px-24">
                 <SectionHeading
                   title={serviceTitle}
                   subtitle={serviceIntro}

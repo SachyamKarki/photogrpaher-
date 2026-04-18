@@ -39,7 +39,7 @@ export function HeroCarousel({ slides, siteTitle }: Props) {
         >
           <Image
             src={slide.src}
-            alt={`High Altitude & Adventure Photography by Rabin Son - ${slide.alt}`}
+            alt={`High Altitude & Adventure Photography by RabinSon - ${slide.alt}`}
             fill
             priority={index === 0}
             quality={100}

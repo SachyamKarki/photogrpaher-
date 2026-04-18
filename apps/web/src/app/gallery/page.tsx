@@ -9,9 +9,9 @@ import { ScrollbarHider } from "@/components/ui/ScrollbarHider";
 export const metadata: Metadata = {
   title: "Gallery",
   description:
-    "Browse the full photography portfolio of Rabin Son — featuring Himalayan landscapes, adventure photography, automobile shoots, studio portraits, and editorial work from Nepal.",
+    "Browse the full photography portfolio of RabinSon — featuring Himalayan landscapes, adventure photography, automobile shoots, studio portraits, and editorial work from Nepal.",
   openGraph: {
-    title: "Gallery | Rabin Son Photography",
+    title: "Gallery | RabinSon Photography",
     description:
       "Explore professional photography across Himalayas, adventure, automobile, and portrait categories.",
     images: [{ url: "/content/hero.jpg", width: 1200, height: 630 }],
@@ -24,7 +24,7 @@ export default async function GalleryPage() {
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
       <ScrollbarHider />
-      <main className="mx-auto max-w-[1440px] px-2 pb-20 pt-8 sm:px-10 lg:px-16">
+      <main className="mx-auto max-w-[1440px] px-6 pb-20 pt-8 sm:px-10 lg:px-16">
         <Reveal>
           <div className="mb-8">
             <SectionHeading

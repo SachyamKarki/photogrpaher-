@@ -33,13 +33,13 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Rabin Son Photography | Himalayan Adventure & Automobile Photographer",
-    template: "%s | Rabin Son Photography",
+    default: "RabinSon Photography | Himalayan Adventure & Automobile Photographer",
+    template: "%s | RabinSon Photography",
   },
   description:
-    "Rabin Son is an elite Nepal-based photographer specializing in high-altitude Himalayan adventure, cinematic automobile storytelling, and editorial portraiture. Delivering timeless visuals with absolute technical precision.",
+    "RabinSon is an elite Nepal-based photographer specializing in high-altitude Himalayan adventure, cinematic automobile storytelling, and editorial portraiture. Delivering timeless visuals with absolute technical precision.",
   keywords: [
-    "Rabin Son Photography",
+    "RabinSon Photography",
     "Nepal high altitude photographer",
     "Himalayan adventure photography",
     "Mount Everest photographer",
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     "Landscape photography Himalayas",
     "Outdoor adventure storyteller",
   ],
-  authors: [{ name: "Rabin Son", url: SITE_URL }],
-  creator: "Rabin Son",
-  publisher: "Rabin Son Photography",
+  authors: [{ name: "RabinSon", url: SITE_URL }],
+  creator: "RabinSon",
+  publisher: "RabinSon Photography",
   robots: {
     index: true,
     follow: true,
@@ -70,8 +70,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
-    siteName: "Rabin Son Photography",
-    title: "Rabin Son Photography | Himalayan Adventure & Automobile Photographer",
+    siteName: "RabinSon Photography",
+    title: "RabinSon Photography | Himalayan Adventure & Automobile Photographer",
     description:
       "Capturing honest light and timeless detail across the Himalayas. Specializing in high-altitude adventure, automotive, and refined editorial photography.",
     images: [
@@ -79,13 +79,13 @@ export const metadata: Metadata = {
         url: "/content/hero.jpg",
         width: 1200,
         height: 630,
-        alt: "Rabin Son Photography — Himalayan Adventure & Automobile Photographer",
+        alt: "RabinSon Photography — Himalayan Adventure & Automobile Photographer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rabin Son Photography | High Altitude & Adventure Photographer",
+    title: "RabinSon Photography | High Altitude & Adventure Photographer",
     description:
       "Nepal-based professional photographer specializing in Himalayan adventure, automobile, and editorial storytelling.",
     images: ["/content/hero.jpg"],
@@ -95,6 +95,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/icon.png",
+    shortcut: "/favicon.ico",
     apple: "/apple-icon.png",
   },
   category: "Photography",

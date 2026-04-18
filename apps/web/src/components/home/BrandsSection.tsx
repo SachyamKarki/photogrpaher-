@@ -58,7 +58,7 @@ export function BrandsSection({ partners }: { partners?: Partner[] | null }) {
     <section className="relative w-full py-16 sm:py-24 lg:py-32 overflow-hidden bg-white">
 
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mb-10 md:mb-14">
+      <div className="mx-auto max-w-7xl px-6 sm:px-6 md:px-8 mb-10 md:mb-14">
         <SectionHeading
           title="Industry Partners"
           align="center"

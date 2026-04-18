@@ -16,9 +16,9 @@ import { sanityServerClient } from "@/lib/sanity/serverClient";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Meet Rabin Son — a Nepal-based professional photographer specializing in honest light, calm direction, and clean composition. From Himalayan passes to studio sets, creating timeless editorial photography.",
+    "Meet RabinSon — a Nepal-based professional photographer specializing in honest light, calm direction, and clean composition. From Himalayan passes to studio sets, creating timeless editorial photography.",
   openGraph: {
-    title: "About Rabin Son | Nepal-Based Professional Photographer",
+    title: "About RabinSon | Nepal-Based Professional Photographer",
     description:
       "Nepal-based photographer for editorial, high altitude adventure, automotive, and studio portrait work. Book your session today.",
     images: [{ url: "/content/hero.jpg", width: 1200, height: 630 }],
@@ -73,7 +73,7 @@ export default async function AboutPage() {
 
   return (
     <main className="flex-1 bg-white text-zinc-900">
-      <section className="px-4 pb-12 pt-20 sm:px-8 sm:pb-14 sm:pt-24 lg:px-12 xl:px-16">
+      <section className="px-6 pb-12 pt-20 sm:px-8 sm:pb-14 sm:pt-24 lg:px-12 xl:px-16">
         <div className="w-full max-w-none">
           <div className="w-full">
             <h1 className="font-heading mt-4 text-3xl font-semibold leading-[1.08] tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">

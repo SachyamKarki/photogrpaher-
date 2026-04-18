@@ -3,7 +3,7 @@ import { footerContent } from "@/lib/portfolio/data";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  description: "Learn about how cookies and similar technologies are used on the Rabin Son Photography website.",
+  description: "Learn about how cookies and similar technologies are used on the RabinSon Photography website.",
   robots: { index: true, follow: true },
 };
 

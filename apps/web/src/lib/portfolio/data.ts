@@ -83,7 +83,7 @@ export const aboutContent = {
   eyebrow: "The Photographer",
   title: "The Vision Behind the Frames.",
   body:
-    "Rabin Son is a Nepal-based photographer focused on honest light, calm direction, and clean composition. From Himalayan passes to studio sets, the work balances documentary sincerity with an editorial finish—built to feel timeless, not trendy.",
+    "RabinSon is a Nepal-based photographer focused on honest light, calm direction, and clean composition. From Himalayan passes to studio sets, the work balances documentary sincerity with an editorial finish—built to feel timeless, not trendy.",
   longBody: [
     "His approach is rooted in observation first: reading the scene, shaping small details, and letting real moments unfold. Whether photographing people, machines, or landscapes, the goal is the same—clarity, intention, and images that hold up years later.",
     "On set, direction is minimal and precise. You’ll get clear prompts, confident pacing, and enough structure to keep everything effortless while still protecting the frame. This is especially important for portraits and weddings, where comfort and tempo matter as much as light.",
@@ -102,7 +102,7 @@ export const aboutContent = {
 export const footerContent = {
   email: "Rabinson2055@gmail.com",
   instagramLinks: [
-    { label: "Art of Rabin Son", url: "https://www.instagram.com/art_of_rabinson?igsh=bTh1Y2xpb3Zid2pz" },
+    { label: "Art of RabinSon", url: "https://www.instagram.com/art_of_rabinson?igsh=bTh1Y2xpb3Zid2pz" },
     { label: "AutoVibes Nepal", url: "https://www.instagram.com/autovibes_nepal?igsh=NGhveXMzanZrZzIw" },
     { label: "Personal", url: "https://www.instagram.com/rabinson01?igsh=MXh5YTZkcm42ZHZvbA==" },
   ],
@@ -127,13 +127,13 @@ export const clientReviews = [
     _id: "rev1",
     author: "Sarah & James",
     role: "Wedding Clients",
-    quote: "Working with Rabin Son was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
+    quote: "Working with RabinSon was the best decision we made for our wedding. The images aren't just photos; they're absolute art. He managed to capture the quiet, unseen moments perfectly without ever feeling intrusive.",
   },
   {
     _id: "rev2",
     author: "Alex Mercer",
     role: "Creative Director, Kinfolk",
-    quote: "Rabin Son brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
+    quote: "RabinSon brings an incredible eye for light and composition to every set. The resulting editorial spreads were flawless and delivered exactly what the brand needed. True professional.",
   },
   {
     _id: "rev3",

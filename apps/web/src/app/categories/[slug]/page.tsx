@@ -61,12 +61,12 @@ export async function generateMetadata({
     title: `${category.title} Photography`,
     description:
       category.description ||
-      `Explore ${category.title} photography by Rabin Son — professional photographer based in Nepal.`,
+      `Explore ${category.title} photography by RabinSon — professional photographer based in Nepal.`,
     openGraph: {
-      title: `${category.title} Photography | Rabin Son`,
+      title: `${category.title} Photography | RabinSon`,
       description:
         category.description ||
-        `Browse ${category.title} photography from Rabin Son's professional portfolio.`,
+        `Browse ${category.title} photography from RabinSon's professional portfolio.`,
     },
   };
 }
@@ -131,7 +131,7 @@ export default async function CategoryPage({
               <LogoMark className="h-5 w-5" />
             </div>
             <div className="font-heading font-semibold tracking-tight">
-              Rabin Son Photography
+              RabinSon Photography
             </div>
           </Link>
           <nav className="text-sm text-zinc-600">

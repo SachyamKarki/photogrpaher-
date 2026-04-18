@@ -96,7 +96,7 @@ export function HomeHeader({
   return (
     <>
       <header className="absolute inset-x-0 top-0 z-40 py-8">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 sm:px-8 lg:px-12 xl:px-16">
           <Link href="/" className="group flex items-center gap-3">
             <div className="relative w-48 sm:w-64 md:w-80 h-6 sm:h-8 flex items-center transition-opacity group-hover:opacity-70">
               <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-6 md:-left-8 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] md:w-[calc(100%+4rem)] h-[60px] sm:h-[80px] md:h-[100px]">

@@ -166,7 +166,7 @@ export function GallerySection({
                       {project.imageUrl ? (
                         <Image
                           src={project.imageUrl}
-                          alt={`${project.category?.title || "Professional"} photography by Rabin Son - ${project.title}`}
+                          alt={`${project.category?.title || "Professional"} photography by RabinSon - ${project.title}`}
                           fill
                           className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

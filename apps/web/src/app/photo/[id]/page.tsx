@@ -12,11 +12,11 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const image = allImages.find((img: GalleryImage) => img._id === params.id);
   
   if (!image) {
-    return { title: "Photo Not Found | Rabin Son Photography" };
+    return { title: "Photo Not Found | RabinSon Photography" };
   }
 
   return {
-    title: `${image.title} | Rabin Son Photography`,
+    title: `${image.title} | RabinSon Photography`,
     description: image.metadata?.description || "Professional photography capture.",
   };
 }

@@ -46,10 +46,10 @@ export async function generateMetadata({
 
   return {
     title: `${project.title}`,
-    description: project.excerpt || `Professional photography project: ${project.title} by Rabin Son.`,
+    description: project.excerpt || `Professional photography project: ${project.title} by RabinSon.`,
     openGraph: {
-      title: `${project.title} | Rabin Son Photography`,
-      description: project.excerpt || `Explore the ${project.title} photography project by Rabin Son.`,
+      title: `${project.title} | RabinSon Photography`,
+      description: project.excerpt || `Explore the ${project.title} photography project by RabinSon.`,
     },
   };
 }

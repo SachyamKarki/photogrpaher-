@@ -14,7 +14,7 @@ export function PhotographerJsonLd() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": SITE_URL,
-    name: "Rabin Son Photography",
+    name: "RabinSon Photography",
     url: SITE_URL,
     description:
       "Nepal-based professional photographer specializing in high altitude, Himalayan adventure, automobile, studio portrait, and wedding photography.",
@@ -105,7 +105,7 @@ export function PhotographerJsonLd() {
     ],
     brand: {
       "@type": "Brand",
-      name: "Rabin Son",
+      name: "RabinSon",
       logo: `${SITE_URL}/icon.png`,
     },
   };
@@ -117,7 +117,7 @@ export function WebsiteJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Rabin Son Photography",
+    name: "RabinSon Photography",
     url: SITE_URL,
     potentialAction: {
       "@type": "SearchAction",
@@ -140,7 +140,7 @@ export function ImageGalleryJsonLd({
   const data = {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
-    name: "Rabin Son Photography Gallery",
+    name: "RabinSon Photography Gallery",
     description:
       "Professional photography gallery featuring Himalayan landscapes, automobile photography, studio portraits, and editorial work.",
     url: `${SITE_URL}/gallery`,
@@ -148,10 +148,10 @@ export function ImageGalleryJsonLd({
       "@type": "ImageObject",
       url: img.url.startsWith("http") ? img.url : `${SITE_URL}${img.url}`,
       name: img.name,
-      description: img.description || `Professional photograph by Rabin Son`,
+      description: img.description || `Professional photograph by RabinSon`,
       author: {
         "@type": "Person",
-        name: "Rabin Son",
+        name: "RabinSon",
       },
     })),
   };
