@@ -184,7 +184,7 @@ export function SiteFooter({
                 </li>
                 <li>
                   <Link
-                    href="/testimonials"
+                    href="/#reviews"
                     className="block text-2xs font-semibold uppercase tracking-[0.05em] text-white/80 transition-colors hover:text-white lg:text-xs"
                   >
                     Testimonials

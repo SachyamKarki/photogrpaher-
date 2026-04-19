@@ -130,11 +130,12 @@ export const FEATURED_IMAGES_QUERY = defineQuery(`
 `);
 
 export const REVIEWS_QUERY = defineQuery(`
-  *[_type == "review" && featured == true] | order(_createdAt desc) {
+  *[_type == "review"] | order(featured desc, _createdAt desc) {
     _id,
     author,
     role,
-    quote
+    quote,
+    featured
   }
 `);
 

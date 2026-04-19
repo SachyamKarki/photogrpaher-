@@ -91,6 +91,7 @@ export function HomeHeader({
   const navLinks = [
     { title: "Gallery", href: "/gallery" },
     { title: "Categories", href: "/#categories" },
+    { title: "Testimonials", href: "#reviews" },
     { title: "About", href: "/about" },
     { title: "Contact", href: "#contact" },
   ];
